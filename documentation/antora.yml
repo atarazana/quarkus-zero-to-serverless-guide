@@ -1,6 +1,6 @@
-name: template-tutorial
-title: Template Tutorial
-version: master
+name: quarkus-zero-to-serverless-guide
+title: Quarkus from Zero to Serverless Guide
+version: main
 nav:
   - modules/ROOT/nav.adoc
 

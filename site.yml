@@ -2,7 +2,7 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Template Tutorial
+  title: Quarkus from Zero to Serverless Guide
   url: https://redhat-scholars.github.io/course-template
   start_page: template-tutorial::index.adoc
 
@@ -13,6 +13,7 @@ content:
 
 asciidoc:
   attributes:
+    graalvm_version: 20.2.0
     release-version: master
     page-pagination: true
   extensions:

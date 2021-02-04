@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: Quarkus from Zero to Serverless Guide
-  url: https://redhat-scholars.github.io/course-template
+  url: https//atarazana.github.io/quarkus-zero-to-serverless-guide
   start_page: template-tutorial::index.adoc
 
 content:

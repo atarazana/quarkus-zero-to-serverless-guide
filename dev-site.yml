@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: Quarkus from Zero to Serverless Guide (Dev Mode)
-  url: http://localhost:3000/rhs-build-course/index.html
+  url: http://localhost:3000/quarkus-zero-to-serverless-guide/index.html
   start_page: quarkus-zero-to-serverless-guide::index.adoc
 
 content:

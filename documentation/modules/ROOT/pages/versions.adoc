@@ -1,0 +1,4 @@
+:graalvm_version: 20.2.0
+:quarkus_version: 1.9.2.Final
+:knative_version: 0.17.0
+:tekton_version: 0.13.0

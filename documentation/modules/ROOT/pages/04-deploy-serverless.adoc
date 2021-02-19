@@ -1,0 +1,42 @@
+
+= Deploy to OpenShift as a Knative service
+include::_attributes.adoc[]
+:project_name: %USERNAME%-{artifact_id}
+
+Let\'s add a new target platform...
+
+[source,properties,role="copypaste"]
+----
+## Generate OpenShift and Knative descriptors
+quarkus.kubernetes.deployment-target=openshift,knative
+----
+
+And this properties to tune the Knative deployment.
+
+WARNING: If you have changed the by default value for PROJECT_NAME change this line below accordingly!
+
+[source,properties,role="copypaste"]
+----
+## Knative
+quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
+quarkus.container-image.group=${PROJECT_NAME:atomic-fruit}
+quarkus.container-image.tag=1.0-SNAPSHOT
+quarkus.knative.name=atomic-fruit-service-kn
+quarkus.knative.version=1.0
+quarkus.knative.part-of=fruits-app
+quarkus.knative.annotations."app.openshift.io/connects-to"=my-database
+quarkus.knative.labels."app.openshift.io/runtime"=quarkus
+quarkus.knative.env.mapping.db-username.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-username.with-key=user
+quarkus.knative.env.mapping.db-password.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-password.with-key=password
+----
+
+Time to deploy using Knative.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package -DskipTests
+kubectl apply -f target/kubernetes/knative.yml
+----

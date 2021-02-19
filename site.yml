@@ -4,18 +4,23 @@ runtime:
 site:
   title: Quarkus from Zero to Serverless Guide
   url: https//atarazana.github.io/quarkus-zero-to-serverless-guide
-  start_page: template-tutorial::index.adoc
+  start_page: quarkus-zero-to-serverless-guide::index.adoc
 
 content:
   sources:
-    - url: ./
+    - url: git@github.com:atarazana/quarkus-zero-to-serverless-guide.git
+      tags: []
+      branches: [master]
       start_path: documentation
 
 asciidoc:
   attributes:
-    graalvm_version: 20.2.0
+    title: Quarkus from Zero to Serverless Guide
     release-version: master
     page-pagination: true
+    git_base: https://github.com/atarazana
+    git_uri: quarkus-zero-to-serverless-guide
+    git_ref: master
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js

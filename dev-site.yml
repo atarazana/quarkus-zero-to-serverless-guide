@@ -8,20 +8,32 @@ site:
 
 content:
   sources:
-    - url: .
-      branches: HEAD
+    - url: git@github.com:atarazana/quarkus-zero-to-serverless-guide.git
+      tags: []
+      branches: [develop]
       start_path: documentation
+
 asciidoc:
   attributes:
     title: Quarkus from Zero to Serverless Guide (Dev Mode)
-    graalvm_version: 20.2.0
+    release-version: develop
+    page-pagination: true
+    git_base: https://github.com/atarazana
+    git_uri: quarkus-zero-to-serverless-guide
+    git_ref: develop    
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js
+    
 ui:
   bundle:
     url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.1/ui-bundle.zip
     snapshot: true
-  supplemental_files: ./supplemental-ui
+  supplemental_files:
+    - path: ./supplemental-ui
+    - path: .nojekyll
+    - path: ui.yml
+      contents: "static_files: [ .nojekyll ]"
+
 output:
   dir: ./gh-pages

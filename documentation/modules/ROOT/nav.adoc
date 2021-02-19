@@ -1,7 +1,23 @@
 * xref:01-setup.adoc[1. Setup]
-** xref:01-setup.adoc#prerequisite[Prerequisites]
-** xref:01-setup.adoc#minikube[Setup Minikube]
+** xref:01-setup.adoc#getting-the-code[Getting the Code]
+** xref:01-setup.adoc#prerequisites[Prerequisites]
 
-* xref:02-deploy.adoc[2. Deploy Service]
-** xref:02-deploy.adoc#package[Build Service]
-** xref:02-deploy.adoc#deploy[Deploy Dervice]
+* xref:02-deploy.adoc[2. Deploying the Atomic Fruit Service]
+** xref:02-deploy.adoc#generate-the-quarkus-app-scaffold-using-a-maven-archetype[Generate the Quarkus app scaffold using a maven archetype]
+** xref:02-deploy.adoc#testing-different-ways-of-packaging-the-app[Testing different ways of packaging the app]
+** xref:02-deploy.adoc#running-in-development-mode-and-enjoy-hot-reloading[Running in development mode and enjoy hot reloading]
+
+* xref:03-deploy-database.adoc[Adding a Data Base to our application]
+** xref:03-deploy-database.adoc#deploying-postgresql[Deploying PostgreSQL]
+** xref:03-deploy-database.adoc#deploy[Deploy the Application]
+** xref:03-deploy-database.adoc#adding-db-related-extensions[Adding DB related extensions]
+** xref:03-deploy-database.adoc#exposing-rest-endpoints-for-crud-operations[Exposing REST endpoints for CRUD operations]
+** xref:03-deploy-database.adoc#testing-locally[Testing locally]
+** xref:03-deploy-database.adoc#deploying-to-openshift[Deploying to OpenShift]
+
+* xref:04-deploy-serverless.adoc[Evolving to Serverless]
+** xref:04-deploy-serverless.adoc[Deploy to OpenShift as a Knative service]
+
+* xref:05-annex.adoc[ANNEX: Automatic builds]
+** xref:05-annex.adoc#automatic-build-for-jvm-mode-using-docker[Automatic build for JVM mode using `docker`]
+** xref:05-annex.adoc#automatic-build-for-native-mode-using-docker[Automatic build for Native mode using `docker`]

@@ -1,20 +1,41 @@
-= Welcome to Template Tutorial
+= Welcome to: {title}
 :page-layout: home
 :!sectids:
 
 [.text-center.strong]
-== Publish Services to Kubernetes
+== Publish Atomic Fruit Service to OpenShift
 
-A Kubernetes tutorial to show how you can deploy a Java service to a Kubernetes cluster as it was a child game.
+This module guides developers on their journey towards a native Java application on Kubernetes using Quarkus. Starting from scratch, building a simple REST example that will evolve by adding capabilities through the Quarkus extensions mechanism, including relational DB persistence, dependency injection, etc. until its Serverless deployment through Knative on OpenShift.
 
 [.tiles.browse]
-== Browse modules
+== Browse labs
 
 [.tile]
 .xref:01-setup.adoc[Get Started]
-* xref:01-setup.adoc#minikube[Minikube]
+* xref:01-setup.adoc#getting-the-code[Getting the Code]
+* xref:01-setup.adoc#prerequisites[Prerequisites]
 
 [.tile]
-.xref:02-deploy.adoc[Deploying]
-* xref:02-deploy.adoc#package[Package the Application]
-* xref:02-deploy.adoc#deploy[Deploy the Application]
+.xref:02-deploy.adoc[Deploying the Atomic Fruit Service]
+* xref:02-deploy.adoc#generate-the-quarkus-app-scaffold-using-a-maven-archetype[Generate the Quarkus app scaffold using a maven archetype]
+* xref:02-deploy.adoc#testing-different-ways-of-packaging-the-app[Testing different ways of packaging the app]
+* xref:02-deploy.adoc#running-in-development-mode-and-enjoy-hot-reloading[Running in development mode and enjoy hot reloading]
+
+[.tile]
+.xref:03-deploy-database.adoc[Adding a Data Base to our application]
+* xref:03-deploy-database.adoc#deploying-postgresql[Deploying PostgreSQL]
+* xref:03-deploy-database.adoc#deploy[Deploy the Application]
+* xref:03-deploy-database.adoc#adding-db-related-extensions[Adding DB related extensions]
+* xref:03-deploy-database.adoc#exposing-rest-endpoints-for-crud-operations[Exposing REST endpoints for CRUD operations]
+* xref:03-deploy-database.adoc#testing-locally[Testing locally]
+* xref:03-deploy-database.adoc#deploying-to-openshift[Deploying to OpenShift]
+
+[.tile]
+.xref:04-deploy-serverless.adoc[Evolving to Serverless]
+* xref:04-deploy-serverless.adoc[Deploy to OpenShift as a Knative service]
+
+[.tile]
+.xref:05-annex.adoc[ANNEX: Automatic builds]
+* xref:05-annex.adoc#automatic-build-for-jvm-mode-using-docker[Automatic build for JVM mode using `docker`]
+* xref:05-annex.adoc#automatic-build-for-native-mode-using-docker[Automatic build for Native mode using `docker`]
+

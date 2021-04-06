@@ -1,0 +1,250 @@
+
+= Deploying the Atomic Fruit Service on OpenShift
+include::_attributes.adoc[]
+
+[#deploying-to-openshift]
+== Deploying to OpenShift
+
+WARNING: Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service` directory in all your terminals.
+
+First of all let\'s add the extension to deploy to OpenShift.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw quarkus:add-extension -Dextension="openshift"
+----
+
+Output:
+[.console-output]
+[source,console]
+----
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------< com.redhat.atomic.fruit:atomic-fruit-service >------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Extension io.quarkus:quarkus-smallrye-health has been installed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.200 s
+[INFO] Finished at: 2021-03-31T18:27:06Z
+[INFO] ------------------------------------------------------------------------
+----
+
+Second let\'s remove the docker extension, we don\'t need it and they collide with each other.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw quarkus:remove-extension -Dextension="container-image-docker"
+----
+
+Output:
+[.console-output]
+[source,console]
+----
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------< com.redhat.atomic.fruit:atomic-fruit-service >------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:remove-extension (default-cli) @ atomic-fruit-service ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.109 s
+[INFO] Finished at: 2021-03-31T18:33:16Z
+[INFO] ------------------------------------------------------------------------
+----
+
+Add this couple of properties to `{artifact_id_quarkus}/src/main/resources/application.properties` so that we trust on the CA cert and set the namespace where we want to deploy our application.
+
+[source,properties,subs="attributes+",role="copypaste"]
+----
+## Kubernetes Client
+quarkus.kubernetes-client.trust-certs=true
+quarkus.kubernetes-client.namespace=${PROJECT_NAME:{project_name}}
+
+## Only generate OpenShift descriptors
+quarkus.kubernetes.deployment-target=openshift
+
+## Expose the service when deployed
+quarkus.openshift.expose=true
+----
+
+Let\'s add a some additional labels `part-of` and `name`, and a custom label:
+
+[source,properties,subs="attributes+",role="copypaste"]
+----
+## Recommended labels and a custom label for kubernetes and openshift
+quarkus.openshift.part-of={app_name}
+quarkus.openshift.name={artifact_id_quarkus}
+quarkus.openshift.labels.department=fruity-dept
+----
+
+Regarding annotations, out of the box, the generated resources will be annotated with version control related information that can be used either by tooling, or by the user for troubleshooting purposes.
+
+[source,yaml]
+----
+annotations:
+  app.quarkus.io/vcs-url: "<some url>"
+  app.quarkus.io/commit-id: "<some git SHA>"
+----
+
+Let\'s add a custom annotation:
+
+[source,properties,role="copypaste"]
+----
+## Custom annotations
+quarkus.openshift.annotations."app.openshift.io/connects-to"=my-database
+quarkus.openshift.annotations.foo=bar
+quarkus.openshift.annotations."app.quarkus/id"=42
+----
+
+So far we haven\'t prepared the production profile, for instance we have no secret to keep the database credentials. Let\'s do something about it. Let\'s create a secret locally first.
+
+NOTE: `openshift` extension takes the file we\'re generating and merge it with the one generated
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+mkdir -p $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/kubernetes && \
+cat <<EOF > $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/kubernetes/openshift.yml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fruits-database-secret
+stringData:
+  user: luke
+  password: secret
+EOF
+----
+
+Now let\'s add the environment variables we need to connect to the database:
+
+[source,properties,role="copypaste"]
+----
+## Environment variables
+quarkus.openshift.env.mapping.db-username.from-secret=fruits-database-secret
+quarkus.openshift.env.mapping.db-username.with-key=user
+quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
+quarkus.openshift.env.mapping.db-password.with-key=password
+----
+
+- - - - - NEED REVIEW / B - - - - -
+
+Let\'s package our application and have a look to the descriptors generated.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package
+----
+
+- - - - - NEED REVIEW / E - - - - -
+
+You can check the generated file `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
+
+Let\'s deploy the result:
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests
+----
+
+[TIP]
+====
+The other, and equivalent, approach is to use the `oc` client instead of the maven script:
+
+[.console-input]
+[source,sh,subs="attributes+",role="copypaste"]
+----
+$ oc apply -n {project_name} -f $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/target/kubernetes/openshift.yml
+----
+====
+
+Let\'s inspect the resources created.
+
+[.console-input]
+[source,sh,subs="attributes+",role="copypaste"]
+----
+$ oc get dc,deploy -n {project_name}
+----
+
+[.console-output]
+[source,console]
+----
+NAME                                                      REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/atomic-fruit-service   1          1         1         image(atomic-fruit-service:1.0-SNAPSHOT)
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-database   1/1     1            1           96m
+----
+
+Now we can test that everything works properly.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+curl http://$(oc get route atomic-fruit-service -o jsonpath='{.spec.host}')/fruit
+----
+
+- - - - - NEED REVIEW / B - - - - -
+
+What about native in this case? Easy, just add `-Dquarkus.native.container-build=true -Pnative`.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Dquarkus.native.container-build=true -Pnative
+----
+
+- - - - - NEED REVIEW / E - - - - -
+
+[#evolving-to-serverless]
+== Evolving to Serverless
+include::_attributes.adoc[]
+
+In order to deploy our app to OpenShift as a Knative service... Let\'s add a new target platform !!!
+[source,properties,role="copypaste"]
+----
+## Generate OpenShift and Knative descriptors
+quarkus.kubernetes.deployment-target=openshift,knative
+----
+
+And this properties to tune the Knative deployment.
+
+WARNING: If you have changed the by default value for PROJECT_NAME change this line below accordingly!
+
+[source,properties,subs="attributes+",role="copypaste"]
+----
+## Knative
+quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
+quarkus.container-image.group=${PROJECT_NAME:{project_name}}
+quarkus.container-image.tag=1.0-SNAPSHOT
+quarkus.knative.name={artifact_id_quarkus}-kn
+quarkus.knative.version=1.0
+quarkus.openshift.part-of={app_name}
+quarkus.knative.annotations."app.openshift.io/connects-to"=my-database
+quarkus.knative.labels."app.openshift.io/runtime"=quarkus
+quarkus.knative.env.mapping.db-username.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-username.with-key=user
+quarkus.knative.env.mapping.db-password.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-password.with-key=password
+----
+
+Time to deploy using Knative.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package -DskipTests && \
+oc apply -f target/kubernetes/knative.yml
+----

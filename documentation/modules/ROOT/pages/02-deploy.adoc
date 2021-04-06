@@ -9,14 +9,14 @@ This is a sample Fruit service built from a maven artifact that generates all th
 By default, the command will target the latest version of `quarkus-universe-bom` (unless specific coordinates have been specified). If you run offline however, it will look for the latest locally available and if `quarkus-universe-bom` (satisfying the default version range which is currently up to 2.0) is not available locally, it will fallback to the bundled platform based on `quarkus-bom` (the version will match the version of the plugin).
 
 [.console-input]
-[source,sh,role="copypaste"]
+[source,sh,subs="attributes+",role="copypaste"]
 ----
-mvn io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create \
-  -DprojectGroupId="com.redhat.atomic.fruit" \
-  -DprojectArtifactId="atomic-fruit-service" \
+mvn io.quarkus:quarkus-maven-plugin:{QUARKUS_VERSION}:create \
+  -DprojectGroupId="{group_id}" \
+  -DprojectArtifactId="{artifact_id_quarkus}" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dpath="fruit"
+  -DclassName="{class_name}" \
+  -Dpath="{class_path}"
 ----
 
 ****
@@ -30,7 +30,13 @@ A pair of Dockerfiles for native and jvm mode are also generated in `src/main/do
 [#testing-different-ways-of-packaging-the-app]
 == Testing different ways of packaging the app
 
-NOTE: At this point you must be compliant with all the prerequisites describes in the xref:01-setup.adoc[setup section] and be inside the app dir as indicated.
+NOTE: At this point you must be compliant with all the prerequisites describes in the xref:01-setup.adoc[setup section] and be inside the app dir `atomic-fruit-service` you just created in the previous section.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+cd $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service
+----
 
 [#jvm-mode]
 === JVM mode
@@ -42,7 +48,7 @@ This mode generates a Quarkus Java jar file.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw -DskipTests clean package
+unset MAVEN_CONFIG && ./mvnw -DskipTests clean package
 ----
 
 . Run the application in JVM mode.
@@ -53,7 +59,7 @@ This mode generates a Quarkus Java jar file.
 java -jar ./target/atomic-fruit-service-1.0-SNAPSHOT-runner.jar <1>
 ----
 
-. Test from another terminal or a browser, you should receive a `hello` string.
+. Test from another terminal, you should receive a `hello` string.
 +
 [.console-input]
 [source,sh,role="copypaste"]
@@ -86,10 +92,11 @@ This is huge... now you have a native binary file, no JVM involved.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+chmod +x ./target/atomic-fruit-service-1.0-SNAPSHOT-runner && \
 ./target/atomic-fruit-service-1.0-SNAPSHOT-runner <1>
 ----
 
-. Test from another terminal or a browser, you should receive a `hello` string.
+. Test from another terminal, you should receive a `hello` string.
 +
 [.console-input]
 [source,sh,role="copypaste"]
@@ -98,74 +105,12 @@ curl http://localhost:8080/fruit
 ----
 
 <1> *_Ctrl+C_ to stop.*
-
-[#native-mode-ii-generated-in-a-container]
-=== Native Mode II (generated in a container)
-
-Native executables make Quarkus applications ideal for containers and serverless workloads.
-This mode generates a Quarkus native binary file using a build image and builds an image with it.
-
-.If you want to use Mandrel
-****
-[.console-input]
-[source,sh]
-----
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}
-----
-****
-
-
-. Create the docker image:
-+
-[.console-input]
-[source,sh,role="copypaste"]
-----
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
-docker build -f src/main/docker/Dockerfile.native -t atomic-fruit-service:1.0-SNAPSHOT .
-----
-+
-[NOTE]
-====
-If you want/need to set the container runtime you can use `-Dquarkus.native.container-runtime=(podman/docker)`. For instance to use `podman` (then use `podman` to build the image, etc.):
-
-[source,sh]
-----
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
-----
-====
-
-. Run the image created.
-+
-[.console-input]
-[source,sh,role="copypaste"]
-----
-docker run -i --rm -p 8080:8080 atomic-fruit-service:1.0-SNAPSHOT <1>
-----
-
-. Test from another terminal or a browser, you should receive a `hello` string.
-+
-[.console-input]
-[source,sh,role="copypaste"]
-----
-curl http://localhost:8080/fruit
-----
-
-<1> *_Ctrl+C_ to stop.*
-
-.Push to a image registry
-****
 
 [TIP]
 ====
-Finally you could push it to the image registry of your choice.
-
-[source,sh]
-----
-docker tag atomic-fruit-service:1.0-SNAPSHOT quay.io/<registry_user>/atomic-fruit-service:1.0-SNAPSHOT
-docker push quay.io/<registry_user>/atomic-fruit-service:1.0-SNAPSHOT
-----
+There is second mode from the Native perspective, a way of creating a native Linux executable by leveraging a container runtime such as `docker` or `podman`. 
+This is outside of the scope of this lab but if you want to know more about this approach, we describe it for you in the Annex: xref:05-annex.adoc#native-mode-ii-generated-in-a-container[Native Mode II (generated in a container)]
 ====
-****
 
 [#running-in-development-mode-and-enjoy-hot-reloading]
 == Running in development mode and enjoy hot reloading
@@ -183,7 +128,60 @@ We can run our app in development mode, to do so we have to do as follows:
 Enables hot deployment with background compilation, which means that when you modify your Java files or your resource files and refresh your browser these changes will automatically take effect. This works too for resource files like the configuration property file. The act of refreshing the browser triggers a scan of the workspace, and if any changes are detected the Java files are compiled, and the application is redeployed, then your request is serviced by the redeployed application. If there are any issues with compilation or deployment an error page will let you know.
 ****
 
-As we have done several times before, from a different terminal or using a browser try this url: http://localhost:8080/fruit
+As we have done several times before, from a different terminal try this url: http://localhost:8080/fruit
+
+[NOTE]
+====
+The first time you build the app, new dependencies may be downloaded via maven. This should only happen once, after that things will go even faster
+====
+
+[NOTE]
+====
+You may see WARNINGs like `Unrecognized configuration key` or `Duplicate entry`. These are configuration values that will take effect later on and can be safely ignored for now.
+====
+
+You should see:
+[.console-output]
+[source,console]
+----
+2020-11-03 14:27:00,102 INFO  [io.quarkus] (Quarkus Main Thread) people 1.0-SNAPSHOT on JVM (powered by Quarkus x.x.x) started in 0.972s. Listening on: http://0.0.0.0:8080
+2020-11-03 14:27:00,102 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2020-11-03 14:27:00,103 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+----
+
+Note the amazingly fast startup time! The app is now running "locally" (within the Che container in which the workspace is also running). `localhost` refers to the Kubernetes pod, not "your" laptop (so therefore opening localhost:8080 in your browser will not do anything).
+
+CodeReady will also detect that the Quarkus app opens `8080` (for web requests). When prompted, *Open in Preview*, which opens a small web browser in CodeReady:
+
+image::open-preview.png[port, 700]
+
+You should see the default Quarkus welcome page (you may need to click the _reload_ icon):
+
+image::welcome-quarkus.png[port, 900]
+
+Open a *new* CodeReady Workspaces Terminal:
+
+image::cmd-terminal.png[livecoding, 900]
+
+and invoke the `fruit` endpoint using the following _curl_ command:
+
+[source,sh,role="copypaste"]
+----
+curl http://localhost:8080/fruit
+----
+
+You can also click on the URL link at the upper right to open the same default page in a separate browser tab:
+
+image::crw-open-page.png[page, 800]
+
+Add `/fruit` in your browser to see the same result as the _curl_ command:
+
+image::crw-open-page-fruit.png[page, 800]
+
+[NOTE]
+====
+This will also listen for a debugger on port `5005`. If you want to wait for the debugger to attach before running you can pass `-Ddebug` on the command line. If you don’t want the debugger at all you can use `-Ddebug=false`. We'll use this later.
+====
 
 Now, without stopping our application, let\'s add some logging...
 
@@ -192,11 +190,11 @@ Now, without stopping our application, let\'s add some logging...
 
 Internally Quarkus uses JBoss Logging; you can also use it inside your application so that no other dependencies should be added for your logs.
 
-[NOTE]
-====
-You can configure Quarkus logging by setting the following parameters to `$PROJECT_HOME/src/main/resources/application.properties`:
+In order to add logging capabilities to your app follow the next steps:
 
-[source,properties]
+. Configure Quarkus logging by setting the following parameters to `{artifact_id_quarkus}/src/main/resources/application.properties`:
++
+[source,properties,role="copypaste"]]
 ----
 ## Enable logging
 quarkus.log.console.enable=true
@@ -205,13 +203,21 @@ quarkus.log.console.level=DEBUG
 ## Log level settings
 quarkus.log.category."com.redhat.atomic".level=DEBUG
 ----
++
+[TIP]
+====
+Keep it open as you are going to use it frequently during all the lab.
 ====
 
-. Update `$PROJECT_HOME/src/main/java/com/redhat/atomic/fruit/FruitResource.java` with the relevant lines bellow.
+. Navigate to `src → main → java → {group_id}` in the project tree starting at folder `{artifact_id_quarkus}` and double click on `FruitResource.java`. Update with the relevant lines bellow replacing all the existing code as of `import javax.ws.rs.core.MediaType;` till the end of the class:
 +
 [source,java,role="copypaste"]
 ----
-...
+import org.jboss.logging.Logger; // logging
+
+@Path("/fruit")
+public class FruitResource {
+  Logger logger = Logger.getLogger(FruitResource.class); // logging
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)
@@ -219,11 +225,27 @@ quarkus.log.category."com.redhat.atomic".level=DEBUG
       logger.debug("Hello method is called"); // logging
       return "hello";
   }
-
-...
+}
 ----
 
-. From a different terminal or using a browser try/reload this url: http://localhost:8080/fruit
+. From a different terminal try this url: http://localhost:8080/fruit
++
+The output should be something similar as follows (pay attention to the last trace, **DEBUG**):
++
+[.console-output]
+[source,console]
+----
+2021-03-31 16:32:26,809 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.131s. Listening on: http://0.0.0.0:8080
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 16:32:26,943 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-7) Hot replace total time: 0.201s 
+2021-03-31 16:32:26,946 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called
+----
 
 The console log handler is enabled by default. It outputs all log events to the console of your application (typically to the system’s `stdout`).
 
@@ -234,11 +256,23 @@ For details of its configuration options, see https://quarkus.io/guides/logging#
 
 Quarkus uses https://microprofile.io/project/eclipse/microprofile-config[MicroProfile Config] annotations to inject the configuration properties in the application.
 
-. Add the following and update the `hello`() method to use your custom property.
+. Append the following property to your `application.properties`:
++
+[source,properties,role="copypaste"]
+----
+## custom properties
+hello.message = ${HELLO_MESSAGE:hello}
+----
+
+. Again and if you already closed it, navigate to `src → main → java → {group_id}` and double click on `FruitResource.java`. Update with the following code  replacing all the existing code as of `import org.jboss.logging.Logger; // logging` till the end of the class:
 +
 [source,java,role="copypaste"]
 ----
-...
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Path("/fruit")
+public class FruitResource {
+  Logger logger = Logger.getLogger(FruitResource.class); // logging
 
   @ConfigProperty(name = "hello.message")
   String message;
@@ -249,20 +283,48 @@ Quarkus uses https://microprofile.io/project/eclipse/microprofile-config[MicroPr
       logger.debug("Hello method is called with message: " + this.message); // logging & custom property
       return message; // custom property
   }
-
-...
+}
 ----
 
-. Add the following property to your application.properties.
+. From a different terminal try this url: http://localhost:8080/fruit
 +
-[source,properties,role="copypaste"]
+The output should be something similar as follows (pay attention to the last trace, **DEBUG**):
++
+[.console-output]
+[source,console]
 ----
-## custom properties
-hello.message = ${HELLO_MESSAGE:hello}
+2021-03-31 17:01:14,757 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-8) Hot replace total time: 0.242s 
+2021-03-31 17:01:14,999 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-9) Changed source files detected, recompiling [/projects/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/java/com/redhat/atomic/fruit/FruitResource.java]
+2021-03-31 17:01:15,100 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.222s. Listening on: http://0.0.0.0:8080
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 17:01:15,325 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-9) Hot replace total time: 0.327s 
+2021-03-31 17:01:15,334 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called with message: hello
 ----
 
-. From a different terminal or using a browser try/reload this url: http://localhost:8080/fruit
+. Now, without stopping our application, change the value of `hello.message` in `atomic-fruit-service/src/main/resources/application.properties` from hello to __something different__ you may prefer. Save the aplication.propertlies file and try again. 
++
+This time the result should be different (pay attention to the last trace, **DEBUG**):
++
+[.console-output]
+[source,console]
+----
+2021-03-31 17:05:06,395 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-10) File change detected: /projects/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/resources/application.properties
+2021-03-31 17:05:06,396 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.136s. Listening on: http://0.0.0.0:8080
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 17:05:06,534 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-10) Hot replace total time: 0.140s 
+2021-03-31 17:05:06,537 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called with message: something different
+----
 
-. Now, without stopping our application, change the value of `hello.message` from hello to something different. Save the aplication.propertlies file and try again. This time the result should be different.
-
-WARNING: Return the value of `hello.message` back to `hello` and stop the app with _Ctrl+C_
+WARNING: Return the value of `hello.message` back to `hello` and stop the app with **_Ctrl+C_**

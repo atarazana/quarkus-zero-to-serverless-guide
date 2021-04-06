@@ -2,5 +2,11 @@ include::versions.adoc[]
 :experimental: true
 :source-highlighter: highlightjs
 :artifact_id: fruit-service
+:group_id: com.redhat.atomic.fruit
 :artifact_id_quarkus: atomic-fruit-service
 :app_name: fruits-app
+:class_name: FruitResource
+:class_path: fruit
+:app_home: $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service
+:project_name: %USER%-{artifact_id}
+:lab_pass: openshift

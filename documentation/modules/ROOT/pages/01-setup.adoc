@@ -1,89 +1,108 @@
 = Setup
 include::_attributes.adoc[]
-:project_name: %USERNAME%-{artifact_id}
 
-[#getting-the-code]
-== Getting the Code
+[#getting-ready]
+== Getting Ready for the labs
 
-. Time to get our hands dirty. Clone or download the code, your choice.
-+
-[.console-input]
-[source,sh,subs="attributes+"]
-----
-git clone --single-branch --branch {git_ref} {git_base}/{git_uri}.git
-----
+You will be using Red Hat CodeReady Workspaces, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^]. *Changes to files are auto-saved every few seconds*, so you don’t need to explicitly save changes.
 
-. Change to the dir where the code is.
-+
-[.console-input]
-[source,sh,subs="attributes+"]
-----
-cd {git_uri}/apps/{APP_NAME}
-----
+To get started, access the CodeReady Workspaces instance and log in using the username and password you’ve been assigned (e.g. `%USER%/{LAB_PASS}`):
 
-[#prerequisites]
-== Prerequisites
+image::che-login.png[cdw, 700]
 
-IMPORTANT: You need JDK 8 or 11
+Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green %USER%-namespace that says _Open_ on the top right hand side of the screen.
 
-. Setting demo environment variables
-+
-NOTE: _You must run:_ `$ . ./env.sh`
-+
-The `env.sh` has the following content:
-+
-[source,sh,subs="attributes+"]
----- 
-export QUARKUS_VERSION={quarkus_version}
-export GRAALVM_VERSION={graalvm_version}
+After a minute or two, you’ll be placed in the workspace:
 
-GRAALVM_HOME=$(pwd)/graalvm-ce-java11-$\{GRAALVM_VERSION}
-if [[ "$OSTYPE" == "darwin"* ]]; then GRAALVM_HOME=$\{GRAALVM_HOME}/Contents/Home ; fi
-export GRAALVM_HOME
-export PATH=$\{GRAALVM_HOME}/bin:$PATH
+image::che-workspace.png[cdw, 900]
 
-if [[ "$OSTYPE" == "linux"* ]]; then GRAALVM_OSTYPE=linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then GRAALVM_OSTYPE=darwin ; fi
-export GRAALVM_OSTYPE
+You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do:
 
-export KNATIVE_CLI_VERSION={knative_version}
-if [[ "$OSTYPE" == "linux"* ]]; then KNATIVE_OSTYPE=Linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then KNATIVE_OSTYPE=Darwin ; fi
-export KNATIVE_OSTYPE
+image::crw-icons.png[cdw, 400]
 
-export TEKTON_CLI_VERSION={tekton_version}
-if [[ "$OSTYPE" == "linux"* ]]; then TEKTON_OSTYPE=Linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then TEKTON_OSTYPE=Darwin ; fi
-export TEKTON_OSTYPE
+[NOTE]
+====
+If things get weird or your browser appears, you can simply reload the browser tab to refresh the view.
+====
 
-mkdir -p ./bin
-export PATH=$(pwd)/bin:$PATH
-----
+Many features of CodeReady Workspaces are accessed via *Commands*. You can see a few of the commands listed with links on the home page (e.g. _New File.._, _Git Clone.._, and others).
 
-. Download GraalVM and set GraaVM env
-+
-[.console-input]
-[source,sh,role="copypaste"]
-----
-curl -OL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-java11-${GRAALVM_OSTYPE}-amd64-${GRAALVM_VERSION}.tar.gz
+If you ever need to run commands that you don't see in a menu, you can press kbd:[F1] to open the command window, or the more traditional kbd:[Control+SHIFT+P] (or kbd:[Command+SHIFT+P] on Mac OS X).
 
-tar xvzf graalvm-ce-java11-${GRAALVM_OSTYPE}-amd64-${GRAALVM_VERSION}.tar.gz
-----
+[#import-projects]
+=== Import Projects
 
-. Install native image for GraalVM
-+
-[.console-input]
-[source,sh,role="copypaste"]
-----
-gu install native-image
-----
+Let's import the project source code for this lab. Click on **Git Clone..** (or type kbd:[F1], enter 'git' and click on the auto-completed _Git Clone.._ )
 
-. Login to your Openshift cluster `oc login ...`
+image::che-workspace-gitclone.png[cdw, 900]
 
-. Create a project or use an already existing one
-+
+Step through the prompts, using the following value for **Repository URL**. If you use *FireFox*, it may end up pasting extra spaces at the end, so just press backspace after pasting:
+
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-oc new-project ${PROJECT_NAME}
+{git_base}/{git_uri}.git
+----
+
+image::crw-clone-repo.png[crw,900]
+
+Click on *Select Repository Location* then click on *Open in New Window*. It will reload your web browser immediately:
+
+image::crw-add-workspace.png[crw, 900]
+
+The project is imported into your workspace and is visible in the project explorer:
+
+image::crw-clone-explorer.png[crw,900]
+
+==== IMPORTANT: Check out proper Git branch
+
+To make sure you're using the right version of the project files, run this command in a CodeReady Terminal:
+
+[source,sh,role="copypaste"]
+----
+cd $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide && git checkout master
+----
+
+[NOTE]
+====
+The Terminal window in CodeReady Workspaces. You can open a terminal window for any of the containers running in your Developer workspace. For the rest of these labs, anytime you need to run a command in a terminal, you can use the **>_ New Terminal** command on the right:
+
+image::codeready-workspace-terminal.png[codeready-workspace-terminal, 700]
+====
+
+[#login-to-openshift]
+=== Login to OpenShift
+
+Although your Eclipse Che workspace is running on the Kubernetes cluster, it’s running with a default restricted _Service Account_ that prevents you from creating most resource types. If you’ve completed other modules, you’re probably already logged in, but let’s login again: click on *Login to OpenShift*, and enter your given credentials:
+
+* Username: `%USER%`
+* Password: `{LAB_PASS}`
+
+image::cmd-login.png[login,700]
+
+You should see something like this (the project names may be different):
+
+[.console-output]
+[source,console]
+----
+Login successful.
+
+You have access to the following projects and can switch between them with 'oc project <projectname>':
+
+  * %USER%-project
+
+Using project "%USER%-project".
+Welcome! See 'oc help' to get started.
+----
+
+[NOTE]
+====
+After you log in using *Login to OpenShift*, the terminal is no longer usable as a regular terminal. You can close the terminal window. You will still be logged in when you open more terminals later!
+====
+
+Create the project:
+[.console-input]
+[source,sh,subs="attributes+",role="copypaste"]
+----
+oc new-project {PROJECT_NAME}
 ----

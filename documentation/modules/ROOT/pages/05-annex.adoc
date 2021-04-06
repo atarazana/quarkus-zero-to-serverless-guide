@@ -1,5 +1,85 @@
-= ANNEX: Automatic builds
+= ANNEX: Packing & building by using Docker
 include::_attributes.adoc[]
+
+[#native-mode-ii-generated-in-a-container]
+== Native Mode II (generated in a container)
+
+Quite often one only needs to create a native Linux executable for their Quarkus application (for example in order to run in a containerized environment) and would like to avoid the trouble of installing the proper GraalVM version in order to accomplish this task (for example, in CI environments it’s common practice to install as little software as possible).
+
+To this end, Quarkus provides a very convenient way of creating a native Linux executable by leveraging a container runtime such as Docker or podman. The easiest way of accomplishing this task is to execute:
+
+.If you want to use Mandrel instead of GraalVM
+****
+[.console-input]
+[source,sh]
+----
+./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}
+----
+****
+
+. Create the docker image:
++
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
+----
+
+. Create the docker image:
++
+[.console-input]
+[source,sh,role="copypaste"]
+----
+docker build -f src/main/docker/Dockerfile.native -t atomic-fruit-service:1.0-SNAPSHOT .
+----
++
+[TIP]
+====
+By default Quarkus automatically detects the container runtime.
+If you want to explicitely select the container runtime, you can do it with:
+[source,bash]
+----
+# Docker
+./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
+# Podman
+./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
+----
+
+These are normal Quarkus config properties, so if you always want to build in a container it is recommended you add these to your `application.properties` in order to avoid specifying them every time.
+====
+
+. Run the image created.
++
+[.console-input]
+[source,sh,role="copypaste"]
+----
+docker run -i --rm -p 8080:8080 atomic-fruit-service:1.0-SNAPSHOT <1>
+----
+
+. Test from another terminal or a browser, you should receive a `hello` string.
++
+[.console-input]
+[source,sh,role="copypaste"]
+----
+curl http://localhost:8080/fruit
+----
+
+<1> *_Ctrl+C_ to stop.*
+
+.Push to an image registry
+****
+
+[TIP]
+====
+Finally you could push it to the image registry of your choice.
+
+[source,sh]
+----
+docker tag atomic-fruit-service:1.0-SNAPSHOT quay.io/<registry_user>/atomic-fruit-service:1.0-SNAPSHOT && \
+docker push quay.io/<registry_user>/atomic-fruit-service:1.0-SNAPSHOT
+----
+====
+****
 
 [#automatic-build-for-jvm-mode-using-docker]
 == Automatic build for JVM mode using `docker`

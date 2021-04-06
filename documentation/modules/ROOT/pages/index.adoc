@@ -12,8 +12,8 @@ This module guides developers on their journey towards a native Java application
 
 [.tile]
 .xref:01-setup.adoc[Get Started]
-* xref:01-setup.adoc#getting-the-code[Getting the Code]
-* xref:01-setup.adoc#prerequisites[Prerequisites]
+* xref:01-setup.adoc#getting-ready[Getting Ready for the labs]
+* xref:01-setup.adoc#login-to-openshift[Login To OpenShift]
 
 [.tile]
 .xref:02-deploy.adoc[Deploying the Atomic Fruit Service]
@@ -31,11 +31,13 @@ This module guides developers on their journey towards a native Java application
 * xref:03-deploy-database.adoc#deploying-to-openshift[Deploying to OpenShift]
 
 [.tile]
-.xref:04-deploy-serverless.adoc[Evolving to Serverless]
-* xref:04-deploy-serverless.adoc[Deploy to OpenShift as a Knative service]
+.xref:04-deploy-openshift.adoc[Deploying the Atomic Fruit Service on OpenShift]
+* xref:04-deploy-openshift.adoc#deploying-to-openshift[Deploying to OpenShift]
+* xref:04-deploy-openshift.adoc#evolving-to-serverless[Evolving to Serverless]
 
 [.tile]
-.xref:05-annex.adoc[ANNEX: Automatic builds]
+.xref:05-annex.adoc[ANNEX: Packing & building by using Docker]
+* xref:05-annex.adoc#native-mode-ii-generated-in-a-container[Native Mode II (generated in a container)]
 * xref:05-annex.adoc#automatic-build-for-jvm-mode-using-docker[Automatic build for JVM mode using `docker`]
 * xref:05-annex.adoc#automatic-build-for-native-mode-using-docker[Automatic build for Native mode using `docker`]
 

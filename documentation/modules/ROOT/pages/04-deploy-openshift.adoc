@@ -12,6 +12,7 @@ First of all let\'s add the extension to deploy to OpenShift.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 ./mvnw quarkus:add-extension -Dextension="openshift"
 ----
 
@@ -26,39 +27,12 @@ Output:
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 [INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
-✅ Extension io.quarkus:quarkus-smallrye-health has been installed
+✅ Extension io.quarkus:quarkus-openshift has been installed
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  1.200 s
 [INFO] Finished at: 2021-03-31T18:27:06Z
-[INFO] ------------------------------------------------------------------------
-----
-
-Second let\'s remove the docker extension, we don\'t need it and they collide with each other.
-
-[.console-input]
-[source,sh,role="copypaste"]
-----
-./mvnw quarkus:remove-extension -Dextension="container-image-docker"
-----
-
-Output:
-[.console-output]
-[source,console]
-----
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] ------------< com.redhat.atomic.fruit:atomic-fruit-service >------------
-[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO] 
-[INFO] --- quarkus-maven-plugin:1.9.2.Final:remove-extension (default-cli) @ atomic-fruit-service ---
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.109 s
-[INFO] Finished at: 2021-03-31T18:33:16Z
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -113,8 +87,8 @@ NOTE: `openshift` extension takes the file we\'re generating and merge it with t
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-mkdir -p $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/kubernetes && \
-cat <<EOF > $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/kubernetes/openshift.yml
+mkdir -p $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes && \
+cat <<EOF > $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
 ---
 apiVersion: v1
 kind: Secret
@@ -130,11 +104,37 @@ Now let\'s add the environment variables we need to connect to the database:
 
 [source,properties,role="copypaste"]
 ----
+#################################
+## BEGIN: Data Base related properties
+
 ## Environment variables
 quarkus.openshift.env.mapping.db-username.from-secret=fruits-database-secret
 quarkus.openshift.env.mapping.db-username.with-key=user
 quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
 quarkus.openshift.env.mapping.db-password.with-key=password
+
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.username = ${DB_USERNAME}
+%prod.quarkus.datasource.password = ${DB_PASSWORD}
+
+%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%dev.quarkus.datasource.db-kind=h2
+%dev.quarkus.datasource.username = username-default
+
+%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%test.quarkus.datasource.db-kind=h2
+%test.quarkus.datasource.username = username-default
+
+## drop and create the database at startup (use `update` to only update the schema)
+%prod.quarkus.hibernate-orm.database.generation = create
+quarkus.hibernate-orm.database.generation = drop-and-create
+quarkus.hibernate-orm.sql-load-script = import.sql
+## show sql statements in log
+quarkus.hibernate-orm.log.sql = true
+
+## END: Data Base related properties
+#################################
 ----
 
 - - - - - NEED REVIEW / B - - - - -
@@ -144,7 +144,7 @@ Let\'s package our application and have a look to the descriptors generated.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw clean package
+./mvnw clean package -DskipTests
 ----
 
 - - - - - NEED REVIEW / E - - - - -
@@ -153,9 +153,12 @@ You can check the generated file `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-
 
 Let\'s deploy the result:
 
+NOTE: We make sure the default project is `{project_name}`, this is necessary because the plugin used to deploy in OpenShift deploys in the default project unless indicated otherwise.
+
 [.console-input]
-[source,sh,role="copypaste"]
+[source,sh,role="copypaste",subs="attributes+"]
 ----
+oc project {project_name} && \
 ./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests
 ----
 
@@ -166,7 +169,7 @@ The other, and equivalent, approach is to use the `oc` client instead of the mav
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-$ oc apply -n {project_name} -f $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/target/kubernetes/openshift.yml
+oc apply -n {project_name} -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml
 ----
 ====
 
@@ -175,7 +178,7 @@ Let\'s inspect the resources created.
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-$ oc get dc,deploy -n {project_name}
+oc get dc,deploy -n {project_name}
 ----
 
 [.console-output]
@@ -203,7 +206,7 @@ What about native in this case? Easy, just add `-Dquarkus.native.container-build
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Dquarkus.native.container-build=true -Pnative
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative
 ----
 
 - - - - - NEED REVIEW / E - - - - -

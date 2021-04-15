@@ -5,13 +5,13 @@
 [.text-center.strong]
 == Publish Atomic Fruit Service to OpenShift
 
-This module guides developers on their journey towards a native Java application on Kubernetes using Quarkus. Starting from scratch, building a simple REST example that will evolve by adding capabilities through the Quarkus extensions mechanism, including relational DB persistence, dependency injection, etc. until its Serverless deployment through Knative on OpenShift.
+This module guides developers on their journey towards deploying a Cloud Native Java application on Kubernetes using Quarkus. Starting from scratch you will build a simple REST service that will evolve by adding capabilities using the Quarkus extensions mechanism, including relational DB persistence, dependency injection, etc. Later you will learn how to deploy your brand new microservice to Openshift and finally you will learn yet another way of deploying your application, this time using Knative.
 
 [.tiles.browse]
 == Browse labs
 
 [.tile]
-.xref:01-setup.adoc[Get Started]
+.xref:01-setup.adoc[Getting Started]
 * xref:01-setup.adoc#getting-ready[Getting Ready for the labs]
 * xref:01-setup.adoc#login-to-openshift[Login To OpenShift]
 

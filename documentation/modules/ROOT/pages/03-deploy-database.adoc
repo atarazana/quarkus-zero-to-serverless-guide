@@ -122,29 +122,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logging.Logger;
+import org.jboss.logging.Logger; // logging
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
 
 @Path("/fruit")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
-    Logger logger = Logger.getLogger(FruitResource.class);
+  Logger logger = Logger.getLogger(FruitResource.class); // logging
 
-    @ConfigProperty(name = "hello.message")
-    String message;
-    
-    @GET
+  @ConfigProperty(name = "hello.message") // custom property
+  String message; // custom property
+
+   @GET
     @Path("hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
         logger.debug("Hello method is called with message: " + this.message); // logging & custom property
         return message; // custom property
     }
-    
+
     @GET
     public List<Fruit> allFruits() {
-        return Fruit.listAll(); 
+        return Fruit.listAll();
     }
 
     @GET
@@ -166,8 +166,6 @@ public class FruitResource {
     }
 }
 ----
-
-- - - - - NEED REVIEW / B - - - - -
 
 We need to adapt the test class after the changes to `FruitResource`. Update `$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java` with the next code.
 
@@ -201,38 +199,27 @@ public class FruitResourceTest {
 
 Add the following properties to your `{artifact_id_quarkus}/src/main/resources/application.properties` file:
 
-NOTE: As you can see we have three different jdbc urls for three execution profiles (`dev`, `prod` the default and `che` a custom profile we\'ll use later)
+NOTE: As you can see we have three different jdbc urls for three execution profiles: `dev`, `prod` (the default one)
 
-- - - - - NEED REVIEW / E - - - - -
-
-[source,properties,role="copypaste"]
+[source,properties,role="copypaste",subs="attributes+"]
 ----
-## Data Base related properties
-quarkus.datasource.jdbc.url = jdbc:postgresql://my-database:5432/my_data
+#################################
+## BEGIN: Data Base related properties
+quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
 quarkus.datasource.db-kind=postgresql
-
-%dev.quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/my_data
-%dev.quarkus.datasource.db-kind=postgresql
-#%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-#%dev.quarkus.datasource.db-kind=h2
-#%dev.quarkus.datasource.username = username-default
-#%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-#%test.quarkus.datasource.db-kind=h2
-#%test.quarkus.datasource.username = username-default
 
 quarkus.datasource.username = luke
 quarkus.datasource.password = secret
 
 ## drop and create the database at startup (use `update` to only update the schema)
-%dev.quarkus.hibernate-orm.database.generation = drop-and-create
-quarkus.hibernate-orm.database.generation = create
+quarkus.hibernate-orm.database.generation = drop-and-create
 quarkus.hibernate-orm.sql-load-script = import.sql
 ## show sql statements in log
 quarkus.hibernate-orm.log.sql = true
-----
 
-[#testing-locally]
-== Testing locally
+## END: Data Base related properties
+#################################
+----
 
 [#adding-some-fruits]
 === Adding some fruits
@@ -254,26 +241,10 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'App
 INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Grape '     , 'Fall'   );
 ----
 
-[#testing-locally-using-port-forwarding]
-=== Using port-forwarding
-
-IMPORTANT: Open a new terminal to execute the following
-
-[.console-input]
-[source,sh,subs="attributes+",role="copypaste"]
-----
-POD_NAME=$(oc get pod -n {project_name} -o jsonpath='{.items[0].metadata.name}')
-oc port-forward ${POD_NAME} 5432:5432 -n {project_name} <1>
-----
-
-A couple of popups may arise with a message like `A new process is now listening on port 5432` that you can safely close (clicking on the 'x'/close button)
-
-In your current terminal (the terminal you have been using from the beginning) run your code using profile `dev`
-
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw compile quarkus:dev <2>
+./mvnw compile quarkus:dev <1>
 ----
 
 :NOTE: When you run your app it runs in `dev` mode as `dev` profile is activated by default.
@@ -296,24 +267,25 @@ This time you should get a list of fruits:
 [NOTE]
 ===============================
 
-<1> We\'re done with the PostgreSQL tests, now go to the terminal window where we forwaded the database port and stop it with **Ctrl+C**.
-
-<2> Leave the application running we\'re going to do some more changes.
+<1> Leave the application running we\'re going to do some more changes.
 
 ===============================
+
+Ok, so far we have used the default database related properties and connecting with the instance of PostgreSQL we have deployed in `{project_name}`.
 
 [#little-diversion-using-h2]
 === Little diversion: Using H2
 
-What if you wanted to use H2, the embedded database when in `dev` mode?
+What if you wanted to use H2, the embedded database when in `dev` mode?  Although not always possible is not a bad practice to use an embedded database like `H2` so that tests don't need an external database in place.
 
 **Adding H2**
 
-We will use _Quarkus_ extension to add **H2 JDBC Driver**. Go back to the terminal and run the following maven plugin:
+We will use _Quarkus_ extension to add **H2 JDBC Driver**. From another terminal run the following command.
 
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 ./mvnw quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"
 ----
 
@@ -344,19 +316,30 @@ NOTE: we have changed the value of `dev.quarkus.datasource.url` now the url poin
 
 [source,properties,role="copypaste"]
 ----
-### Comment this
-
-#%dev.quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/my_data
-#%dev.quarkus.datasource.db-kind=postgresql
-
-### Uncomment that
+#################################
+## BEGIN: Data Base related properties
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.username = luke
+%prod.quarkus.datasource.password = secret
 
 %dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
 %dev.quarkus.datasource.db-kind=h2
 %dev.quarkus.datasource.username = username-default
+
 %test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
 %test.quarkus.datasource.db-kind=h2
 %test.quarkus.datasource.username = username-default
+
+## drop and create the database at startup (use `update` to only update the schema)
+%prod.quarkus.hibernate-orm.database.generation = create
+quarkus.hibernate-orm.database.generation = drop-and-create
+quarkus.hibernate-orm.sql-load-script = import.sql
+## show sql statements in log
+quarkus.hibernate-orm.log.sql = true
+
+## END: Data Base related properties
+#################################
 ----
 
 If, accidentally, you stopped the application you can run it again using profile `dev` running the next command. However this time the application will run queries against H2.
@@ -375,7 +358,7 @@ As we have done before, from another terminal run:
 curl http://localhost:8080/fruit
 ----
 
-Same output as the PostgreSQL's:
+You should get the same output you got from PostgreSQL:
 [.console-output]
 [source,console]
 ----
@@ -424,11 +407,12 @@ curl: (6) Could not resolve host: POST
 [#adding-swagger-ui-to-ease-api-development-and-testing]
 === Adding Swagger UI to ease API development and testing
 
-You can easily generate en OpenAPI compliant description of your API and at additionally add a Swagger UI to your app by adding the `openapi` extension. Please run this command to do so.
+You can easily generate en OpenAPI compliant description of your API and at additionally add a Swagger UI to your app by adding the `openapi` extension. Please run this command from a new terminal.
 
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 ./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"
 ----
 
@@ -452,7 +436,7 @@ The output:
 [INFO] ------------------------------------------------------------------------
 ----
 
-You can use the `web-%USER%` shortcut from your CodeRedy tool panel (right side) to open the app link
+You can use the `web-%USER%` shortcut from your CodeReady tool panel (right side) to open the app link
 
 image::crw-open-page-shortcut.png[crw-open-page-shortcut, 400]
 
@@ -487,6 +471,7 @@ Health checks is one of those things that if recommendable in general is a must 
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 ./mvnw quarkus:add-extension -Dextension="smallrye-health"
 ----
 

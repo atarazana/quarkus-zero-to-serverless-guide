@@ -1,7 +1,7 @@
 = Deploying the Atomic Fruit Service
 include::_attributes.adoc[]
 
-This is a sample Fruit service built from a maven artifact that generates all the needed Java scaffold for a Quarkus Maven app.
+The purpose of this section is to explain step by step how to build a simple CRUD service using Quarkus starting from scratch. Then you will learn how to enhance it by adding extensions and finally you will deploy it in OpenShift.
 
 [#generate-the-quarkus-app-scaffold-using-a-maven-archetype]
 == Generate the Quarkus app scaffold using a maven archetype
@@ -11,7 +11,7 @@ By default, the command will target the latest version of `quarkus-universe-bom`
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-mvn io.quarkus:quarkus-maven-plugin:{QUARKUS_VERSION}:create \
+mvn io.quarkus:quarkus-maven-plugin:{quarkus_version}:create \
   -DprojectGroupId="{group_id}" \
   -DprojectArtifactId="{artifact_id_quarkus}" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -35,7 +35,7 @@ NOTE: At this point you must be compliant with all the prerequisites describes i
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service
+cd $CHE_PROJECTS_ROOT/atomic-fruit-service
 ----
 
 [#jvm-mode]
@@ -48,7 +48,7 @@ This mode generates a Quarkus Java jar file.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-unset MAVEN_CONFIG && ./mvnw -DskipTests clean package
+./mvnw -DskipTests clean package
 ----
 
 . Run the application in JVM mode.
@@ -92,7 +92,6 @@ This is huge... now you have a native binary file, no JVM involved.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-chmod +x ./target/atomic-fruit-service-1.0-SNAPSHOT-runner && \
 ./target/atomic-fruit-service-1.0-SNAPSHOT-runner <1>
 ----
 
@@ -209,10 +208,17 @@ quarkus.log.category."com.redhat.atomic".level=DEBUG
 Keep it open as you are going to use it frequently during all the lab.
 ====
 
-. Navigate to `src → main → java → {group_id}` in the project tree starting at folder `{artifact_id_quarkus}` and double click on `FruitResource.java`. Update with the relevant lines bellow replacing all the existing code as of `import javax.ws.rs.core.MediaType;` till the end of the class:
+. Navigate to `src → main → java → {group_id}` in the project tree starting at folder `{artifact_id_quarkus}` and double click on `FruitResource.java`. Update with the code bellow, replacing all the existing code:
 +
 [source,java,role="copypaste"]
 ----
+package com.redhat.atomic.fruit;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.jboss.logging.Logger; // logging
 
 @Path("/fruit")
@@ -264,19 +270,27 @@ Quarkus uses https://microprofile.io/project/eclipse/microprofile-config[MicroPr
 hello.message = ${HELLO_MESSAGE:hello}
 ----
 
-. Again and if you already closed it, navigate to `src → main → java → {group_id}` and double click on `FruitResource.java`. Update with the following code  replacing all the existing code as of `import org.jboss.logging.Logger; // logging` till the end of the class:
+. Again and if you already closed it, navigate to `src → main → java → {group_id}` and double click on `FruitResource.java`. Update with the following code replacing all the existing code:
 +
 [source,java,role="copypaste"]
 ----
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+package com.redhat.atomic.fruit;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jboss.logging.Logger; // logging
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
 
 @Path("/fruit")
 public class FruitResource {
   Logger logger = Logger.getLogger(FruitResource.class); // logging
 
-  @ConfigProperty(name = "hello.message")
-  String message;
-  
+  @ConfigProperty(name = "hello.message") // custom property
+  String message; // custom property
+
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String hello() {

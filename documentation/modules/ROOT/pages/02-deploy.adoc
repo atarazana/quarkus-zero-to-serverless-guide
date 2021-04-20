@@ -43,12 +43,14 @@ cd $CHE_PROJECTS_ROOT/atomic-fruit-service
 
 This mode generates a Quarkus Java jar file.
 
+WARNING: Don't forget to add `unset MAVEN_CONFIG` if you open a new terminal!
+
 . Generate `jar`
 +
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw -DskipTests clean package
+unset MAVEN_CONFIG && ./mvnw -DskipTests clean package
 ----
 
 . Run the application in JVM mode.

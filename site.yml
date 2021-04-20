@@ -10,17 +10,17 @@ content:
   sources:
     - url: git@github.com:atarazana/quarkus-zero-to-serverless-guide.git
       tags: []
-      branches: [master]
+      branches: [main]
       start_path: documentation
 
 asciidoc:
   attributes:
     title: Quarkus from Zero to Serverless Guide
-    release-version: master
+    release-version: main
     page-pagination: true
     git_base: https://github.com/atarazana
     git_uri: quarkus-zero-to-serverless-guide
-    git_ref: master
+    git_ref: main
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js

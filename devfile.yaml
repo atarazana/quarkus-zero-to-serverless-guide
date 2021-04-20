@@ -1,6 +1,6 @@
 apiVersion: 1.0.0
 metadata:
-  name: user1-workspace
+  generateName: quarkus-zero-
 components:
   - id: redhat/quarkus-java11/latest
     type: chePlugin

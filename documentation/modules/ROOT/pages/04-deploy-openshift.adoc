@@ -137,8 +137,6 @@ quarkus.hibernate-orm.log.sql = true
 #################################
 ----
 
-- - - - - NEED REVIEW / B - - - - -
-
 Let\'s package our application and have a look to the descriptors generated.
 
 [.console-input]
@@ -147,9 +145,8 @@ Let\'s package our application and have a look to the descriptors generated.
 ./mvnw clean package -DskipTests
 ----
 
-- - - - - NEED REVIEW / E - - - - -
 
-You can check the generated file `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
+You can check the generated file `$CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
 
 Let\'s deploy the result:
 
@@ -215,7 +212,8 @@ What about native in this case? Easy, just add `-Dquarkus.native.container-build
 == Evolving to Serverless
 include::_attributes.adoc[]
 
-In order to deploy our app to OpenShift as a Knative service... Let\'s add a new target platform !!!
+In order to deploy our app to OpenShift as a Knative service... Let\'s add a new target platform. Find the next property and make sure its value is `openshift,knative` instead of just `openshift`.
+
 [source,properties,role="copypaste"]
 ----
 ## Generate OpenShift and Knative descriptors
@@ -223,8 +221,6 @@ quarkus.kubernetes.deployment-target=openshift,knative
 ----
 
 And this properties to tune the Knative deployment.
-
-WARNING: If you have changed the by default value for PROJECT_NAME change this line below accordingly!
 
 [source,properties,subs="attributes+",role="copypaste"]
 ----
@@ -234,7 +230,7 @@ quarkus.container-image.group=${PROJECT_NAME:{project_name}}
 quarkus.container-image.tag=1.0-SNAPSHOT
 quarkus.knative.name={artifact_id_quarkus}-kn
 quarkus.knative.version=1.0
-quarkus.openshift.part-of={app_name}
+quarkus.knative.part-of={app_name}
 quarkus.knative.annotations."app.openshift.io/connects-to"=my-database
 quarkus.knative.labels."app.openshift.io/runtime"=quarkus
 quarkus.knative.env.mapping.db-username.from-secret=fruits-database-secret

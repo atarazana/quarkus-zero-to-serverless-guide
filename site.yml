@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: Quarkus from Zero to Serverless Guide
-  url: https//atarazana.github.io/quarkus-zero-to-serverless-guide
+  url: https://atarazana.github.io/quarkus-zero-to-serverless-guide
   start_page: quarkus-zero-to-serverless-guide::index.adoc
 
 content:

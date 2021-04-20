@@ -143,6 +143,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#automatic-build-for-native-mode-using-docker">Automatic build for Native mode using <code>docker</code></a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#s2i-native-build">S2i Native Build</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -415,6 +418,22 @@ For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( <a hre
 </div>
 <div class="paragraph">
 <p><strong><em>Ctrl+C</em> to stop.</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="s2i-native-build"><a class="anchor" href="#s2i-native-build"></a>S2i Native Build</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We saw how s2i works with the <em>JVM mode</em> here: <a href="04-deploy-openshift.html#deploying-to-openshift" class="page">Deploying to OpenShift</a>.</p>
+</div>
+<div class="paragraph">
+<p>What about native in this case? Easy, just add <code>-Dquarkus.native.container-build=true -Pnative</code>.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative</code></pre>
+</div>
 </div>
 </div>
 </div>

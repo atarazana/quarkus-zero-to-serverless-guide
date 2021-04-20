@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Deploy Service :: Quarkus from Zero to Serverless Guide</title>
-    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/quarkus-zero-to-serverless-guide/main/02-deploy.html">
+    <title>Quarkus from Zero to Serverless Guide :: Quarkus from Zero to Serverless Guide</title>
+    <link rel="canonical" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/02-deploy.html">
     <link rel="prev" href="01-setup.html">
+    <link rel="next" href="03-deploy-database.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -17,7 +18,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" href="https://redhat-scholars.github.io/course-template">Quarkus from Zero to Serverless Guide</a>
+      <a class="navbar-item" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide">Quarkus from Zero to Serverless Guide</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -75,22 +76,73 @@
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+    <a class="nav-link" href="01-setup.html#getting-ready">Getting Ready for the labs</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#minikube">Setup Minikube</a>
+    <a class="nav-link" href="01-setup.html#login-to-openshift">Login To OpenShift</a>
   </li>
 </ul>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-deploy.html">2. Deploy Service</a>
+    <a class="nav-link" href="02-deploy.html">2. Deploying the Atomic Fruit Service</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#package">Build Service</a>
+    <a class="nav-link" href="#generate-the-quarkus-app-scaffold-using-a-maven-archetype">Generate the Quarkus app scaffold using a maven archetype</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#deploy">Deploy Dervice</a>
+    <a class="nav-link" href="#testing-different-ways-of-packaging-the-app">Testing different ways of packaging the app</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#running-in-development-mode-and-enjoy-hot-reloading">Running in development mode and enjoy hot reloading</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-deploy-database.html">3. Adding a Data Base to our application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploying-postgresql">Deploying PostgreSQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploy">Deploy the Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#adding-db-related-extensions">Adding DB related extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#exposing-rest-endpoints-for-crud-operations">Exposing REST endpoints for CRUD operations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#testing-locally">Testing locally</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-deploy-openshift.html">4. Deploying the Atomic Fruit Service on OpenShift</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#deploying-to-openshift">Deploying to OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#evolving-to-serverless">Evolving to Serverless</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-annex.html">ANNEX: Packing &amp; building by using Docker</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#native-mode-ii-generated-in-a-container">Native Mode II (generated in a container)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-jvm-mode-using-docker">Automatic build for JVM mode using <code>docker</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-native-mode-using-docker">Automatic build for Native mode using <code>docker</code></a>
   </li>
 </ul>
   </li>
@@ -121,171 +173,34 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Quarkus from Zero to Serverless Guide</a></li>
-    <li><a href="02-deploy.html">2. Deploy Service</a></li>
+    <li><a href="02-deploy.html">2. Deploying the Atomic Fruit Service</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/master/documentation/modules/ROOT/pages/02-deploy.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/main/documentation/modules/ROOT/pages/02-deploy.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Deploy Service</h1>
-<div class="sect1">
-<h2 id="service"><a class="anchor" href="#service"></a>The Service</h2>
+<h1 class="page">Quarkus from Zero to Serverless Guide</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The code:</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Main {
-
-    public static void main(String[] args) {
-
-    }
-
-}
-
-./mvnw compile</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_atomic_fruit_service"><a class="anchor" href="#_atomic_fruit_service"></a>Atomic Fruit Service</h3>
-<div class="paragraph">
-<p>This is a sample Fruit service generated from a maven artifact that generates all the needed Java scaffold for a Quarkus Maven app.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Don&#8217;t worry, there&#8217;s also a Gradle counterpart ;-)
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Change to the cloned folder.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-You need JDK 8 or 11
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_setting_demo_environment_variables"><a class="anchor" href="#_setting_demo_environment_variables"></a>Setting demo environment variables</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<strong>You can alternatively run:</strong> <code>$ . ./env.sh</code>
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-bash hljs" data-lang="bash">export PROJECT_NAME="atomic-fruit"
-export APP_NAME="fruits-app"
-
-export QUARKUS_VERSION="1.9.2.Final"
-
-export GRAALVM_VERSION="20.2.0"
-GRAALVM_HOME=$(pwd)/graalvm-ce-java11-$20.2.0
-if [[ "$OSTYPE" == "darwin"* ]]; then GRAALVM_HOME=${GRAALVM_HOME}/Contents/Home ; fi
-export GRAALVM_HOME
-export PATH=${GRAALVM_HOME}/bin:$PATH
-
-if [[ "$OSTYPE" == "linux"* ]]; then GRAALVM_OSTYPE=linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then GRAALVM_OSTYPE=darwin ; fi
-export GRAALVM_OSTYPE
-
-export KNATIVE_CLI_VERSION="0.17.0"
-if [[ "$OSTYPE" == "linux"* ]]; then KNATIVE_OSTYPE=Linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then KNATIVE_OSTYPE=Darwin ; fi
-export KNATIVE_OSTYPE
-
-export TEKTON_CLI_VERSION="0.13.0"
-if [[ "$OSTYPE" == "linux"* ]]; then TEKTON_OSTYPE=Linux ; fi
-if [[ "$OSTYPE" == "darwin"* ]]; then TEKTON_OSTYPE=Darwin ; fi
-export TEKTON_OSTYPE
-
-mkdir -p ./bin
-export PATH=$(pwd)/bin:$PATH</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_download_graalvm_and_set_graavm_env"><a class="anchor" href="#_download_graalvm_and_set_graavm_env"></a>Download GraalVM and set GraaVM env</h3>
-<div class="paragraph">
-<p>Now download GraalVM for your system&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -OL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-java11-${GRAALVM_OSTYPE}-amd64-${GRAALVM_VERSION}.tar.gz
-tar xvzf graalvm-ce-java11-${GRAALVM_OSTYPE}-amd64-${GRAALVM_VERSION}.tar.gz</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_install_native_image_for_graalvm"><a class="anchor" href="#_install_native_image_for_graalvm"></a>Install native image for GraalVM</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">gu install native-image</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_login_to_your_openshift_cluster"><a class="anchor" href="#_login_to_your_openshift_cluster"></a>Login to your Openshift cluster</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login ...</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_create_a_project_or_use_an_already_existing_one"><a class="anchor" href="#_create_a_project_or_use_an_already_existing_one"></a>Create a project or use an already existing one</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project ${PROJECT_NAME}</code></pre>
-</div>
-</div>
+<p>The purpose of this section is to explain step by step how to build a simple CRUD service using Quarkus starting from scratch. Then you will learn how to enhance it by adding extensions and finally you will deploy it in OpenShift.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_generate_the_quarkus_app_scaffold_using_a_maven_archetype"><a class="anchor" href="#_generate_the_quarkus_app_scaffold_using_a_maven_archetype"></a>Generate the Quarkus app scaffold using a maven archetype</h2>
+<h2 id="generate-the-quarkus-app-scaffold-using-a-maven-archetype"><a class="anchor" href="#generate-the-quarkus-app-scaffold-using-a-maven-archetype"></a>Generate the Quarkus app scaffold using a maven archetype</h2>
 <div class="sectionbody">
-<div class="listingblock">
+<div class="paragraph">
+<p>By default, the command will target the latest version of <code>quarkus-universe-bom</code> (unless specific coordinates have been specified). If you run offline however, it will look for the latest locally available and if <code>quarkus-universe-bom</code> (satisfying the default version range which is currently up to 2.0) is not available locally, it will fallback to the bundled platform based on <code>quarkus-bom</code> (the version will match the version of the plugin).</p>
+</div>
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:1.11.6.Final-redhat-00001:create \
   -DprojectGroupId="com.redhat.atomic.fruit" \
   -DprojectArtifactId="atomic-fruit-service" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -293,187 +208,309 @@ tar xvzf graalvm-ce-java11-${GRAALVM_OSTYPE}-amd64-${GRAALVM_VERSION}.tar.gz</co
   -Dpath="fruit"</code></pre>
 </div>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>If you decide to generate a REST resource (using the <code>className</code> attribute), the endpoint is exposed at: <a href="http://localhost:8080/$path" class="bare">http://localhost:8080/$path</a>. If you use the default <code>path</code>, the URL is: <a href="http://localhost:8080/hello" class="bare">http://localhost:8080/hello</a>.</p>
+</div>
+<div class="paragraph">
+<p>The project is generated in a directory named after the passed artifactId. If the directory already exists, the generation fails.</p>
+</div>
+<div class="paragraph">
+<p>A pair of Dockerfiles for native and jvm mode are also generated in <code>src/main/docker</code>. Instructions to build the image and run the container are written in those Dockerfiles.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testing_different_ways_of_packaging_the_app"><a class="anchor" href="#_testing_different_ways_of_packaging_the_app"></a>Testing different ways of packaging the app</h2>
+<h2 id="testing-different-ways-of-packaging-the-app"><a class="anchor" href="#testing-different-ways-of-packaging-the-app"></a>Testing different ways of packaging the app</h2>
 <div class="sectionbody">
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>You must be inside the project folder to run the following commands.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+At this point you must be compliant with all the prerequisites describes in the <a href="01-setup.html" class="page">setup section</a> and be inside the app dir <code>atomic-fruit-service</code> you just created in the previous section.
+</td>
+</tr>
+</table>
 </div>
-</blockquote>
-</div>
-<div class="listingblock">
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd atomic-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd $CHE_PROJECTS_ROOT/atomic-fruit-service</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_jvm_mode"><a class="anchor" href="#_jvm_mode"></a>JVM mode</h3>
+<h3 id="jvm-mode"><a class="anchor" href="#jvm-mode"></a>JVM mode</h3>
 <div class="paragraph">
 <p>This mode generates a Quarkus Java jar file.</p>
 </div>
-<div class="listingblock">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Don&#8217;t forget to add <code>unset MAVEN_CONFIG</code> if you open a new terminal!
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Generate <code>jar</code></p>
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">unset MAVEN_CONFIG &amp;&amp; ./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>Run the application in JVM mode.</p>
-</div>
-<div class="listingblock">
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">java -jar ./target/atomic-fruit-service-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">java -jar ./target/atomic-fruit-service-1.0-SNAPSHOT-runner.jar <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Test from another terminal or a browser, you should receive a <code>hello</code> string.</p>
-</div>
-<div class="listingblock">
+</li>
+<li>
+<p>Test from another terminal, you should receive a <code>hello</code> string.</p>
+<div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Ctrl+C to stop.</p>
+</li>
+</ol>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong><em>Ctrl+C</em> to stop.</strong></td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_native_mode_i"><a class="anchor" href="#_native_mode_i"></a>Native Mode I</h3>
+<h3 id="native-mode-i"><a class="anchor" href="#native-mode-i"></a>Native Mode I</h3>
 <div class="paragraph">
 <p>This mode generates a Quarkus native binary file.</p>
 </div>
-<div class="quoteblock">
-<blockquote>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p><strong>NOTE:</strong> This is huge&#8230;&#8203; now you have a native binary file, no JVM involved.</p>
+<p>This is huge&#8230;&#8203; now you have a native binary file, no JVM involved.</p>
 </div>
-</blockquote>
+</td>
+</tr>
+</table>
 </div>
-<div class="listingblock">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Generate the binary</p>
+<div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw -DskipTests clean package -Pnative</code></pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>Run the application in native mode.</p>
-</div>
-<div class="listingblock">
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./target/atomic-fruit-service-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./target/atomic-fruit-service-1.0-SNAPSHOT-runner <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Test from another terminal or a browser, you should receive a <code>hello</code> string.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ctrl+C to stop.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_native_mode_ii_generated_in_a_container"><a class="anchor" href="#_native_mode_ii_generated_in_a_container"></a>Native Mode II (generated in a container)</h3>
-<div class="paragraph">
-<p>This mode generates a Quarkus native binary file using a build image and builds an image with it.</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>NOTE:</strong> If you want to use Mandrel&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}</code></pre>
-</div>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>IMPORTANT:
-&gt;
-&gt; If you want/need to set the container runtime you can use <code>-Dquarkus.native.container-runtime=(podman/docker)</code>
-&gt;
-&gt; For instance to use <code>podman</code> (then use <code>podman</code> to build the image, etc.):
-&gt; <code>`
-&gt; ./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
-&gt; </code>`</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
-docker build -f src/main/docker/Dockerfile.native -t atomic-fruit-service:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Run the image created.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">docker run -i --rm -p 8080:8080 atomic-fruit-service:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Test from another terminal or a browser, you should receive a <code>hello</code> string.</p>
-</div>
-<div class="listingblock">
+</li>
+<li>
+<p>Test from another terminal, you should receive a <code>hello</code> string.</p>
+<div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
 </div>
 </div>
+</li>
+</ol>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong><em>Ctrl+C</em> to stop.</strong></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Ctrl+C to stop.</p>
+<p>There is second mode from the Native perspective, a way of creating a native Linux executable by leveraging a container runtime such as <code>docker</code> or <code>podman</code>.
+This is outside of the scope of this lab but if you want to know more about this approach, we describe it for you in the Annex: <a href="05-annex.html#native-mode-ii-generated-in-a-container" class="page">Native Mode II (generated in a container)</a></p>
 </div>
-<div class="paragraph">
-<p>Push it to the image registry of your choice.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">docker tag atomic-fruit-service:1.0-SNAPSHOT quay.io/&lt;registry_user&gt;/atomic-fruit-service:1.0-SNAPSHOT
-docker push quay.io/&lt;registry_user&gt;/atomic-fruit-service:1.0-SNAPSHOT</code></pre>
-</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_running_in_development_mode_and_enjoy_hot_reloading"><a class="anchor" href="#_running_in_development_mode_and_enjoy_hot_reloading"></a>Running in development mode and enjoy hot reloading</h2>
+<h2 id="running-in-development-mode-and-enjoy-hot-reloading"><a class="anchor" href="#running-in-development-mode-and-enjoy-hot-reloading"></a>Running in development mode and enjoy hot reloading</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We can run our app in development mode, to do so we have to do as follows:</p>
 </div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>NOTE:</strong> In this case we&#8217;re using the <code>dev</code> profile</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
+<div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:dev</code></pre>
 </div>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><code>quarkus:dev</code></div>
 <div class="paragraph">
-<p>As we have done several times before, from a different terminal or using a browser try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+<p>Enables hot deployment with background compilation, which means that when you modify your Java files or your resource files and refresh your browser these changes will automatically take effect. This works too for resource files like the configuration property file. The act of refreshing the browser triggers a scan of the workspace, and if any changes are detected the Java files are compiled, and the application is redeployed, then your request is serviced by the redeployed application. If there are any issues with compilation or deployment an error page will let you know.</p>
+</div>
+</div>
 </div>
 <div class="paragraph">
-<p>Now, without stopping our application, let&#8217;s add some logging&#8230;&#8203;</p>
+<p>As we have done several times before, from a different terminal try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_adding_log_capabilities"><a class="anchor" href="#_adding_log_capabilities"></a>Adding log capabilities</h2>
-<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>You can configure Quarkus logging by setting the following parameters to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
+<p>The first time you build the app, new dependencies may be downloaded via maven. This should only happen once, after that things will go even faster</p>
 </div>
-<div class="listingblock">
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You may see WARNINGs like <code>Unrecognized configuration key</code> or <code>Duplicate entry</code>. These are configuration values that will take effect later on and can be safely ignored for now.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You should see:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">2020-11-03 14:27:00,102 INFO  [io.quarkus] (Quarkus Main Thread) people 1.0-SNAPSHOT on JVM (powered by Quarkus x.x.x) started in 0.972s. Listening on: http://0.0.0.0:8080
+2020-11-03 14:27:00,102 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2020-11-03 14:27:00,103 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the amazingly fast startup time! The app is now running "locally" (within the Che container in which the workspace is also running). <code>localhost</code> refers to the Kubernetes pod, not "your" laptop (so therefore opening localhost:8080 in your browser will not do anything).</p>
+</div>
+<div class="paragraph">
+<p>CodeReady will also detect that the Quarkus app opens <code>8080</code> (for web requests). When prompted, <strong>Open in Preview</strong>, which opens a small web browser in CodeReady:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/open-preview.png" alt="port" width="700">
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the default Quarkus welcome page (you may need to click the <em>reload</em> icon):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/welcome-quarkus.png" alt="port" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>Open a <strong>new</strong> CodeReady Workspaces Terminal:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cmd-terminal.png" alt="livecoding" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>and invoke the <code>fruit</code> endpoint using the following <em>curl</em> command:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also click on the URL link at the upper right to open the same default page in a separate browser tab:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-open-page.png" alt="page" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>Add <code>/fruit</code> in your browser to see the same result as the <em>curl</em> command:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-open-page-fruit.png" alt="page" width="800">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This will also listen for a debugger on port <code>5005</code>. If you want to wait for the debugger to attach before running you can pass <code>-Ddebug</code> on the command line. If you don’t want the debugger at all you can use <code>-Ddebug=false</code>. We&#8217;ll use this later.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now, without stopping our application, let's add some logging&#8230;&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="adding-log-capabilities"><a class="anchor" href="#adding-log-capabilities"></a>Adding log capabilities</h3>
+<div class="paragraph">
+<p>Internally Quarkus uses JBoss Logging; you can also use it inside your application so that no other dependencies should be added for your logs.</p>
+</div>
+<div class="paragraph">
+<p>In order to add logging capabilities to your app follow the next steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure Quarkus logging by setting the following parameters to <code>atomic-fruit-service/src/main/resources/application.properties</code>:</p>
+<div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Enable logging
 quarkus.log.console.enable=true
@@ -483,17 +520,37 @@ quarkus.log.console.level=DEBUG
 quarkus.log.category."com.redhat.atomic".level=DEBUG</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Update <code>$PROJECT_HOME/src/main/java/com/redhat/atomic/fruit/FruitResource.java</code> with the relevant lines bellow.</p>
+<p>Keep it open as you are going to use it frequently during all the lab.</p>
 </div>
-<div class="listingblock">
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Navigate to <code>src → main → java → com.redhat.atomic.fruit</code> in the project tree starting at folder <code>atomic-fruit-service</code> and double click on <code>FruitResource.java</code>. Update with the code bellow, replacing all the existing code:</p>
+<div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">...
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.jboss.logging.Logger; // logging
 
+@Path("/fruit")
 public class FruitResource {
   Logger logger = Logger.getLogger(FruitResource.class); // logging
-  ...
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)
@@ -501,28 +558,75 @@ public class FruitResource {
       logger.debug("Hello method is called"); // logging
       return "hello";
   }
-...
 }</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_adding_custom_properties"><a class="anchor" href="#_adding_custom_properties"></a>Adding custom properties</h2>
-<div class="sectionbody">
+</li>
+<li>
+<p>From a different terminal try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
 <div class="paragraph">
-<p>Add the following to the class you want to use your custom property.</p>
+<p>The output should be something similar as follows (pay attention to the last trace, <strong>DEBUG</strong>):</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">...
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">2021-03-31 16:32:26,809 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.131s. Listening on: http://0.0.0.0:8080
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 16:32:26,943 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 16:32:26,943 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-7) Hot replace total time: 0.201s
+2021-03-31 16:32:26,946 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The console log handler is enabled by default. It outputs all log events to the console of your application (typically to the system’s <code>stdout</code>).</p>
+</div>
+<div class="paragraph">
+<p>For details of its configuration options, see <a href="https://quarkus.io/guides/logging#quarkus-log-logging-log-config_quarkus.log.console">the Console Logging configuration reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-custom-properties"><a class="anchor" href="#adding-custom-properties"></a>Adding custom properties</h3>
+<div class="paragraph">
+<p>Quarkus uses <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile Config</a> annotations to inject the configuration properties in the application.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Append the following property to your <code>application.properties</code>:</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## custom properties
+hello.message = ${HELLO_MESSAGE:hello}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Again and if you already closed it, navigate to <code>src → main → java → com.redhat.atomic.fruit</code> and double click on <code>FruitResource.java</code>. Update with the following code replacing all the existing code:</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jboss.logging.Logger; // logging
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
 
 @Path("/fruit")
 public class FruitResource {
+  Logger logger = Logger.getLogger(FruitResource.class); // logging
 
-  @ConfigProperty(name = "hello.message")
-  String message;
+  @ConfigProperty(name = "hello.message") // custom property
+  String message; // custom property
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)
@@ -530,863 +634,73 @@ public class FruitResource {
       logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property
       return message; // custom property
   }
-...
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Add the following property to your application.properties.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## custom properties
-hello.message = ${HELLO_MESSAGE:hello}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, without stopping our application, change the value of <code>hello.message</code> from hello to something different. Save the aplication.propertlies file and try again. This time the result should be different.</p>
-</div>
-<div class="paragraph">
-<p><strong>WARNING:</strong> Return the value of <code>hello.message</code> back to <code>hello</code> and stop the app with Ctrl+C</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_adding_a_data_base_to_our_application"><a class="anchor" href="#_adding_a_data_base_to_our_application"></a>Adding a Data Base to our application</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_deploying_postgresql"><a class="anchor" href="#_deploying_postgresql"></a>Deploying PostgreSQL</h3>
-<div class="paragraph">
-<p>We&#8217;re going to deploy PostgreSQL using a template, in general an operator is a better choice but for the sake of simplicity in this demo a template is a good choice.</p>
-</div>
-<div class="paragraph">
-<p>Using <code>oc</code></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project ${PROJECT_NAME}
-oc new-app -e POSTGRESQL_USER=luke -e POSTGRESQL_PASSWORD=secret -e POSTGRESQL_DATABASE=my_data centos/postgresql-10-centos7 --name=my-database -n ${PROJECT_NAME}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Some labeling specially useful for OpenShift developer view.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc label deployment/my-database app.openshift.io/runtime=postgresql --overwrite -n ${PROJECT_NAME} &amp;&amp; \
-oc label deployment/my-database app.kubernetes.io/part-of=${APP_NAME} --overwrite -n ${PROJECT_NAME}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_adding_db_related_extensions"><a class="anchor" href="#_adding_db_related_extensions"></a>Adding DB related extensions</h3>
-<div class="paragraph">
-<p>We need some extensions to expose our database to the world: REST JSON, PostgreSQL and Panache Hibernate as our ORM.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You should see something like this when you add succesfully extensions to an app.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">...
-[INFO] --- quarkus-maven-plugin:0.23.1:add-extension (default-cli) @ atomic-fruit-service ---
-✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
-✅ Adding extension io.quarkus:quarkus-jdbc-postgresql
-✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
-...</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_lets_create_the_fruit_entity"><a class="anchor" href="#_lets_create_the_fruit_entity"></a>Let&#8217;s create the <code>Fruit</code> entity</h3>
-<div class="paragraph">
-<p>Create this file here <code>$PROJECT_HOME/src/main/java/com/redhat/atomic/fruit/Fruit.java</code></p>
-</div>
-<div class="paragraph">
-<p>Add this content to it.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
-
-import java.util.List;
-
-import javax.persistence.Entity;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-
-@Entity
-public class Fruit extends PanacheEntity {
-
-    public String name;
-    public String season;
-
-    public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) {
-        return find("season", season).list();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As you can see our <code>Fruit</code> class extends <code>PanacheEntity</code> which adds the default <strong>CRUD</strong> methods you can expects from an <strong>ORM framework</strong> such as <strong>Panache</strong>. How ever it doesn&#8217;t add any custom methods. In this case we want to be able to search by season and that&#8217;s the reason we have added a methos called <code>getAllFruitsForSeason</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_lets_crudify_our_rest_enabled_service_class_fruitresource"><a class="anchor" href="#_lets_crudify_our_rest_enabled_service_class_fruitresource"></a>Let&#8217;s CRUDify our REST enabled service class FruitResource</h3>
-<div class="paragraph">
-<p>What we want to do is easy:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Return all the fruit if <strong>GET</strong> <code>/fruit</code></p>
 </li>
 <li>
-<p>Save a Fruit if <strong>POST</strong> <code>/fruit</code></p>
+<p>From a different terminal try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+<div class="paragraph">
+<p>The output should be something similar as follows (pay attention to the last trace, <strong>DEBUG</strong>):</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">2021-03-31 17:01:14,757 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-8) Hot replace total time: 0.242s
+2021-03-31 17:01:14,999 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-9) Changed source files detected, recompiling [/projects/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/java/com/redhat/atomic/fruit/FruitResource.java]
+2021-03-31 17:01:15,100 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.222s. Listening on: http://0.0.0.0:8080
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 17:01:15,325 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 17:01:15,325 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-9) Hot replace total time: 0.327s
+2021-03-31 17:01:15,334 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called with message: hello</code></pre>
+</div>
+</div>
 </li>
 <li>
-<p>Search fruit if a given season if <strong>GET</strong> <code>/fruit/{season}</code></p>
+<p>Now, without stopping our application, change the value of <code>hello.message</code> in <code>atomic-fruit-service/src/main/resources/application.properties</code> from hello to <em>something different</em> you may prefer. Save the aplication.propertlies file and try again.</p>
+<div class="paragraph">
+<p>This time the result should be different (pay attention to the last trace, <strong>DEBUG</strong>):</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">2021-03-31 17:05:06,395 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-10) File change detected: /projects/quarkus-zero-to-serverless-guide/atomic-fruit-service/src/main/resources/application.properties
+2021-03-31 17:05:06,396 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service stopped in 0.000s
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) atomic-fruit-service 1.0-SNAPSHOT on JVM (powered by Quarkus 1.9.2.Final) started in 0.136s. Listening on: http://0.0.0.0:8080
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-31 17:05:06,534 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy]
+2021-03-31 17:05:06,534 INFO  [io.qua.dep.dev.RuntimeUpdatesProcessor] (vert.x-worker-thread-10) Hot replace total time: 0.140s
+2021-03-31 17:05:06,537 DEBUG [com.red.ato.fru.FruitResource] (executor-thread-199) Hello method is called with message: something different</code></pre>
+</div>
+</div>
 </li>
-</ul>
+</ol>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
-
-import java.net.URI;
-import java.util.List;
-
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logging.Logger;
-
-@Path("/fruit")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class FruitResource {
-    Logger logger = Logger.getLogger(FruitResource.class);
-
-    @ConfigProperty(name = "hello.message")
-    String message;
-
-    @GET
-    @Path("hello")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property
-        return message; // custom property
-    }
-
-    @GET
-    public List&lt;Fruit&gt; allFruits() {
-        return Fruit.listAll();
-    }
-
-    @GET
-    @Path("{season}")
-    public List&lt;Fruit&gt; fruitsBySeason(@PathParam("season") String season) {
-        return Fruit.getAllFruitsForSeason(season);
-    }
-
-    @POST
-    @Transactional
-    public Response saveFruit(Fruit fruit) {
-        // since the FruitEntity is a panache entity
-        // persist is available by default
-        fruit.persist();
-        final URI createdUri = UriBuilder.fromResource(FruitResource.class)
-                        .path(Long.toString(fruit.id))
-                        .build();
-        return Response.created(createdUri).build();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We need to adapt the test class after the changes to <code>FruitResource</code>. Update <code>$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java</code> with the next code.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
-
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-
-@QuarkusTest
-public class FruitResourceTest {
-
-    @Test
-    public void testHelloEndpoint() {
-        given()
-          .when().get("/fruit/hello")
-          .then()
-             .statusCode(200)
-             .body(is("hello"));
-    }
-
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_adding_datasource_related_properties"><a class="anchor" href="#_adding_datasource_related_properties"></a>Adding datasource related properties</h3>
-<div class="paragraph">
-<p>Add the following properties to your <code>./src/main/resources/application.properties</code> file:</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>NOTE:</strong> As you can see we have three different jdbc urls for three execution profiles (<code>dev</code>, <code>prod</code> the default and <code>che</code> a custom profile we&#8217;ll use later)</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Data Base related properties
-quarkus.datasource.jdbc.url = jdbc:postgresql://my-database:5432/my_data
-quarkus.datasource.db-kind=postgresql
-
-%dev.quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/my_data
-%dev.quarkus.datasource.db-kind=postgresql
-#%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-#%dev.quarkus.datasource.db-kind=h2
-#%dev.quarkus.datasource.username = username-default
-#%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-#%test.quarkus.datasource.db-kind=h2
-#%test.quarkus.datasource.username = username-default
-
-quarkus.datasource.username = luke
-quarkus.datasource.password = secret
-
-## drop and create the database at startup (use `update` to only update the schema)
-%dev.quarkus.hibernate-orm.database.generation = drop-and-create
-quarkus.hibernate-orm.database.generation = create
-quarkus.hibernate-orm.sql-load-script = import.sql
-## show sql statements in log
-quarkus.hibernate-orm.log.sql = true</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_adding_some_fruits"><a class="anchor" href="#_adding_some_fruits"></a>Adding some fruits</h3>
-<div class="paragraph">
-<p>Create a file called <code>import.sql</code> here <code>./src/main/resources</code></p>
-</div>
-<div class="paragraph">
-<p>This is a suitable content for that file.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Mango'      , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Strawberry' , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Orange'     , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'GrapeFruit' , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Blueberry'  , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Banana'     , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Plum'       , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Apple'      , 'Fall'   );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Grape '     , 'Fall'   );</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_testing_locally_using_port_forwarding"><a class="anchor" href="#_testing_locally_using_port_forwarding"></a>Testing locally using port-forwarding</h3>
-<div class="paragraph">
-<p>In a different terminal&#8230;&#8203;</p>
-</div>
-<div class="admonitionblock important">
+<div class="admonitionblock warning">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-If using <code>oc</code> you may want to set the default project to ${PROJECT_NAME}: <code>oc project ${PROJECT_NAME}</code>
+Return the value of <code>hello.message</code> back to <code>hello</code> and stop the app with <strong><em>Ctrl+C</em></strong>
 </td>
 </tr>
 </table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">POD_NAME=$(oc get pod -n ${PROJECT_NAME} -o jsonpath='{.items[0].metadata.name}')
-oc port-forward ${POD_NAME} 5432:5432 -n ${PROJECT_NAME}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In your current terminal run your code using profile <code>dev</code></p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Later we&#8217;ll need to run <code>che</code>, we&#8217;ll do it by adding: <code>-Dquarkus.profile=che</code>
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you use another terminal and try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a> this time you should get a list of fruits.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit
-[{"id":1,"name":"Mango","season":"Spring"},{"id":2,"name":"Strawberry","season":"Spring"},{"id":3,"name":"Orange","season":"Winter"},{"id":4,"name":"GrapeFruit","season":"Winter"},{"id":5,"name":"Blueberry","season":"Summer"},{"id":6,"name":"Banana","season":"Summer"},{"id":7,"name":"Plum","season":"Summer"},{"id":8,"name":"Apple","season":"Fall"},{"id":9,"name":"Grape ","season":"Fall"}]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We&#8217;re done with the PostgreSQL tests, now go to the terminal window where we forwaded the database port and stop it with Ctrl+C</p>
-</div>
-<div class="paragraph">
-<p>Leave the application running we&#8217;re going to do some more changes.</p>
-</div>
-<div class="sect3">
-<h4 id="_little_diversion_using_h2"><a class="anchor" href="#_little_diversion_using_h2"></a>Little diversion: Using H2</h4>
-<div class="paragraph">
-<p>What if you wanted to use H2, the embedded database when in <code>dev</code> mode?</p>
-</div>
-<div class="paragraph">
-<p>First let&#8217;s add the extension.</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Adding H2</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"
-[INFO] Scanning for projects...
-[INFO]
-[INFO] ------------&lt; com.redhat.atomic.fruit:atomic-fruit-service &gt;------------
-[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:0.23.1:add-extension (default-cli) @ atomic-fruit-service ---
-✅ Adding dependency io.quarkus:quarkus-jdbc-h2:jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.606 s
-[INFO] Finished at: 2019-10-13T15:37:52+02:00
-[INFO] ------------------------------------------------------------------------</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Second, change some datasource related properties in <code>application.properties</code></p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>Notice</strong> that we have changed the value of <code>dev.quarkus.datasource.url</code> now the url points to H2 instead of PostgreSQL, so no need to port-forward our DB running in our cluster.</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#%dev.quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/my_data
-#%dev.quarkus.datasource.db-kind=postgresql
-%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-%dev.quarkus.datasource.db-kind=h2
-%dev.quarkus.datasource.username = username-default
-%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
-%test.quarkus.datasource.db-kind=h2
-%test.quarkus.datasource.username = username-default</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If, accidentally, you stopped the application you can run it again using profile <code>dev</code> running the next command. However this time the application will run queries against H2.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As we have done before, from another terminal run:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit
-[{"id":1,"name":"Mango","season":"Spring"},{"id":2,"name":"Strawberry","season":"Spring"},{"id":3,"name":"Orange","season":"Winter"},{"id":4,"name":"GrapeFruit","season":"Winter"},{"id":5,"name":"Blueberry","season":"Summer"},{"id":6,"name":"Banana","season":"Summer"},{"id":7,"name":"Plum","season":"Summer"},{"id":8,"name":"Apple","season":"Fall"},{"id":9,"name":"Grape ","season":"Fall"}]</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_test_creating_a_fruit"><a class="anchor" href="#_test_creating_a_fruit"></a>Test creating a fruit</h3>
-<div class="paragraph">
-<p>Let&#8217;s try to create a Fruit object in our database.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit
-* Rebuilt URL to: POST/
-* Could not resolve host: POST
-* Closing connection 0
-curl: (6) Could not resolve host: POST
-*   Trying ::1...
-* TCP_NODELAY set
-* Connected to localhost (::1) port 8080 (#1)
-&gt; POST /fruit HTTP/1.1
-&gt; Host: localhost:8080
-&gt; User-Agent: curl/7.54.0
-&gt; Accept: */*
-&gt; Content-Type: application/json
-&gt; Content-Length: 38
-&gt;
-* upload completely sent off: 38 out of 38 bytes
-&lt; HTTP/1.1 201 Created
-&lt; Location: http://localhost:8080/fruit/1
-&lt; Content-Length: 0
-&lt;
-* Connection #1 to host localhost left intact</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_adding_swagger_ui_to_ease_api_development_and_testing"><a class="anchor" href="#_adding_swagger_ui_to_ease_api_development_and_testing"></a>Adding Swagger UI to ease API development and testing</h3>
-<div class="paragraph">
-<p>You can easily generate en OpenAPI compliant description of your API and at additionally add a Swagger UI to your app by adding the <code>openapi</code> extension. Please run this command to do so.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Try opening this url <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> with a browser you should see something like:</p>
-</div>
-<div class="paragraph">
-<p>![Swagger UI](./docs/images/swagger-ui.png)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_try_creating_another_fruit_this_time_with_the_swagger_ui"><a class="anchor" href="#_try_creating_another_fruit_this_time_with_the_swagger_ui"></a>Try creating another Fruit this time with the Swagger UI</h3>
-<div class="paragraph">
-<p>Try to create a new fruit, get all and get by season.</p>
-</div>
-<div class="paragraph">
-<p>Click on <strong>POST /fruit</strong> then click on <strong>Try it out</strong></p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>WARNING:</strong> Don&#8217;t forget to delete the <code>id</code> property when creating a new fruit because <code>id</code> is self-generated.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>![Create Fruit 1](./docs/images/create-fruit-1.png)</p>
-</div>
-<div class="paragraph">
-<p>Now click on <strong>Execute</strong> eventually you should get a result similar to this one.</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Pay attention to <strong>Code</strong>, it should be <strong>201</strong>.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>![Create Fruit 1](./docs/images/create-fruit-2.png)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_adding_health_checks"><a class="anchor" href="#_adding_health_checks"></a>Adding health checks</h3>
-<div class="paragraph">
-<p>Health checks is one of those things that if recommendable in general is a must for every Cloud Native App and in quarkus it&#8217;s a extension so let&#8217;s add it.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="smallrye-health"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Make sure your application is running in <code>dev</code> mode, then test the <code>/health</code> endpoint like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/health
-
-{
-    "status": "UP",
-    "checks": [
-        {
-            "name": "Database connections health check",
-            "status": "UP"
-        }
-    ]
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ctrl+C</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_different_deployment_techniques"><a class="anchor" href="#_different_deployment_techniques"></a>Different deployment techniques</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_deploying_to_openshift"><a class="anchor" href="#_deploying_to_openshift"></a>Deploying to OpenShift</h3>
-<div class="paragraph">
-<p>First of all let&#8217;s add the extension to deploy to OpenShift.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="openshift"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Second let&#8217;s remove the docker extension, we don&#8217;t need it and they collide with each other.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:remove-extension -Dextension="container-image-docker"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Add this couple of properties to <code>application.properties</code> so that we trust on the CA cert and set the namespace where we want to deploy our application.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Kubernetes Client
-quarkus.kubernetes-client.trust-certs=true
-quarkus.kubernetes-client.namespace=${PROJECT_NAME:atomic-fruit}
-
-## Only generate OpenShift descriptors
-quarkus.kubernetes.deployment-target=openshift
-
-## Expose the service when deployed
-quarkus.openshift.expose=true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now we don&#8217;t want to create the image locally, we want OpenShift build it using S2I, hence we shouldn&#8217;t set the image group or registry, right? Find the next properties and comment them.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## OCI Image
-#quarkus.container-image.registry=&lt;registry&gt;
-#quarkus.container-image.group=&lt;registry_user&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s add a some additional labels <code>part-of</code> and <code>name</code>, and a custom label:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Recommended labels and a custom label for kubernetes and openshift
-quarkus.openshift.part-of=fruits-app
-quarkus.openshift.name=atomic-fruit-service
-quarkus.openshift.labels.department=fruity-dept</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Regarding annotations, out of the box, the generated resources will be annotated with version control related information that can be used either by tooling, or by the user for troubleshooting purposes.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">annotations:
-  app.quarkus.io/vcs-url: "&lt;some url&gt;"
-  app.quarkus.io/commit-id: "&lt;some git SHA&gt;"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s add a custom annotation:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Custom annotations
-quarkus.openshift.annotations."app.openshift.io/connects-to"=my-database
-quarkus.openshift.annotations.foo=bar
-quarkus.openshift.annotations."app.quarkus/id"=42</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So far we haven&#8217;t prepared the production profile, for instance we have no secret to keep the database credentials. Let&#8217;s do something about it. Let&#8217;s create a secret locally first.</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<code>openshift</code> extension takes the file we&#8217;re generating and merge it with the one generated
-</td>
-</tr>
-</table>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mkdir -p ./src/main/kubernetes
-cat &lt;&lt;EOF &gt; ./src/main/kubernetes/openshift.yml
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: fruits-database-secret
-stringData:
-  user: luke
-  password: secret
-EOF</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now let&#8217;s add the environment variables we need to connect to the database:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Environment variables
-quarkus.openshift.env.mapping.db-username.from-secret=fruits-database-secret
-quarkus.openshift.env.mapping.db-username.with-key=user
-quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
-quarkus.openshift.env.mapping.db-password.with-key=password</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s package our application and have a look to the descriptors generated.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>./mvnw clean package</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Go to [<code>./target/kubernetes/openshift.yml</code>](./target/kubernetes/openshift.yml) there you&#8217;ll find: Service and Deployment&#8230;&#8203;</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s deploy the result.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Or</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">$ kubectl apply -n ${PROJECT_NAME} -f target/kubernetes/openshift.yml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s inspect the resources created.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">$ oc get dc -n ${PROJECT_NAME}
-NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
-atomic-fruit-service   1/1     1            1           73s
-my-database            1/1     1            1           89m</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now we can test that everything works properly.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://$(oc get route atomic-fruit-service -o jsonpath='{.spec.host}')/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>What about native in this case? Easy, just add <code>-Dquarkus.native.container-build=true -Pnative</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Dquarkus.native.container-build=true -Pnative</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_deploy_to_openshift_as_a_knative_service"><a class="anchor" href="#_deploy_to_openshift_as_a_knative_service"></a>Deploy to OpenShift as a Knative service</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Let&#8217;s add a new target platform&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Generate OpenShift and Knative descriptors
-quarkus.kubernetes.deployment-target=openshift,knative</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And this properties to tune the Knative deployment.</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>WARNING:</strong> If you have changed the by default value for PROJECT_NAME change this line below accordingly!</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Knative
-quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
-quarkus.container-image.group=${PROJECT_NAME:atomic-fruit}
-quarkus.container-image.tag=1.0-SNAPSHOT
-quarkus.knative.name=atomic-fruit-service-kn
-quarkus.knative.version=1.0
-quarkus.knative.part-of=fruits-app
-quarkus.knative.annotations."app.openshift.io/connects-to"=my-database
-quarkus.knative.labels."app.openshift.io/runtime"=quarkus
-quarkus.knative.env.mapping.db-username.from-secret=fruits-database-secret
-quarkus.knative.env.mapping.db-username.with-key=user
-quarkus.knative.env.mapping.db-password.from-secret=fruits-database-secret
-quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Time to deploy using Knative.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -DskipTests
-kubectl apply -f target/kubernetes/knative.yml</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_annex_automatic_builds"><a class="anchor" href="#_annex_automatic_builds"></a>ANNEX: Automatic builds</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_automatic_build_for_jvm_mode_using_docker"><a class="anchor" href="#_automatic_build_for_jvm_mode_using_docker"></a>Automatic build for JVM mode using <code>docker</code></h3>
-<div class="paragraph">
-<p>With automatic builds we have to set <code>registry</code> and <code>group</code> to tag the image for pushing to the registry. Add these properties to the <code>application.properties</code> files or add them using <code>-D</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## OCI Image
-quarkus.container-image.registry=&lt;registry&gt;
-quarkus.container-image.group=&lt;registry_user&gt;</code></pre>
-</div>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>NOTE:</strong> Extentions for building images [here](<a href="https://quarkus.io/guides/container-image" class="bare">https://quarkus.io/guides/container-image</a>)</p>
-</div>
-</blockquote>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>WARNING:</strong> For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( [this](<a href="https://github.com/quarkusio/quarkus/blob/master/extensions/container-image/container-image-docker/deployment/src/main/java/io/quarkus/container/image/docker/deployment/DockerProcessor.java" class="bare">https://github.com/quarkusio/quarkus/blob/master/extensions/container-image/container-image-docker/deployment/src/main/java/io/quarkus/container/image/docker/deployment/DockerProcessor.java</a>) is the culprit.</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Run the image created.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">docker run -i --rm -p 8080:8080 &lt;registry&gt;/&lt;registry_user&gt;/atomic-fruit-service:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Test from another terminal or a browser, you should receive a <code>hello</code> string.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ctrl+C to stop.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_automatic_build_for_native_mode_using_docker"><a class="anchor" href="#_automatic_build_for_native_mode_using_docker"></a>Automatic build for Native mode using <code>docker</code></h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>NOTE:</strong> Extentions for building images [here](<a href="https://quarkus.io/guides/container-image" class="bare">https://quarkus.io/guides/container-image</a>).</p>
-</div>
-</blockquote>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>WARNING:</strong> For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( [this](<a href="https://github.com/quarkusio/quarkus/blob/master/extensions/container-image/container-image-docker/deployment/src/main/java/io/quarkus/container/image/docker/deployment/DockerProcessor.java" class="bare">https://github.com/quarkusio/quarkus/blob/master/extensions/container-image/container-image-docker/deployment/src/main/java/io/quarkus/container/image/docker/deployment/DockerProcessor.java</a>) is the culprit.</p>
-</div>
-</blockquote>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Pnative</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Run the image created.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">docker run -i --rm -p 8080:8080 &lt;registry&gt;/&lt;registry_user&gt;/atomic-fruit-service:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Test from another terminal or a browser, you should receive a <code>hello</code> string.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ctrl+C to stop.</p>
 </div>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="01-setup.html">1. Setup</a></span>
+  <span class="prev"><a href="01-setup.html" class="query-params-link">1. Setup</a></span>
+  <span class="next"><a href="03-deploy-database.html" class="query-params-link">3. Adding a Data Base to our application</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

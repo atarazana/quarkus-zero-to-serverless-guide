@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://redhat-scholars.github.io/course-template/quarkus-zero-to-serverless-guide/main/01-setup.html</loc>
-<lastmod>2021-02-04T17:53:14.201Z</lastmod>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/01-setup.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
 </url>
 <url>
-<loc>https://redhat-scholars.github.io/course-template/quarkus-zero-to-serverless-guide/main/02-deploy.html</loc>
-<lastmod>2021-02-04T17:53:14.201Z</lastmod>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/02-deploy.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
 </url>
 <url>
-<loc>https://redhat-scholars.github.io/course-template/quarkus-zero-to-serverless-guide/main/index.html</loc>
-<lastmod>2021-02-04T17:53:14.201Z</lastmod>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/03-deploy-database.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
+</url>
+<url>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/04-deploy-openshift.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
+</url>
+<url>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/05-annex.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
+</url>
+<url>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/index.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
+</url>
+<url>
+<loc>https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/versions.html</loc>
+<lastmod>2021-04-20T09:56:38.562Z</lastmod>
 </url>
 </urlset>

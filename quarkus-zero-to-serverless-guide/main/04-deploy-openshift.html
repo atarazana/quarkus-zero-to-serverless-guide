@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Quarkus from Zero to Serverless Guide :: Quarkus from Zero to Serverless Guide</title>
+    <link rel="canonical" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/04-deploy-openshift.html">
+    <link rel="prev" href="03-deploy-database.html">
+    <link rel="next" href="05-annex.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide">Quarkus from Zero to Serverless Guide</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="quarkus-zero-to-serverless-guide" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Quarkus from Zero to Serverless Guide</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#getting-ready">Getting Ready for the labs</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#login-to-openshift">Login To OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-deploy.html">2. Deploying the Atomic Fruit Service</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#generate-the-quarkus-app-scaffold-using-a-maven-archetype">Generate the Quarkus app scaffold using a maven archetype</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#testing-different-ways-of-packaging-the-app">Testing different ways of packaging the app</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#running-in-development-mode-and-enjoy-hot-reloading">Running in development mode and enjoy hot reloading</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-deploy-database.html">3. Adding a Data Base to our application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploying-postgresql">Deploying PostgreSQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploy">Deploy the Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#adding-db-related-extensions">Adding DB related extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#exposing-rest-endpoints-for-crud-operations">Exposing REST endpoints for CRUD operations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#testing-locally">Testing locally</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-deploy-openshift.html">4. Deploying the Atomic Fruit Service on OpenShift</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#deploying-to-openshift">Deploying to OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#evolving-to-serverless">Evolving to Serverless</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-annex.html">ANNEX: Packing &amp; building by using Docker</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#native-mode-ii-generated-in-a-container">Native Mode II (generated in a container)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-jvm-mode-using-docker">Automatic build for JVM mode using <code>docker</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-native-mode-using-docker">Automatic build for Native mode using <code>docker</code></a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Quarkus from Zero to Serverless Guide</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Quarkus from Zero to Serverless Guide</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Quarkus from Zero to Serverless Guide</a></li>
+    <li><a href="04-deploy-openshift.html">4. Deploying the Atomic Fruit Service on OpenShift</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/main/documentation/modules/ROOT/pages/04-deploy-openshift.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Quarkus from Zero to Serverless Guide</h1>
+<div class="sect1">
+<h2 id="deploying-to-openshift"><a class="anchor" href="#deploying-to-openshift"></a>Deploying to OpenShift</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>First of all let's add the extension to deploy to OpenShift.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+./mvnw quarkus:add-extension -Dextension="openshift"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------&lt; com.redhat.atomic.fruit:atomic-fruit-service &gt;------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Extension io.quarkus:quarkus-openshift has been installed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.200 s
+[INFO] Finished at: 2021-03-31T18:27:06Z
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add this couple of properties to <code>atomic-fruit-service/src/main/resources/application.properties</code> so that we trust on the CA cert and set the namespace where we want to deploy our application.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Kubernetes Client
+quarkus.kubernetes-client.trust-certs=true
+quarkus.kubernetes-client.namespace=${PROJECT_NAME:%USER%-fruit-service}
+
+## Only generate OpenShift descriptors
+quarkus.kubernetes.deployment-target=openshift
+
+## Expose the service when deployed
+quarkus.openshift.expose=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let's add a some additional labels <code>part-of</code> and <code>name</code>, and a custom label:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Recommended labels and a custom label for kubernetes and openshift
+quarkus.openshift.part-of=fruits-app
+quarkus.openshift.name=atomic-fruit-service
+quarkus.openshift.labels.department=fruity-dept</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Regarding annotations, out of the box, the generated resources will be annotated with version control related information that can be used either by tooling, or by the user for troubleshooting purposes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">annotations:
+  app.quarkus.io/vcs-url: "&lt;some url&gt;"
+  app.quarkus.io/commit-id: "&lt;some git SHA&gt;"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let's add a custom annotation:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Custom annotations
+quarkus.openshift.annotations."app.openshift.io/connects-to"=my-database
+quarkus.openshift.annotations.foo=bar
+quarkus.openshift.annotations."app.quarkus/id"=42</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So far we haven't prepared the production profile, for instance we have no secret to keep the database credentials. Let's do something about it. Let's create a secret locally first.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>openshift</code> extension takes the file we're generating and merge it with the one generated
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mkdir -p $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes &amp;&amp; \
+cat &lt;&lt;EOF &gt; $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fruits-database-secret
+stringData:
+  user: luke
+  password: secret
+EOF</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let's add the environment variables we need to connect to the database:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
+## BEGIN: Data Base related properties
+
+## Environment variables
+quarkus.openshift.env.mapping.db-username.from-secret=fruits-database-secret
+quarkus.openshift.env.mapping.db-username.with-key=user
+quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
+quarkus.openshift.env.mapping.db-password.with-key=password
+
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.username = ${DB_USERNAME}
+%prod.quarkus.datasource.password = ${DB_PASSWORD}
+
+%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%dev.quarkus.datasource.db-kind=h2
+%dev.quarkus.datasource.username = username-default
+
+%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%test.quarkus.datasource.db-kind=h2
+%test.quarkus.datasource.username = username-default
+
+## drop and create the database at startup (use `update` to only update the schema)
+%prod.quarkus.hibernate-orm.database.generation = create
+quarkus.hibernate-orm.database.generation = drop-and-create
+quarkus.hibernate-orm.sql-load-script = import.sql
+## show sql statements in log
+quarkus.hibernate-orm.log.sql = true
+
+## END: Data Base related properties
+#################################</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let's package our application and have a look to the descriptors generated.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -DskipTests</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can check the generated file <code>$CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code>, there you'll find: Service and Deployment&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Let's deploy the result:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We make sure the default project is <code>%USER%-fruit-service</code>, this is necessary because the plugin used to deploy in OpenShift deploys in the default project unless indicated otherwise.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project %USER%-fruit-service &amp;&amp; \
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The other, and equivalent, approach is to use the <code>oc</code> client instead of the maven script:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -n %USER%-fruit-service -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let's inspect the resources created.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get dc,deploy -n %USER%-fruit-service</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">NAME                                                      REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/atomic-fruit-service   1          1         1         image(atomic-fruit-service:1.0-SNAPSHOT)
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-database   1/1     1            1           96m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can test that everything works properly.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://$(oc get route atomic-fruit-service -o jsonpath='{.spec.host}')/fruit</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>- - - - NEED REVIEW / B - - - - -</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>What about native in this case? Easy, just add <code>-Dquarkus.native.container-build=true -Pnative</code>.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>- - - - NEED REVIEW / E - - - - -</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="evolving-to-serverless"><a class="anchor" href="#evolving-to-serverless"></a>Evolving to Serverless</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to deploy our app to OpenShift as a Knative service&#8230;&#8203; Let's add a new target platform. Find the next property and make sure its value is <code>openshift,knative</code> instead of just <code>openshift</code>.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Generate OpenShift and Knative descriptors
+quarkus.kubernetes.deployment-target=openshift,knative</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this properties to tune the Knative deployment.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Knative
+quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
+quarkus.container-image.group=${PROJECT_NAME:%USER%-fruit-service}
+quarkus.container-image.tag=1.0-SNAPSHOT
+quarkus.knative.name=atomic-fruit-service-kn
+quarkus.knative.version=1.0
+quarkus.knative.part-of=fruits-app
+quarkus.knative.annotations."app.openshift.io/connects-to"=my-database
+quarkus.knative.labels."app.openshift.io/runtime"=quarkus
+quarkus.knative.env.mapping.db-username.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-username.with-key=user
+quarkus.knative.env.mapping.db-password.from-secret=fruits-database-secret
+quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Time to deploy using Knative.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -DskipTests &amp;&amp; \
+oc apply -f target/kubernetes/knative.yml</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="03-deploy-database.html" class="query-params-link">3. Adding a Data Base to our application</a></span>
+  <span class="next"><a href="05-annex.html" class="query-params-link">ANNEX: Packing &amp; building by using Docker</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

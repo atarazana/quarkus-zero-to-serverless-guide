@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Setup :: Quarkus from Zero to Serverless Guide</title>
-    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/quarkus-zero-to-serverless-guide/main/01-setup.html">
+    <title>Quarkus from Zero to Serverless Guide :: Quarkus from Zero to Serverless Guide</title>
+    <link rel="canonical" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/01-setup.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="02-deploy.html">
     <meta name="generator" content="Antora 2.3.4">
@@ -18,7 +18,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" href="https://redhat-scholars.github.io/course-template">Quarkus from Zero to Serverless Guide</a>
+      <a class="navbar-item" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide">Quarkus from Zero to Serverless Guide</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -76,22 +76,73 @@
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#prerequisite">Prerequisites</a>
+    <a class="nav-link" href="#getting-ready">Getting Ready for the labs</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#minikube">Setup Minikube</a>
+    <a class="nav-link" href="#login-to-openshift">Login To OpenShift</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-deploy.html">2. Deploy Service</a>
+    <a class="nav-link" href="02-deploy.html">2. Deploying the Atomic Fruit Service</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-deploy.html#package">Build Service</a>
+    <a class="nav-link" href="02-deploy.html#generate-the-quarkus-app-scaffold-using-a-maven-archetype">Generate the Quarkus app scaffold using a maven archetype</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-deploy.html#deploy">Deploy Dervice</a>
+    <a class="nav-link" href="02-deploy.html#testing-different-ways-of-packaging-the-app">Testing different ways of packaging the app</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#running-in-development-mode-and-enjoy-hot-reloading">Running in development mode and enjoy hot reloading</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-deploy-database.html">3. Adding a Data Base to our application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploying-postgresql">Deploying PostgreSQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#deploy">Deploy the Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#adding-db-related-extensions">Adding DB related extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#exposing-rest-endpoints-for-crud-operations">Exposing REST endpoints for CRUD operations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-deploy-database.html#testing-locally">Testing locally</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-deploy-openshift.html">4. Deploying the Atomic Fruit Service on OpenShift</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#deploying-to-openshift">Deploying to OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#evolving-to-serverless">Evolving to Serverless</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-annex.html">ANNEX: Packing &amp; building by using Docker</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#native-mode-ii-generated-in-a-container">Native Mode II (generated in a container)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-jvm-mode-using-docker">Automatic build for JVM mode using <code>docker</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-native-mode-using-docker">Automatic build for Native mode using <code>docker</code></a>
   </li>
 </ul>
   </li>
@@ -122,284 +173,204 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Quarkus from Zero to Serverless Guide</a></li>
     <li><a href="01-setup.html">1. Setup</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/master/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/main/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Setup</h1>
+<h1 class="page">Quarkus from Zero to Serverless Guide</h1>
 <div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite CLI tools</h2>
+<h2 id="getting-ready"><a class="anchor" href="#getting-ready"></a>Getting Ready for the labs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following CLI tools are required for running the exercises in this tutorial.
-Please have them installed and configured before you get started with any of the tutorial chapters.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
-<th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-center valign-top"><strong>windows</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Git</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/mac">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/linux">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/win">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Docker</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://docs.docker.com/docker-for-mac/install">Docker for Mac</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://docs.docker.com/docker-for-windows/install">Docker for Windows</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>VirtualBox</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://download.virtualbox.org/virtualbox/6.1.6/VirtualBox-6.1.6-137129-OSX.dmg">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://www.virtualbox.org/wiki/Linux_Downloads">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://download.virtualbox.org/virtualbox/6.1.6/VirtualBox-6.1.6-137129-Win.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://kubernetes.io/docs/tasks/tools/install-minikube">Minikube</a> v1.12.1</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-darwin-amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-linux-amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-windows-amd64.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>kubectl v1.18.6</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/darwin/amd64/kubectl">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/windows/amd64/kubectl.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern">stern</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install stern</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases/download/1.11.0/stern_windows_amd64.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Apache Maven 3.6.3</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz">Download</a></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>The following CLI tools are optional for running the exercises in this tutorial.
-Although they are used in the tutorial, you could use others without any problem.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
-<th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-center valign-top"><strong>windows</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/mikefarah/yq">yq v2.4.1</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/mikefarah/yq/releases/download/2.4.1/yq_darwin_amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/mikefarah/yq/releases/download/2.4.1/yq_linux_amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/mikefarah/yq/releases/download/2.4.1/yq_windows_amd64.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/stedolan/jq">jq v1.6.0</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://httpie.org/">httpie</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install httpie</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install httpie</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://httpie.org/doc#windows-etc" class="bare">https://httpie.org/doc#windows-etc</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">watch</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install watch</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install procps-ng</code></p></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">kubectx and kubens</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install kubectx</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/ahmetb/kubectx" class="bare">https://github.com/ahmetb/kubectx</a></p></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/rakyll/hey">hey</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install hey</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/jblabs/dist/hey_linux_v0.1.2">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/jblabs/dist/hey_win_v0.1.2.exe">Download</a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="minikube"><a class="anchor" href="#minikube"></a>Setup Kubernetes</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The profile my_profile is created to run the tutorial:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_openshift"></a>OpenShift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="paragraph">
-<p>Having <code>minikube</code> installed and in your <code>PATH</code>, then run:</p>
+<p>You will be using Red Hat CodeReady Workspaces, an online IDE based on <a href="https://www.eclipse.org/che/" target="_blank" rel="noopener">Eclipse Che</a>. <strong>Changes to files are auto-saved every few seconds</strong>, so you don’t need to explicitly save changes.</p>
 </div>
 <div class="paragraph">
-<p><strong>MacOS / Linux:</strong></p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.18.6 --vm-driver=virtualbox -p my_profile</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Windows:</strong></p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.18.6 --vm-driver=hyperv -p my_profile</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And the output must be something similar like:</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">❌  profile "my_profile" not found
-✅  Created a new profile : my_profile
-✅  minikube profile was successfully set to my_profile
-😄  [default] minikube v1.12.1 on Darwin 10.15.2
-✨  Selecting 'virtualbox' driver from user configuration (alternates: [hyperkit])
-🔥  Creating virtualbox VM (CPUs=2, Memory=8192MB, Disk=50000MB) ...
-🐳  Preparing Kubernetes v1.18.6 on Docker '19.03.5' ...
-    ▪ apiserver.enable-admission-plugins=LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook
-🚜  Pulling images ...
-🚀  Launching Kubernetes ...
-⌛  Waiting for cluster to come online ...
-🏄  Done! kubectl is now configured to use "my_profile"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Finally configure to use minikube internal docker as docker host:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env -p my_profile)</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_openshift">
-<div class="paragraph">
-<p>To run OpenShift4, you need to have one provisioned using <a href="https://try.openshift.com">try.openshift.com</a> or can use any existing OpenShift4 cluster.
-Once you have your cluster, you can download the latest OpenShift client(oc) from <a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/">here</a> and add to your path.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>oc version</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can check the OpenShift version using:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The output should show oc version &gt;=4.2:</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Client Version: openshift-clients-4.3.0-201910250623-88-g6a937dfe
-Kubernetes Version: v1.18.6</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then login into the cluster and run:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc new-project my_profile</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>And then you are ready for start using Kubernetes:</p>
+<p>To get started, access the CodeReady Workspaces instance and log in using the username and password you’ve been assigned (e.g. <code>%USER%/openshift</code>):</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/kubelogo.png" alt="kubelogo">
+<img src="_images/che-login.png" alt="cdw" width="700">
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="downloadtutorial"><a class="anchor" href="#downloadtutorial"></a>Get tutorial sources</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
+<p>Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green %USER%-namespace that says <em>Open</em> on the top right hand side of the screen.</p>
 </div>
-<div class="listingblock console-input">
+<div class="paragraph">
+<p>After a minute or two, you’ll be placed in the workspace:</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-developer-demos/rhd-tutorial-common.git" class="bare">https://github.com/redhat-developer-demos/rhd-tutorial-common.git</a> my_folder</code></pre>
+<img src="_images/che-workspace.png" alt="cdw" width="900">
 </div>
 </div>
-<div class="listingblock console-input">
+<div class="paragraph">
+<p>You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do:</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export TUTORIAL_HOME="$(pwd)/my_folder"</code></pre>
+<img src="_images/crw-icons.png" alt="cdw" width="400">
 </div>
 </div>
-<div class="listingblock console-input">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If things get weird or your browser appears, you can simply reload the browser tab to refresh the view.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Many features of CodeReady Workspaces are accessed via <strong>Commands</strong>. You can see a few of the commands listed with links on the home page (e.g. <em>New File..</em>, <em>Git Clone..</em>, and others).</p>
+</div>
+<div class="paragraph">
+<p>If you ever need to run commands that you don&#8217;t see in a menu, you can press <kbd>F1</kbd> to open the command window, or the more traditional <span class="keyseq"><kbd>Control</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd></span> (or <span class="keyseq"><kbd>Command</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd></span> on Mac OS X).</p>
+</div>
+<div class="sect2">
+<h3 id="import-projects"><a class="anchor" href="#import-projects"></a>Import Projects</h3>
+<div class="paragraph">
+<p>Let&#8217;s import the project source code for this lab. Click on <strong>Git Clone..</strong> (or type <kbd>F1</kbd>, enter 'git' and click on the auto-completed <em>Git Clone..</em> )</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME</code></pre>
+<img src="_images/che-workspace-gitclone.png" alt="cdw" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>Step through the prompts, using the following value for <strong>Repository URL</strong>. If you use <strong>FireFox</strong>, it may end up pasting extra spaces at the end, so just press backspace after pasting:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">https://github.com/atarazana/quarkus-zero-to-serverless-guide.git</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-clone-repo.png" alt="crw" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on <strong>Select Repository Location</strong> then click on <strong>Open in New Window</strong>. It will reload your web browser immediately:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-add-workspace.png" alt="crw" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>The project is imported into your workspace and is visible in the project explorer:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-clone-explorer.png" alt="crw" width="900">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_important_check_out_proper_git_branch"><a class="anchor" href="#_important_check_out_proper_git_branch"></a>IMPORTANT: Check out proper Git branch</h4>
+<div class="paragraph">
+<p>To make sure you&#8217;re using the right version of the project files, run this command in a CodeReady Terminal:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide &amp;&amp; git checkout master</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The Terminal window in CodeReady Workspaces. You can open a terminal window for any of the containers running in your Developer workspace. For the rest of these labs, anytime you need to run a command in a terminal, you can use the <strong>&gt;_ New Terminal</strong> command on the right:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/codeready-workspace-terminal.png" alt="codeready-workspace-terminal" width="700">
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="login-to-openshift"><a class="anchor" href="#login-to-openshift"></a>Login to OpenShift</h3>
+<div class="paragraph">
+<p>Although your Eclipse Che workspace is running on the Kubernetes cluster, it’s running with a default restricted <em>Service Account</em> that prevents you from creating most resource types. If you’ve completed other modules, you’re probably already logged in, but let’s login again: click on <strong>Login to OpenShift</strong>, and enter your given credentials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Username: <code>%USER%</code></p>
+</li>
+<li>
+<p>Password: <code>openshift</code></p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cmd-login.png" alt="login" width="700">
+</div>
+</div>
+<div class="paragraph">
+<p>You should see something like this (the project names may be different):</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">Login successful.
+
+You have access to the following projects and can switch between them with 'oc project &lt;projectname&gt;':
+
+  * %USER%-project
+
+Using project "%USER%-project".
+Welcome! See 'oc help' to get started.</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>After you log in using <strong>Login to OpenShift</strong>, the terminal is no longer usable as a regular terminal. You can close the terminal window. You will still be logged in when you open more terminals later!</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Create the project:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project %USER%-fruit-service</code></pre>
+</div>
 </div>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html">Quarkus from Zero to Serverless Guide</a></span>
-  <span class="next"><a href="02-deploy.html">2. Deploy Service</a></span>
+  <span class="prev"><a href="index.html" class="query-params-link">Quarkus from Zero to Serverless Guide</a></span>
+  <span class="next"><a href="02-deploy.html" class="query-params-link">2. Deploying the Atomic Fruit Service</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Quarkus from Zero to Serverless Guide :: Quarkus from Zero to Serverless Guide</title>
+    <link rel="canonical" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide/quarkus-zero-to-serverless-guide/main/03-deploy-database.html">
+    <link rel="prev" href="02-deploy.html">
+    <link rel="next" href="04-deploy-openshift.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://atarazana.github.io/quarkus-zero-to-serverless-guide">Quarkus from Zero to Serverless Guide</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="quarkus-zero-to-serverless-guide" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Quarkus from Zero to Serverless Guide</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#getting-ready">Getting Ready for the labs</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#login-to-openshift">Login To OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-deploy.html">2. Deploying the Atomic Fruit Service</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#generate-the-quarkus-app-scaffold-using-a-maven-archetype">Generate the Quarkus app scaffold using a maven archetype</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#testing-different-ways-of-packaging-the-app">Testing different ways of packaging the app</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-deploy.html#running-in-development-mode-and-enjoy-hot-reloading">Running in development mode and enjoy hot reloading</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-deploy-database.html">3. Adding a Data Base to our application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#deploying-postgresql">Deploying PostgreSQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#deploy">Deploy the Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#adding-db-related-extensions">Adding DB related extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#exposing-rest-endpoints-for-crud-operations">Exposing REST endpoints for CRUD operations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#testing-locally">Testing locally</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-deploy-openshift.html">4. Deploying the Atomic Fruit Service on OpenShift</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#deploying-to-openshift">Deploying to OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-deploy-openshift.html#evolving-to-serverless">Evolving to Serverless</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-annex.html">ANNEX: Packing &amp; building by using Docker</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#native-mode-ii-generated-in-a-container">Native Mode II (generated in a container)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-jvm-mode-using-docker">Automatic build for JVM mode using <code>docker</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-annex.html#automatic-build-for-native-mode-using-docker">Automatic build for Native mode using <code>docker</code></a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Quarkus from Zero to Serverless Guide</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Quarkus from Zero to Serverless Guide</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Quarkus from Zero to Serverless Guide</a></li>
+    <li><a href="03-deploy-database.html">3. Adding a Data Base to our application</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/atarazana/quarkus-zero-to-serverless-guide/edit/main/documentation/modules/ROOT/pages/03-deploy-database.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Quarkus from Zero to Serverless Guide</h1>
+<div class="sect1">
+<h2 id="deploying-postgresql"><a class="anchor" href="#deploying-postgresql"></a>Deploying PostgreSQL</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We're going to deploy PostgreSQL using a template, in general an operator is a better choice but for the sake of simplicity in this demo a template is a good choice.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Using <code>oc</code></p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-app -e POSTGRESQL_USER=luke -e POSTGRESQL_PASSWORD=secret -e POSTGRESQL_DATABASE=my_data centos/postgresql-10-centos7 --name=my-database -n %USER%-fruit-service</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Some labeling specially useful for OpenShift developer view (Topology).</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc label deployment/my-database app.openshift.io/runtime=postgresql --overwrite -n %USER%-fruit-service &amp;&amp; \
+oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite -n %USER%-fruit-service</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-db-related-extensions"><a class="anchor" href="#adding-db-related-extensions"></a>Adding DB related extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We need some extensions to expose our database to the world: REST JSON, PostgreSQL and Panache Hibernate as our ORM.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see something like this when you add succesfully extensions to an app.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">...
+[INFO] --- quarkus-maven-plugin:1.9.2:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
+✅ Adding extension io.quarkus:quarkus-jdbc-postgresql
+✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exposing-rest-endpoints-for-crud-operations"><a class="anchor" href="#exposing-rest-endpoints-for-crud-operations"></a>Exposing REST endpoints for CRUD operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While the code is surprisingly simple, under the hood this is using:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>RESTEasy</strong> to expose the REST endpoints</p>
+</li>
+<li>
+<p><strong>Hibernate</strong> ORM with Panache to perform the CRUD operations on the database</p>
+</li>
+<li>
+<p><strong>Maven</strong> Java project structure</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="lets-create-the-fruit-entity"><a class="anchor" href="#lets-create-the-fruit-entity"></a>Let's create the <code>Fruit</code> entity</h3>
+<div class="paragraph">
+<p>Let’s modify the application and add a companion bean. In CodeReady, navigate to <code>src → main → java → com.redhat.atomic.fruit</code>, right-click on <code>fruit</code> folder in the project browser and select <em>New</em> -&#8594; <em>File</em>. Name the file <code>Fruit.java</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/newclass.png" alt="newclass" width="600">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/classname.png" alt="classname" width="400">
+</div>
+</div>
+<div class="paragraph">
+<p>Next, replace the below code into the class:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
+
+import java.util.List;
+
+import javax.persistence.Entity;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
+@Entity
+public class Fruit extends PanacheEntity {
+
+    public String name;
+    public String season;
+
+    public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) {
+        return find("season", season).list();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see our <code>Fruit</code> class extends <code>PanacheEntity</code> which adds the default <strong>CRUD</strong> methods you can expects from an <strong>ORM framework</strong> such as <strong>Panache</strong>. How ever it doesn't add any custom methods. In this case we want to be able to search by season and that's the reason we have added a methos called <code>getAllFruitsForSeason</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="lets-crudify-our-rest-enabled-service"><a class="anchor" href="#lets-crudify-our-rest-enabled-service"></a>Let's CRUDify our REST enabled service</h3>
+<div class="paragraph">
+<p>What we want to do is easy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Return all the fruit if <strong>GET</strong> <code>/fruit</code></p>
+</li>
+<li>
+<p>Save a Fruit if <strong>POST</strong> <code>/fruit</code></p>
+</li>
+<li>
+<p>Search fruit if a given season if <strong>GET</strong> <code>/fruit/{season}</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Navigate to <code>src → main → java → com.redhat.atomic.fruit</code> and double click on <code>FruitResource.java</code> and copy the below code into the class (replacing all the code in it):</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
+
+import java.net.URI;
+import java.util.List;
+
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+
+import org.jboss.logging.Logger; // logging
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
+
+@Path("/fruit")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class FruitResource {
+  Logger logger = Logger.getLogger(FruitResource.class); // logging
+
+  @ConfigProperty(name = "hello.message") // custom property
+  String message; // custom property
+
+   @GET
+    @Path("hello")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property
+        return message; // custom property
+    }
+
+    @GET
+    public List&lt;Fruit&gt; allFruits() {
+        return Fruit.listAll();
+    }
+
+    @GET
+    @Path("{season}")
+    public List&lt;Fruit&gt; fruitsBySeason(@PathParam("season") String season) {
+        return Fruit.getAllFruitsForSeason(season);
+    }
+
+    @POST
+    @Transactional
+    public Response saveFruit(Fruit fruit) {
+        // since the FruitEntity is a panache entity
+        // persist is available by default
+        fruit.persist();
+        final URI createdUri = UriBuilder.fromResource(FruitResource.class)
+                        .path(Long.toString(fruit.id))
+                        .build();
+        return Response.created(createdUri).build();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We need to adapt the test class after the changes to <code>FruitResource</code>. Update <code>$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java</code> with the next code.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+public class FruitResourceTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+          .when().get("/fruit/hello")
+          .then()
+             .statusCode(200)
+             .body(is("hello"));
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-datasource-related-properties"><a class="anchor" href="#adding-datasource-related-properties"></a>Adding datasource related properties</h3>
+<div class="paragraph">
+<p>Add the following properties to your <code>atomic-fruit-service/src/main/resources/application.properties</code> file:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As you can see we have three different jdbc urls for three execution profiles: <code>dev</code>, <code>prod</code> (the default one)
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
+## BEGIN: Data Base related properties
+quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+quarkus.datasource.db-kind=postgresql
+
+quarkus.datasource.username = luke
+quarkus.datasource.password = secret
+
+## drop and create the database at startup (use `update` to only update the schema)
+quarkus.hibernate-orm.database.generation = drop-and-create
+quarkus.hibernate-orm.sql-load-script = import.sql
+## show sql statements in log
+quarkus.hibernate-orm.log.sql = true
+
+## END: Data Base related properties
+#################################</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-some-fruits"><a class="anchor" href="#adding-some-fruits"></a>Adding some fruits</h3>
+<div class="paragraph">
+<p>Create a file called <code>import.sql</code> in <code>atomic-fruit-service/src/main/resources</code> (same folder as <code>application.properties</code> and in the same way we did for creating <code>Fruit.java</code>)</p>
+</div>
+<div class="paragraph">
+<p>This is a suitable content for that file.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Mango'      , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Strawberry' , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Orange'     , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'GrapeFruit' , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Blueberry'  , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Banana'     , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Plum'       , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Apple'      , 'Fall'   );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Grape '     , 'Fall'   );</code></pre>
+</div>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use another terminal and try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This time you should get a list of fruits:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[{"id":1,"name":"Mango","season":"Spring"},{"id":2,"name":"Strawberry","season":"Spring"},{"id":3,"name":"Orange","season":"Winter"},{"id":4,"name":"GrapeFruit","season":"Winter"},{"id":5,"name":"Blueberry","season":"Summer"},{"id":6,"name":"Banana","season":"Summer"},{"id":7,"name":"Plum","season":"Summer"},{"id":8,"name":"Apple","season":"Fall"},{"id":9,"name":"Grape ","season":"Fall"}]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Leave the application running we're going to do some more changes.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ok, so far we have used the default database related properties and connecting with the instance of PostgreSQL we have deployed in <code>%USER%-fruit-service</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="little-diversion-using-h2"><a class="anchor" href="#little-diversion-using-h2"></a>Little diversion: Using H2</h3>
+<div class="paragraph">
+<p>What if you wanted to use H2, the embedded database when in <code>dev</code> mode?  Although not always possible is not a bad practice to use an embedded database like <code>H2</code> so that tests don&#8217;t need an external database in place.</p>
+</div>
+<div class="paragraph">
+<p><strong>Adding H2</strong></p>
+</div>
+<div class="paragraph">
+<p>We will use <em>Quarkus</em> extension to add <strong>H2 JDBC Driver</strong>. From another terminal run the following command.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+./mvnw quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output should looks like the following:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------&lt; com.redhat.atomic.fruit:atomic-fruit-service &gt;------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Extension io.quarkus:quarkus-jdbc-h2 has been installed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.191 s
+[INFO] Finished at: 2021-03-31T18:17:29Z
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Second, change some datasource related properties in <code>application.properties</code> (at atomic-fruit-service/src/main/resources)</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+we have changed the value of <code>dev.quarkus.datasource.url</code> now the url points to H2 instead of PostgreSQL, so no need to port-forward our DB running in our cluster.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
+## BEGIN: Data Base related properties
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.username = luke
+%prod.quarkus.datasource.password = secret
+
+%dev.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%dev.quarkus.datasource.db-kind=h2
+%dev.quarkus.datasource.username = username-default
+
+%test.quarkus.datasource.jdbc.url = jdbc:h2:mem:myDB
+%test.quarkus.datasource.db-kind=h2
+%test.quarkus.datasource.username = username-default
+
+## drop and create the database at startup (use `update` to only update the schema)
+%prod.quarkus.hibernate-orm.database.generation = create
+quarkus.hibernate-orm.database.generation = drop-and-create
+quarkus.hibernate-orm.sql-load-script = import.sql
+## show sql statements in log
+quarkus.hibernate-orm.log.sql = true
+
+## END: Data Base related properties
+#################################</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If, accidentally, you stopped the application you can run it again using profile <code>dev</code> running the next command. However this time the application will run queries against H2.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we have done before, from another terminal run:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should get the same output you got from PostgreSQL:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[{"id":1,"name":"Mango","season":"Spring"},{"id":2,"name":"Strawberry","season":"Spring"},{"id":3,"name":"Orange","season":"Winter"},{"id":4,"name":"GrapeFruit","season":"Winter"},{"id":5,"name":"Blueberry","season":"Summer"},{"id":6,"name":"Banana","season":"Summer"},{"id":7,"name":"Plum","season":"Summer"},{"id":8,"name":"Apple","season":"Fall"},{"id":9,"name":"Grape ","season":"Fall"}]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="test-creating-a-fruit"><a class="anchor" href="#test-creating-a-fruit"></a>Test creating a fruit</h3>
+<div class="paragraph">
+<p>Let's try to create a Fruit object in our database.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the output &#8230;&#8203;</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">* Rebuilt URL to: POST/
+* Could not resolve host: POST
+* Closing connection 0
+
+curl: (6) Could not resolve host: POST
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#1)
+&gt; POST /fruit HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.61.1
+&gt; Accept: */*
+&gt; Content-Type: application/json
+&gt; Content-Length: 38
+&gt;
+* upload completely sent off: 38 out of 38 bytes
+&lt; HTTP/1.1 201 Created
+&lt; Content-Length: 0
+&lt; Location: http://localhost:8080/fruit/10
+&lt;
+* Connection #1 to host localhost left intact</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-swagger-ui-to-ease-api-development-and-testing"><a class="anchor" href="#adding-swagger-ui-to-ease-api-development-and-testing"></a>Adding Swagger UI to ease API development and testing</h3>
+<div class="paragraph">
+<p>You can easily generate en OpenAPI compliant description of your API and at additionally add a Swagger UI to your app by adding the <code>openapi</code> extension. Please run this command from a new terminal.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------&lt; com.redhat.atomic.fruit:atomic-fruit-service &gt;------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Extension io.quarkus:quarkus-smallrye-openapi has been installed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.157 s
+[INFO] Finished at: 2021-03-31T18:23:19Z
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the <code>web-%USER%</code> shortcut from your CodeReady tool panel (right side) to open the app link</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-open-page-shortcut.png" alt="crw-open-page-shortcut" width="400">
+</div>
+</div>
+<div class="paragraph">
+<p>And append to the end of the URL <code>/swagger-ui</code>, you should see something like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/swagger-ui.png" alt="Swagger UI">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="try-creating-another-fruit-this-time-with-the-swagger-ui"><a class="anchor" href="#try-creating-another-fruit-this-time-with-the-swagger-ui"></a>Try creating another Fruit this time with the Swagger UI</h3>
+<div class="paragraph">
+<p>Try to create a new fruit, get all and get by season.</p>
+</div>
+<div class="paragraph">
+<p>Click on <strong>POST /fruit</strong> then click on <strong>Try it out</strong></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Don't forget to delete the <code>id</code> property when creating a new fruit because <code>id</code> is self-generated.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/create-fruit-1.png" alt="Create Fruit 1">
+</div>
+</div>
+<div class="paragraph">
+<p>Now click on <strong>Execute</strong> eventually you should get a result similar to this one.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Pay attention to <strong>Code</strong>, it should be <strong>201</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/create-fruit-2.png" alt="Create Fruit 1">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-health-checks"><a class="anchor" href="#adding-health-checks"></a>Adding health checks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Health checks is one of those things that if recommendable in general is a must for every Cloud Native App and in quarkus it's a extension so let's add it.</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+./mvnw quarkus:add-extension -Dextension="smallrye-health"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------&lt; com.redhat.atomic.fruit:atomic-fruit-service &gt;------------
+[INFO] Building atomic-fruit-service 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.9.2.Final:add-extension (default-cli) @ atomic-fruit-service ---
+✅ Extension io.quarkus:quarkus-smallrye-health has been installed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.200 s
+[INFO] Finished at: 2021-03-31T18:27:06Z
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make sure your application is running in <code>dev</code> mode, then test the <code>/health</code> endpoint like this:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/health</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see something similar to the following output:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "Database connections health check",
+            "status": "UP"
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Stop the application by using the shortcut <code>Ctrl+C</code> on the terminal you started it.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="02-deploy.html" class="query-params-link">2. Deploying the Atomic Fruit Service</a></span>
+  <span class="next"><a href="04-deploy-openshift.html" class="query-params-link">4. Deploying the Atomic Fruit Service on OpenShift</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

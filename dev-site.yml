@@ -19,11 +19,11 @@ content:
 asciidoc:
   attributes:
     title: Quarkus from Zero to Serverless Guide (Dev Mode)
-    release-version: develop
+    release-version: main
     page-pagination: true
     git_base: https://github.com/atarazana
     git_uri: quarkus-zero-to-serverless-guide
-    git_ref: develop    
+    git_ref: main    
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js

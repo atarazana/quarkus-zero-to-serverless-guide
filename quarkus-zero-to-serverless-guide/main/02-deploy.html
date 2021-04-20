@@ -269,7 +269,7 @@ Don&#8217;t forget to add <code>unset MAVEN_CONFIG</code> if you open a new term
 <p>Generate <code>jar</code></p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">unset MAVEN_CONFIG &amp;&amp; ./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn -DskipTests clean package</code></pre>
 </div>
 </div>
 </li>
@@ -325,7 +325,7 @@ Don&#8217;t forget to add <code>unset MAVEN_CONFIG</code> if you open a new term
 <p>Generate the binary</p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw -DskipTests clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn -DskipTests clean package -Pnative</code></pre>
 </div>
 </div>
 </li>
@@ -381,7 +381,7 @@ This is outside of the scope of this lab but if you want to know more about this
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:dev</code></pre>
 </div>
 </div>
 <div class="sidebarblock">
@@ -566,7 +566,12 @@ public class FruitResource {
 </div>
 </li>
 <li>
-<p>From a different terminal try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+<p>From a different terminal try again this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The output should be something similar as follows (pay attention to the last trace, <strong>DEBUG</strong>):</p>
 </div>
@@ -621,28 +626,45 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.logging.Logger; // logging
-import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
+import org.jboss.logging.Logger; // logging <i class="conum" data-value="1"></i><b>(1)</b>
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
 
 @Path("/fruit")
 public class FruitResource {
-  Logger logger = Logger.getLogger(FruitResource.class); // logging
+  Logger logger = Logger.getLogger(FruitResource.class); // logging <i class="conum" data-value="1"></i><b>(1)</b>
 
-  @ConfigProperty(name = "hello.message") // custom property
-  String message; // custom property
+  @ConfigProperty(name = "hello.message") // custom property <i class="conum" data-value="2"></i><b>(2)</b>
+  String message; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String hello() {
-      logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property
-      return message; // custom property
+      logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
+      return message; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
   }
 }</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Logging</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Custom property</td>
+</tr>
+</table>
+</div>
 </li>
 <li>
-<p>From a different terminal try this url: <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></p>
+<p>As usual, run this request from a different terminal.</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/fruit</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The output should be something similar as follows (pay attention to the last trace, <strong>DEBUG</strong>):</p>
 </div>

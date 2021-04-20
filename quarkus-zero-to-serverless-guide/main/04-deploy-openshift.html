@@ -209,7 +209,7 @@ Before proceeding you must be logged in to the OpenShift cluster. Also, yo have 
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="openshift"</code></pre>
+mvn quarkus:add-extension -Dextension="openshift"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -312,7 +312,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now let's add the environment variables we need to connect to the database:</p>
+<p>Now let's add the environment variables we need to connect to the database, replace database related properties with these:</p>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
@@ -325,7 +325,7 @@ quarkus.openshift.env.mapping.db-username.with-key=user
 quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
 quarkus.openshift.env.mapping.db-password.with-key=password
 
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = ${DB_USERNAME}
 %prod.quarkus.datasource.password = ${DB_PASSWORD}
@@ -354,7 +354,7 @@ quarkus.hibernate-orm.log.sql = true
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -DskipTests</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn clean package -DskipTests</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -378,7 +378,7 @@ We make sure the default project is <code>%USER%-fruit-service</code>, this is n
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project %USER%-fruit-service &amp;&amp; \
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
+mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -464,7 +464,7 @@ quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -DskipTests &amp;&amp; \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn clean package -DskipTests &amp;&amp; \
 oc apply -f target/kubernetes/knative.yml</code></pre>
 </div>
 </div>

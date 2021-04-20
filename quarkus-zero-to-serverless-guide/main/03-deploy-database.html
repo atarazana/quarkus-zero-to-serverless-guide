@@ -237,7 +237,7 @@ oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -357,24 +357,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.logging.Logger; // logging
-import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
+import org.jboss.logging.Logger; // logging <i class="conum" data-value="1"></i><b>(1)</b>
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
 
 @Path("/fruit")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
-  Logger logger = Logger.getLogger(FruitResource.class); // logging
+  Logger logger = Logger.getLogger(FruitResource.class); // logging <i class="conum" data-value="1"></i><b>(1)</b>
 
-  @ConfigProperty(name = "hello.message") // custom property
-  String message; // custom property
+  @ConfigProperty(name = "hello.message") // custom property <i class="conum" data-value="2"></i><b>(2)</b>
+  String message; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
 
    @GET
     @Path("hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property
-        return message; // custom property
+        logger.debug("Hello method is called with message: " + this.message); // logging &amp; custom property &lt;1&gt;/<i class="conum" data-value="2"></i><b>(2)</b>
+        return message; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
     }
 
     @GET
@@ -402,6 +402,18 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Logging</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Custom property</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>We need to adapt the test class after the changes to <code>FruitResource</code>. Update <code>$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java</code> with the next code.</p>
 </div>
@@ -421,7 +433,7 @@ public class FruitResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/fruit/hello")
+          .when().get("/fruit/hello")  <i class="conum" data-value="1"></i><b>(1)</b>
           .then()
              .statusCode(200)
              .body(is("hello"));
@@ -429,6 +441,14 @@ public class FruitResourceTest {
 
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This line changes because the path changed in FruitResource</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -452,7 +472,7 @@ As you can see we have three different jdbc urls for three execution profiles: <
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
 ## BEGIN: Data Base related properties
-quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
 quarkus.datasource.db-kind=postgresql
 
 quarkus.datasource.username = luke
@@ -492,7 +512,7 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Gra
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn compile quarkus:dev <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -548,7 +568,7 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Gra
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"</code></pre>
+mvn quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -591,7 +611,7 @@ we have changed the value of <code>dev.quarkus.datasource.url</code> now the url
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
 ## BEGIN: Data Base related properties
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = luke
 %prod.quarkus.datasource.password = secret
@@ -620,7 +640,7 @@ quarkus.hibernate-orm.log.sql = true
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -647,7 +667,7 @@ quarkus.hibernate-orm.log.sql = true
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -vvv -d '{"name": "Coconut", "season": "Spring"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -687,7 +707,7 @@ curl: (6) Could not resolve host: POST
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
+mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -785,7 +805,7 @@ Pay attention to <strong>Code</strong>, it should be <strong>201</strong>.
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="smallrye-health"</code></pre>
+mvn quarkus:add-extension -Dextension="smallrye-health"</code></pre>
 </div>
 </div>
 <div class="paragraph">

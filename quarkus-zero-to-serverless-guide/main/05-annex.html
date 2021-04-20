@@ -201,7 +201,7 @@
 <div class="title">If you want to use Mandrel instead of GraalVM</div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}</code></pre>
 </div>
 </div>
 </div>
@@ -212,7 +212,7 @@
 <p>Create the docker image:</p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 </li>
@@ -237,9 +237,9 @@ If you want to explicitely select the container runtime, you can do it with:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Docker
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
+mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
 # Podman
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman</code></pre>
+mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -342,8 +342,8 @@ For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( <a hre
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:add-extension -Dextensions="container-image-docker"
+mvn package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -396,8 +396,8 @@ For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( <a hre
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:add-extension -Dextensions="container-image-docker"
+mvn package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Pnative</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -432,7 +432,7 @@ For now you cannot use <code>podman</code> in this case&#8230;&#8203; :-( <a hre
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative</code></pre>
 </div>
 </div>
 </div>

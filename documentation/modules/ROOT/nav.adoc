@@ -22,3 +22,4 @@
 ** xref:05-annex.adoc#native-mode-ii-generated-in-a-container[Native Mode II (generated in a container)]
 ** xref:05-annex.adoc#automatic-build-for-jvm-mode-using-docker[Automatic build for JVM mode using `docker`]
 ** xref:05-annex.adoc#automatic-build-for-native-mode-using-docker[Automatic build for Native mode using `docker`]
+** xref:05-annex.adoc#s2i-native-build[S2i Native Build]

@@ -196,18 +196,6 @@ Now we can test that everything works properly.
 curl http://$(oc get route atomic-fruit-service -o jsonpath='{.spec.host}')/fruit
 ----
 
-- - - - - NEED REVIEW / B - - - - -
-
-What about native in this case? Easy, just add `-Dquarkus.native.container-build=true -Pnative`.
-
-[.console-input]
-[source,sh,role="copypaste"]
-----
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative
-----
-
-- - - - - NEED REVIEW / E - - - - -
-
 [#evolving-to-serverless]
 == Evolving to Serverless
 include::_attributes.adoc[]

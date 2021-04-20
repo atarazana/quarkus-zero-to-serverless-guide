@@ -154,3 +154,16 @@ curl http://localhost:8080/fruit
 ----
 
 *_Ctrl+C_ to stop.*
+
+[#s2i-native-build]
+== S2i Native Build
+
+We saw how s2i works with the __JVM mode__ here: xref:04-deploy-openshift.adoc#deploying-to-openshift[Deploying to OpenShift].
+
+What about native in this case? Easy, just add `-Dquarkus.native.container-build=true -Pnative`.
+
+[.console-input]
+[source,sh,role="copypaste"]
+----
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative
+----

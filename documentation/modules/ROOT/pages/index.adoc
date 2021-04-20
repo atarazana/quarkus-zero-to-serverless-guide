@@ -6,38 +6,3 @@
 == Publish Atomic Fruit Service to OpenShift
 
 This module guides developers on their journey towards deploying a Cloud Native Java application on Kubernetes using Quarkus. Starting from scratch you will build a simple REST service that will evolve by adding capabilities using the Quarkus extensions mechanism, including relational DB persistence, dependency injection, etc. Later you will learn how to deploy your brand new microservice to Openshift and finally you will learn yet another way of deploying your application, this time using Knative.
-
-[.tiles.browse]
-== Browse labs
-
-[.tile]
-.xref:01-setup.adoc[Getting Started]
-* xref:01-setup.adoc#getting-ready[Getting Ready for the labs]
-* xref:01-setup.adoc#login-to-openshift[Login To OpenShift]
-
-[.tile]
-.xref:02-deploy.adoc[Deploying the Atomic Fruit Service]
-* xref:02-deploy.adoc#generate-the-quarkus-app-scaffold-using-a-maven-archetype[Generate the Quarkus app scaffold using a maven archetype]
-* xref:02-deploy.adoc#testing-different-ways-of-packaging-the-app[Testing different ways of packaging the app]
-* xref:02-deploy.adoc#running-in-development-mode-and-enjoy-hot-reloading[Running in development mode and enjoy hot reloading]
-
-[.tile]
-.xref:03-deploy-database.adoc[Adding a Data Base to our application]
-* xref:03-deploy-database.adoc#deploying-postgresql[Deploying PostgreSQL]
-* xref:03-deploy-database.adoc#deploy[Deploy the Application]
-* xref:03-deploy-database.adoc#adding-db-related-extensions[Adding DB related extensions]
-* xref:03-deploy-database.adoc#exposing-rest-endpoints-for-crud-operations[Exposing REST endpoints for CRUD operations]
-* xref:03-deploy-database.adoc#testing-locally[Testing locally]
-* xref:03-deploy-database.adoc#deploying-to-openshift[Deploying to OpenShift]
-
-[.tile]
-.xref:04-deploy-openshift.adoc[Deploying the Atomic Fruit Service on OpenShift]
-* xref:04-deploy-openshift.adoc#deploying-to-openshift[Deploying to OpenShift]
-* xref:04-deploy-openshift.adoc#evolving-to-serverless[Evolving to Serverless]
-
-[.tile]
-.xref:05-annex.adoc[ANNEX: Packing & building by using Docker]
-* xref:05-annex.adoc#native-mode-ii-generated-in-a-container[Native Mode II (generated in a container)]
-* xref:05-annex.adoc#automatic-build-for-jvm-mode-using-docker[Automatic build for JVM mode using `docker`]
-* xref:05-annex.adoc#automatic-build-for-native-mode-using-docker[Automatic build for Native mode using `docker`]
-

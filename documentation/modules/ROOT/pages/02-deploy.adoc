@@ -50,7 +50,7 @@ WARNING: Don't forget to add `unset MAVEN_CONFIG` if you open a new terminal!
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-unset MAVEN_CONFIG && ./mvnw -DskipTests clean package
+mvn -DskipTests clean package
 ----
 
 . Run the application in JVM mode.
@@ -86,7 +86,7 @@ This is huge... now you have a native binary file, no JVM involved.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw -DskipTests clean package -Pnative
+mvn -DskipTests clean package -Pnative
 ----
 
 . Run the application in native mode.
@@ -121,7 +121,7 @@ We can run our app in development mode, to do so we have to do as follows:
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw quarkus:dev
+mvn quarkus:dev
 ----
 
 .`quarkus:dev`
@@ -236,7 +236,12 @@ public class FruitResource {
 }
 ----
 
-. From a different terminal try this url: http://localhost:8080/fruit
+. From a different terminal try again this url: http://localhost:8080/fruit
++
+[source,sh,role="copypaste"]
+----
+curl http://localhost:8080/fruit
+----
 +
 The output should be something similar as follows (pay attention to the last trace, **DEBUG**):
 +
@@ -283,26 +288,34 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.logging.Logger; // logging
-import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
+import org.jboss.logging.Logger; // logging <1>
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <2>
 
 @Path("/fruit")
 public class FruitResource {
-  Logger logger = Logger.getLogger(FruitResource.class); // logging
+  Logger logger = Logger.getLogger(FruitResource.class); // logging <1>
 
-  @ConfigProperty(name = "hello.message") // custom property
-  String message; // custom property
+  @ConfigProperty(name = "hello.message") // custom property <2>
+  String message; // custom property <2>
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String hello() {
-      logger.debug("Hello method is called with message: " + this.message); // logging & custom property
-      return message; // custom property
+      logger.debug("Hello method is called with message: " + this.message); // logging & custom property <1> <2> 
+      return message; // custom property <2> 
   }
 }
 ----
++
+<1> Logging
+<2> Custom property
 
-. From a different terminal try this url: http://localhost:8080/fruit
+. As usual, run this request from a different terminal.
++
+[source,sh,role="copypaste"]
+----
+curl http://localhost:8080/fruit
+----
 +
 The output should be something similar as follows (pay attention to the last trace, **DEBUG**):
 +

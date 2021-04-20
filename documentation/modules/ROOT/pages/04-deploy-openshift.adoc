@@ -13,7 +13,7 @@ First of all let\'s add the extension to deploy to OpenShift.
 [source,sh,role="copypaste"]
 ----
 cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="openshift"
+mvn quarkus:add-extension -Dextension="openshift"
 ----
 
 Output:
@@ -100,9 +100,9 @@ stringData:
 EOF
 ----
 
-Now let\'s add the environment variables we need to connect to the database:
+Now let\'s add the environment variables we need to connect to the database, replace database related properties with these:
 
-[source,properties,role="copypaste"]
+[source,properties,role="copypaste",subs="attributes+"]
 ----
 #################################
 ## BEGIN: Data Base related properties
@@ -113,7 +113,7 @@ quarkus.openshift.env.mapping.db-username.with-key=user
 quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
 quarkus.openshift.env.mapping.db-password.with-key=password
 
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.{project_name}:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = ${DB_USERNAME}
 %prod.quarkus.datasource.password = ${DB_PASSWORD}
@@ -142,7 +142,7 @@ Let\'s package our application and have a look to the descriptors generated.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw clean package -DskipTests
+mvn clean package -DskipTests
 ----
 
 
@@ -156,7 +156,7 @@ NOTE: We make sure the default project is `{project_name}`, this is necessary be
 [source,sh,role="copypaste",subs="attributes+"]
 ----
 oc project {project_name} && \
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests
+mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests
 ----
 
 [TIP]
@@ -232,6 +232,6 @@ Time to deploy using Knative.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw clean package -DskipTests && \
+mvn clean package -DskipTests && \
 oc apply -f target/kubernetes/knative.yml
 ----

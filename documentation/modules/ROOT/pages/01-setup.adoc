@@ -70,5 +70,5 @@ Open a new terminal (as described above) and create the project:
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-oc new-project {PROJECT_NAME}
+oc new-project {project_name}
 ----

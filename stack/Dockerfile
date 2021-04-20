@@ -3,16 +3,14 @@
 # docker push quay.io/username/quarkus-workshop-stack:VVVV
 
 ARG FROM_IMAGE
-FROM ${FROM_IMAGE}
+FROM ${FROM_IMAGE} AS BASE
 
 #ENV MANDREL_VERSION=21.0.0.0.Final
-#ENV QUARKUS_VERSION=1.13.2.Final
 ENV MANDREL_VERSION=20.3.1.2-Final
-ENV QUARKUS_VERSION=1.11.6.Final-redhat-00001
 
 ENV KN_VERSION=0.19.1
 ENV TKN_VERSION=0.15.0
-ENV OC_VERSION=4.7
+ENV OC_VERSION=4.6
 ENV GRAALVM_HOME="/usr/local/mandrel-java11-${MANDREL_VERSION}"
 ENV PATH="/usr/local/maven/apache-maven-${MVN_VERSION}/bin:${PATH}"
 
@@ -27,6 +25,13 @@ RUN wget -O /tmp/tkn.tar.gz https://github.com/tektoncd/cli/releases/download/v$
 RUN sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && sudo microdnf install -y zlib-devel gcc siege && sudo curl -Lo /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && sudo chmod a+x /usr/bin/jq
 
 RUN wget -O /tmp/mandrel.tar.gz https://github.com/graalvm/mandrel/releases/download/mandrel-${MANDREL_VERSION}/mandrel-java11-linux-amd64-${MANDREL_VERSION}.tar.gz && cd /usr/local && tar -xvzf /tmp/mandrel.tar.gz && rm -rf /tmp/mandrel.tar.gz
+
+USER jboss
+
+FROM BASE
+
+#ENV QUARKUS_VERSION=1.13.2.Final
+ENV QUARKUS_VERSION=1.11.6.Final-redhat-00001
 
 USER jboss
 

@@ -13,7 +13,7 @@ To this end, Quarkus provides a very convenient way of creating a native Linux e
 [.console-input]
 [source,sh]
 ----
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}
+mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-mandrel:{mandrel-flavor}
 ----
 ****
 
@@ -22,7 +22,7 @@ To this end, Quarkus provides a very convenient way of creating a native Linux e
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
+mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true
 ----
 
 . Create the docker image:
@@ -40,9 +40,9 @@ If you want to explicitely select the container runtime, you can do it with:
 [source,bash]
 ----
 # Docker
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
+mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
 # Podman
-./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
+mvn package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
 ----
 
 These are normal Quarkus config properties, so if you always want to build in a container it is recommended you add these to your `application.properties` in order to avoid specifying them every time.
@@ -100,8 +100,8 @@ WARNING: For now you cannot use `podman` in this case... :-( https://github.com/
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
+mvn quarkus:add-extension -Dextensions="container-image-docker"
+mvn package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
 ----
 
 Run the image created.
@@ -133,8 +133,8 @@ WARNING: For now you cannot use `podman` in this case... :-( https://github.com/
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw quarkus:add-extension -Dextensions="container-image-docker"
-./mvnw package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Pnative
+mvn quarkus:add-extension -Dextensions="container-image-docker"
+mvn package -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Pnative
 ----
 
 Run the image created.
@@ -165,5 +165,5 @@ What about native in this case? Easy, just add `-Dquarkus.native.container-build
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative
+mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests -Pnative
 ----

@@ -34,7 +34,7 @@ We need some extensions to expose our database to the world: REST JSON, PostgreS
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"
+mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"
 ----
 
 You should see something like this when you add succesfully extensions to an app.
@@ -122,24 +122,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.logging.Logger; // logging
-import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property
+import org.jboss.logging.Logger; // logging <1>
+import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <2>
 
 @Path("/fruit")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
-  Logger logger = Logger.getLogger(FruitResource.class); // logging
+  Logger logger = Logger.getLogger(FruitResource.class); // logging <1>
 
-  @ConfigProperty(name = "hello.message") // custom property
-  String message; // custom property
+  @ConfigProperty(name = "hello.message") // custom property <2>
+  String message; // custom property <2>
 
    @GET
     @Path("hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        logger.debug("Hello method is called with message: " + this.message); // logging & custom property
-        return message; // custom property
+        logger.debug("Hello method is called with message: " + this.message); // logging & custom property <1>/<2>
+        return message; // custom property <2> 
     }
 
     @GET
@@ -167,6 +167,9 @@ public class FruitResource {
 }
 ----
 
+<1> Logging
+<2> Custom property
+
 We need to adapt the test class after the changes to `FruitResource`. Update `$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java` with the next code.
 
 [source,java,role="copypaste"]
@@ -185,7 +188,7 @@ public class FruitResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/fruit/hello")
+          .when().get("/fruit/hello")  // <1>
           .then()
              .statusCode(200)
              .body(is("hello"));
@@ -193,6 +196,8 @@ public class FruitResourceTest {
 
 }
 ----
+
+<1> This line changes because the path changed in FruitResource
 
 [#adding-datasource-related-properties]
 === Adding datasource related properties
@@ -205,7 +210,7 @@ NOTE: As you can see we have three different jdbc urls for three execution profi
 ----
 #################################
 ## BEGIN: Data Base related properties
-quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.{project_name}:5432/my_data
 quarkus.datasource.db-kind=postgresql
 
 quarkus.datasource.username = luke
@@ -244,7 +249,7 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Gra
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw compile quarkus:dev <1>
+mvn compile quarkus:dev <1>
 ----
 
 :NOTE: When you run your app it runs in `dev` mode as `dev` profile is activated by default.
@@ -286,7 +291,7 @@ We will use _Quarkus_ extension to add **H2 JDBC Driver**. From another terminal
 [source,sh,role="copypaste"]
 ----
 cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"
+mvn quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"
 ----
 
 The output should looks like the following:
@@ -314,11 +319,11 @@ Second, change some datasource related properties in `application.properties` (a
 
 NOTE: we have changed the value of `dev.quarkus.datasource.url` now the url points to H2 instead of PostgreSQL, so no need to port-forward our DB running in our cluster.
 
-[source,properties,role="copypaste"]
+[source,properties,role="copypaste",subs="attributes+"]
 ----
 #################################
 ## BEGIN: Data Base related properties
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.user1-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.{project_name}:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = luke
 %prod.quarkus.datasource.password = secret
@@ -347,7 +352,7 @@ If, accidentally, you stopped the application you can run it again using profile
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-./mvnw compile quarkus:dev
+mvn compile quarkus:dev
 ----
 
 As we have done before, from another terminal run:
@@ -373,7 +378,7 @@ Let\'s try to create a Fruit object in our database.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit
+curl -vvv -d '{"name": "Coconut", "season": "Spring"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit
 ----
 
 And the output ...
@@ -413,7 +418,7 @@ You can easily generate en OpenAPI compliant description of your API and at addi
 [source,sh,role="copypaste"]
 ----
 cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"
+mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"
 ----
 
 The output:
@@ -472,7 +477,7 @@ Health checks is one of those things that if recommendable in general is a must 
 [source,sh,role="copypaste"]
 ----
 cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
-./mvnw quarkus:add-extension -Dextension="smallrye-health"
+mvn quarkus:add-extension -Dextension="smallrye-health"
 ----
 
 The output:

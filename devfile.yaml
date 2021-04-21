@@ -24,7 +24,7 @@ components:
     #image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-stack:2.5'
     image: 'quay.io/atarazana/quarkus-stack:2.7-5'
     env:
-      - value: '-Xmx4G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled'
+      - value: '-Xmx6G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled'
         name: MAVEN_OPTS
 commands:
   - name: Login to OpenShift

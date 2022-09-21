@@ -192,33 +192,87 @@
 <h2 id="getting-ready"><a class="anchor" href="#getting-ready"></a>Getting Ready for the labs</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>Throughout the lab you will have to use both <strong>CodeReady Workspaces</strong>, an online IDE based on <a href="https://www.eclipse.org/che/" target="_blank" rel="noopener">Eclipse Che</a>, and the <strong>OpenShift Console</strong>. In any case you will be authenticated by OpenShift Oauth Server, please use these credentials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Username:</strong> <code>%USERNAME%</code></p>
+</li>
+<li>
+<p><strong>Password:</strong> <code>%PASSWORD%</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
 <p>You will be using Red Hat CodeReady Workspaces, an online IDE based on <a href="https://www.eclipse.org/che/" target="_blank" rel="noopener">Eclipse Che</a>. <strong>Changes to files are auto-saved every few seconds</strong>, so you don’t need to explicitly save changes.</p>
 </div>
 <div class="paragraph">
-<p>To get started, access the CodeReady Workspaces instance and log in using the username and password you’ve been assigned (e.g. <code>%USER%/openshift</code>):</p>
+<p>Let&#8217;s get started! Access the <strong>CodeReady Workspaces</strong> instance and log in using the username and password you’ve been assigned. Using the next link in a new tab, this links will take you to the IDE you&#8217;ll be using and at the same time will create the workspace with all the tools needed.</p>
 </div>
-<div class="imageblock">
+<div class="listingblock console-input">
 <div class="content">
-<img src="_images/che-login.png" alt="cdw" width="700">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">https://codeready-openshift-workspaces.apps.%BASE_SUBDOMAIN%/f?url=https://raw.githubusercontent.com/atarazana/quarkus-zero-to-serverless-guide/main/devfile-internal.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green %USER%-namespace that says <em>Open</em> on the top right hand side of the screen.</p>
-</div>
-<div class="paragraph">
-<p>After a minute or two, you’ll be placed in the workspace:</p>
+<p>Before you can use your credentials please choose the identity provided named <code>htpasswd_provider</code> as in the next picture.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/che-workspace.png" alt="cdw" width="900">
+<img src="_images/crw-login-1.png" alt="CRW Login">
 </div>
 </div>
 <div class="paragraph">
-<p>You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do:</p>
+<p>Now, you can use the provided credentials, then please click on <code>Log in</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/crw-icons.png" alt="cdw" width="400">
+<img src="_images/crw-login-2.png" alt="CRW Login">
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, before you can start using CRW you have to provide some additional data, you can use the following example data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Email:</strong> <code>user@%USERNAME%.com</code></p>
+</li>
+<li>
+<p><strong>First Name:</strong> <code>User</code></p>
+</li>
+<li>
+<p><strong>Last Name:</strong> <code>%USERNAME%</code></p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-login-3.png" alt="CRW Login">
+</div>
+</div>
+<div class="paragraph">
+<p>Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green %USERNAME%-namespace that says <em>Open</em> on the top right hand side of the screen.</p>
+</div>
+<div class="paragraph">
+<p>After a minute or two, you’ll be placed in your workspace:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/crw-workspace-1.png" alt="Workspace">
 </div>
 </div>
 <div class="admonitionblock note">
@@ -249,10 +303,10 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Username: <code>%USER%</code></p>
+<p>Username: <code>%USERNAME%</code></p>
 </li>
 <li>
-<p>Password: <code>openshift</code></p>
+<p>Password: <code>%PASSWORD%</code></p>
 </li>
 </ul>
 </div>
@@ -266,13 +320,13 @@
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">Login successful.
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">Login successful.
 
 You have access to the following projects and can switch between them with 'oc project &lt;projectname&gt;':
 
-  * %USER%-project
+  * %USERNAME%-project
 
-Using project "%USER%-project".
+Using project "%USERNAME%-codeready".
 Welcome! See 'oc help' to get started.</code></pre>
 </div>
 </div>
@@ -314,7 +368,7 @@ Welcome! See 'oc help' to get started.</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project %USER%-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project %USERNAME%-fruit-service</code></pre>
 </div>
 </div>
 </div>

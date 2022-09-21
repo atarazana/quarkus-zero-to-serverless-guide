@@ -212,7 +212,7 @@ Before proceeding you must be logged in to the OpenShift cluster. Also, yo have 
 <p>Using <code>oc</code></p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-app -e POSTGRESQL_USER=luke -e POSTGRESQL_PASSWORD=secret -e POSTGRESQL_DATABASE=my_data centos/postgresql-10-centos7 --name=my-database -n %USER%-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-app -e POSTGRESQL_USER=luke -e POSTGRESQL_PASSWORD=secret -e POSTGRESQL_DATABASE=my_data centos/postgresql-10-centos7 --name=my-database -n %USERNAME%-fruit-service</code></pre>
 </div>
 </div>
 </li>
@@ -220,8 +220,8 @@ Before proceeding you must be logged in to the OpenShift cluster. Also, yo have 
 <p>Some labeling specially useful for OpenShift developer view (Topology).</p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc label deployment/my-database app.openshift.io/runtime=postgresql --overwrite -n %USER%-fruit-service &amp;&amp; \
-oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite -n %USER%-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc label deployment/my-database app.openshift.io/runtime=postgresql --overwrite -n %USERNAME%-fruit-service &amp;&amp; \
+oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite -n %USERNAME%-fruit-service</code></pre>
 </div>
 </div>
 </li>
@@ -472,7 +472,7 @@ As you can see we have three different jdbc urls for three execution profiles: <
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
 ## BEGIN: Data Base related properties
-quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
+quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USERNAME%-fruit-service:5432/my_data
 quarkus.datasource.db-kind=postgresql
 
 quarkus.datasource.username = luke
@@ -551,7 +551,7 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Gra
 </table>
 </div>
 <div class="paragraph">
-<p>Ok, so far we have used the default database related properties and connecting with the instance of PostgreSQL we have deployed in <code>%USER%-fruit-service</code>.</p>
+<p>Ok, so far we have used the default database related properties and connecting with the instance of PostgreSQL we have deployed in <code>%USERNAME%-fruit-service</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -611,7 +611,7 @@ we have changed the value of <code>dev.quarkus.datasource.url</code> now the url
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">#################################
 ## BEGIN: Data Base related properties
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USERNAME%-fruit-service:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = luke
 %prod.quarkus.datasource.password = secret
@@ -732,7 +732,7 @@ mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can use the <code>web-%USER%</code> shortcut from your CodeReady tool panel (right side) to open the app link</p>
+<p>You can use the <code>web-%USERNAME%</code> shortcut from your CodeReady tool panel (right side) to open the app link</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -834,7 +834,7 @@ mvn quarkus:add-extension -Dextension="smallrye-health"</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl http://localhost:8080/q/health</code></pre>
 </div>
 </div>
 <div class="paragraph">

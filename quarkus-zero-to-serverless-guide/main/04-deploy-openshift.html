@@ -240,7 +240,7 @@ mvn quarkus:add-extension -Dextension="openshift"</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Kubernetes Client
 quarkus.kubernetes-client.trust-certs=true
-quarkus.kubernetes-client.namespace=${PROJECT_NAME:%USER%-fruit-service}
+quarkus.kubernetes-client.namespace=${PROJECT_NAME:%USERNAME%-fruit-service}
 
 ## Only generate OpenShift descriptors
 quarkus.kubernetes.deployment-target=openshift
@@ -325,7 +325,7 @@ quarkus.openshift.env.mapping.db-username.with-key=user
 quarkus.openshift.env.mapping.db-password.from-secret=fruits-database-secret
 quarkus.openshift.env.mapping.db-password.with-key=password
 
-%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USER%-fruit-service:5432/my_data
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://my-database.%USERNAME%-fruit-service:5432/my_data
 %prod.quarkus.datasource.db-kind=postgresql
 %prod.quarkus.datasource.username = ${DB_USERNAME}
 %prod.quarkus.datasource.password = ${DB_PASSWORD}
@@ -370,14 +370,14 @@ quarkus.hibernate-orm.log.sql = true
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We make sure the default project is <code>%USER%-fruit-service</code>, this is necessary because the plugin used to deploy in OpenShift deploys in the default project unless indicated otherwise.
+We make sure the default project is <code>%USERNAME%-fruit-service</code>, this is necessary because the plugin used to deploy in OpenShift deploys in the default project unless indicated otherwise.
 </td>
 </tr>
 </table>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project %USER%-fruit-service &amp;&amp; \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project %USERNAME%-fruit-service &amp;&amp; \
 mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
 </div>
 </div>
@@ -393,7 +393,7 @@ mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -n %USER%-fruit-service -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -n %USERNAME%-fruit-service -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code></pre>
 </div>
 </div>
 </td>
@@ -405,7 +405,7 @@ mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get dc,deploy -n %USER%-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get dc,deploy -n %USERNAME%-fruit-service</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -446,7 +446,7 @@ quarkus.kubernetes.deployment-target=openshift,knative</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Knative
 quarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000
-quarkus.container-image.group=${PROJECT_NAME:%USER%-fruit-service}
+quarkus.container-image.group=${PROJECT_NAME:%USERNAME%-fruit-service}
 quarkus.container-image.tag=1.0-SNAPSHOT
 quarkus.knative.name=atomic-fruit-service-kn
 quarkus.knative.version=1.0
@@ -464,7 +464,8 @@ quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn clean package -DskipTests &amp;&amp; \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+mvn clean package -DskipTests &amp;&amp; \
 oc apply -f target/kubernetes/knative.yml</code></pre>
 </div>
 </div>

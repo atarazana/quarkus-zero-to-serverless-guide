@@ -203,7 +203,7 @@
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:1.7.6.Final-redhat-00014:create \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:1.11.7.Final-redhat-00009:create \
   -DprojectGroupId="com.redhat.atomic.fruit" \
   -DprojectArtifactId="atomic-fruit-service" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -488,6 +488,18 @@ This is outside of the scope of this lab but if you want to know more about this
 </div>
 <div class="paragraph">
 <p>Now, without stopping our application, let's add some logging&#8230;&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="quarkus-listen-on-all-ip-addresses"><a class="anchor" href="#quarkus-listen-on-all-ip-addresses"></a>Making Quarkus to listen on all IP addresses</h3>
+<div class="paragraph">
+<p>Configure Quarkus logging by setting the following parameters to <code>atomic-fruit-service/src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Listen on all IP addresses
+quarkus.http.host=0.0.0.0</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="adding-log-capabilities"><a class="anchor" href="#adding-log-capabilities"></a>Adding log capabilities</h3>

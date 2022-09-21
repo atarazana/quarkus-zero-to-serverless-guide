@@ -184,6 +184,17 @@ This will also listen for a debugger on port `5005`. If you want to wait for the
 
 Now, without stopping our application, let\'s add some logging...
 
+[#quarkus-listen-on-all-ip-addresses]
+=== Making Quarkus to listen on all IP addresses
+
+Configure Quarkus logging by setting the following parameters to `{artifact_id_quarkus}/src/main/resources/application.properties`:
+
+[source,properties,role="copypaste"]]
+----
+# Listen on all IP addresses
+quarkus.http.host=0.0.0.0
+----
+
 [#adding-log-capabilities]
 === Adding log capabilities
 

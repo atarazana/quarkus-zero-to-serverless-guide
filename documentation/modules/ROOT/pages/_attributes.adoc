@@ -8,5 +8,11 @@ include::versions.adoc[]
 :class_name: FruitResource
 :class_path: fruit
 :app_home: $CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service
-:project_name: %USER%-{artifact_id}
-:lab_pass: openshift
+:project_name: %USERNAME%-{artifact_id}
+:username: %USERNAME%
+:password: %PASSWORD%
+:base_subdomain: %BASE_SUBDOMAIN%
+:openshift-console-url:  https://console-openshift-console.apps.{base_subdomain}
+:crw-url: https://codeready-openshift-workspaces.apps.{base_subdomain}
+:devfile-url: https://raw.githubusercontent.com/atarazana/quarkus-zero-to-serverless-guide/main/devfile-internal.yaml
+:workspace_launch_url: {crw-url}/f?url={devfile-url}

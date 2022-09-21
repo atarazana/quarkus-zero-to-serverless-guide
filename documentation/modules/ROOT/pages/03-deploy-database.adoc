@@ -441,7 +441,7 @@ The output:
 [INFO] ------------------------------------------------------------------------
 ----
 
-You can use the `web-%USER%` shortcut from your CodeReady tool panel (right side) to open the app link
+You can use the `web-{username}` shortcut from your CodeReady tool panel (right side) to open the app link
 
 image::crw-open-page-shortcut.png[crw-open-page-shortcut, 400]
 
@@ -505,7 +505,7 @@ Make sure your application is running in `dev` mode, then test the `/health` end
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-curl http://localhost:8080/health
+curl http://localhost:8080/q/health
 ----
 
 You should see something similar to the following output:

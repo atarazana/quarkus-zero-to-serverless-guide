@@ -232,6 +232,7 @@ Time to deploy using Knative.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
+cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 mvn clean package -DskipTests && \
 oc apply -f target/kubernetes/knative.yml
 ----

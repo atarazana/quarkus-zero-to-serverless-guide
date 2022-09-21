@@ -22,7 +22,7 @@ components:
     type: dockerimage
     alias: quarkus-tools
     #image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-stack:2.5'
-    image: 'quay.io/atarazana/quarkus-stack:2.7-5'
+    image: 'quay.io/atarazana/quarkus-stack:2.15-11-001'
     env:
       - value: '-Xmx6G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled'
         name: MAVEN_OPTS

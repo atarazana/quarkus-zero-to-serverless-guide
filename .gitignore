@@ -41,3 +41,6 @@ package*
 node_modules
 .firebaserc
 .firebase
+
+old
+maven-repository-*

@@ -4,21 +4,45 @@ include::_attributes.adoc[]
 [#getting-ready]
 == Getting Ready for the labs
 
+Throughout the lab you will have to use both *CodeReady Workspaces*, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^], and the *OpenShift Console*. In any case you will be authenticated by OpenShift Oauth Server, please use these credentials:
+
+- *Username:* `{username}`
+- *Password:* `{password}`
+
+
 You will be using Red Hat CodeReady Workspaces, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^]. *Changes to files are auto-saved every few seconds*, so you don’t need to explicitly save changes.
 
-To get started, access the CodeReady Workspaces instance and log in using the username and password you’ve been assigned (e.g. `%USER%/{LAB_PASS}`):
+Let's get started! Access the *CodeReady Workspaces* instance and log in using the username and password you’ve been assigned. Using the next link in a new tab, this links will take you to the IDE you'll be using and at the same time will create the workspace with all the tools needed.
 
-image::che-login.png[cdw, 700]
+[.console-input]
+[source,bash, subs="+attributes"]
+----
+{workspace_launch_url}
+----
 
-Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green %USER%-namespace that says _Open_ on the top right hand side of the screen.
+Before you can use your credentials please choose the identity provided named `htpasswd_provider` as in the next picture.
 
-After a minute or two, you’ll be placed in the workspace:
+image::crw-login-1.png[CRW Login]
 
-image::che-workspace.png[cdw, 900]
+Now, you can use the provided credentials, then please click on `Log in`.
 
-You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do:
+image::crw-login-2.png[CRW Login]
 
-image::crw-icons.png[cdw, 400]
+Finally, before you can start using CRW you have to provide some additional data, you can use the following example data:
+
+- *Email:* `user@{username}.com`
+- *First Name:* `User`
+- *Last Name:* `{username}`
+
+image::crw-login-3.png[CRW Login]
+
+Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green {username}-namespace that says _Open_ on the top right hand side of the screen.
+
+After a minute or two, you’ll be placed in your workspace:
+
+NOTE: You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do.
+
+image::crw-workspace-1.png[Workspace]
 
 [NOTE]
 ====
@@ -34,23 +58,23 @@ If you ever need to run commands that you don't see in a menu, you can press kbd
 
 Although your Eclipse Che workspace is running on the Kubernetes cluster, it’s running with a default restricted _Service Account_ that prevents you from creating most resource types. If you’ve completed other modules, you’re probably already logged in, but let’s login again: click on *Login to OpenShift*, and enter your given credentials:
 
-* Username: `%USER%`
-* Password: `{LAB_PASS}`
+* Username: `{username}`
+* Password: `{password}`
 
 image::cmd-login.png[login,700]
 
 You should see something like this (the project names may be different):
 
 [.console-output]
-[source,console]
+[source,sh,subs="attributes+"]
 ----
 Login successful.
 
 You have access to the following projects and can switch between them with 'oc project <projectname>':
 
-  * %USER%-project
+  * {username}-project
 
-Using project "%USER%-project".
+Using project "{username}-codeready".
 Welcome! See 'oc help' to get started.
 ----
 

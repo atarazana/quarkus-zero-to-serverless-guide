@@ -54,7 +54,7 @@ ENV MAVEN_SETTINGS_XML ${MAVEN_REPO_BASE}/settings.xml
 
 RUN echo "MAVEN_REPO_BASE=${MAVEN_REPO_BASE}" >> ~/.bashrc && \
   echo "MAVEN_SETTINGS_XML=${MAVEN_SETTINGS_XML}" >> ~/.bashrc && \
-  echo 'alias mvn="mvn -s ${MAVEN_SETTINGS_XML}"' >> ~/.bashrc
+  echo 'alias mvn="mvn -s ${MAVEN_SETTINGS_XML} -Dmaven.repo.local=${MAVEN_REPO}"' >> ~/.bashrc
 
 # COPY external libs
 RUN mkdir -p ${MAVEN_REPO_BASE}

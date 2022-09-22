@@ -145,7 +145,6 @@ Let\'s package our application and have a look to the descriptors generated.
 mvn clean package -DskipTests
 ----
 
-
 You can check the generated file `$CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
 
 Let\'s deploy the result:
@@ -187,6 +186,18 @@ deploymentconfig.apps.openshift.io/atomic-fruit-service   1          1         1
 NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/my-database   1/1     1            1           96m
 ----
+
+You can also see your application deployed in the OpenShift Console. If you closed the tab you used before just use the link below.
+
+[.console-input]
+[source,bash, subs="+attributes"]
+----
+{openshift-console-url}/topology/ns/{username}-fruit-service?view=graph
+----
+
+You should see something like:
+
+image::ocp-console-app-1.png[DB Deployed, 900]
 
 Now we can test that everything works properly.
 
@@ -236,3 +247,31 @@ cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 mvn clean package -DskipTests && \
 oc apply -f target/kubernetes/knative.yml
 ----
+
+Time to have a look again from the OpenShift Console, if you closed the tab you used before just use the link below.
+
+[.console-input]
+[source,bash, subs="+attributes"]
+----
+{openshift-console-url}/topology/ns/{username}-fruit-service?view=graph
+----
+
+You should see something like:
+
+image::ocp-console-app-2.png[DB Deployed, 900]
+
+Now we can test that everything works properly.
+
+[TIP]
+====
+
+Remember you're sending a request to a serverless service, and that kind of services are normally scaled down to zero after a certain time (30 secs by default), so expect some delay for the first request!
+
+====
+
+[.console-input]
+[source,sh,role="copypaste", subs="+attributes"]
+----
+curl $(kn route describe atomic-fruit-service-kn  -n {username}-fruit-service -o jsonpath='{.status.url}')/fruit
+----
+

@@ -76,7 +76,7 @@ This mode generates a Quarkus native binary file.
 
 [NOTE]
 ====
-This is huge... now you have a native binary file, no JVM involved.
+You will build a native binary file, no JVM involved! But take into account that generating the binary takes a lot more time, it could be up to 10 mins in certain circumstances, storage and memory allocated impact the build time. In general you would develop using the `quarkus:dev` mode, then build using the `Java Mode` and rarely use the `Native Mode` unless for fixing some error that only manifests in native mode. In general you will leave the heavy liftring to a CICD pipeline.
 ====
 
 . Generate the binary

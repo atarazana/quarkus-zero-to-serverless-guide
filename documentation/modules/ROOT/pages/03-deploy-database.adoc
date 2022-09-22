@@ -26,6 +26,18 @@ oc label deployment/my-database app.openshift.io/runtime=postgresql --overwrite 
 oc label deployment/my-database app.kubernetes.io/part-of={APP_NAME} --overwrite -n {project_name}
 ----
 
+Open the OpenShift Console and have a look to the deployment of PostgreSQL.
+
+[.console-input]
+[source,bash, subs="+attributes"]
+----
+{openshift-console-url}
+----
+
+You should see something like:
+
+image::ocp-console-db-1.png[DB Deployed, 900]
+
 [#adding-db-related-extensions]
 == Adding DB related extensions
 

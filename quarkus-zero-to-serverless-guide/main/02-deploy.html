@@ -301,7 +301,7 @@ At this point you must be compliant with all the prerequisites describes in the 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This is huge&#8230;&#8203; now you have a native binary file, no JVM involved.</p>
+<p>You will build a native binary file, no JVM involved! But take into account that generating the binary takes a lot more time, it could be up to 10 mins in certain circumstances, storage and memory allocated impact the build time. In general you would develop using the <code>quarkus:dev</code> mode, then build using the <code>Java Mode</code> and rarely use the <code>Native Mode</code> unless for fixing some error that only manifests in native mode. In general you will leave the heavy liftring to a CICD pipeline.</p>
 </div>
 </td>
 </tr>

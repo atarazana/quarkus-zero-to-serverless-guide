@@ -418,6 +418,22 @@ deployment.apps/my-database   1/1     1            1           96m</code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>You can also see your application deployed in the OpenShift Console. If you closed the tab you used before just use the link below.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">https://console-openshift-console.apps.%BASE_SUBDOMAIN%/topology/ns/%USERNAME%-fruit-service?view=graph</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see something like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-console-app-1.png" alt="DB Deployed" width="900">
+</div>
+</div>
+<div class="paragraph">
 <p>Now we can test that everything works properly.</p>
 </div>
 <div class="listingblock copypaste">
@@ -467,6 +483,44 @@ quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
 mvn clean package -DskipTests &amp;&amp; \
 oc apply -f target/kubernetes/knative.yml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Time to have a look again from the OpenShift Console, if you closed the tab you used before just use the link below.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">https://console-openshift-console.apps.%BASE_SUBDOMAIN%/topology/ns/%USERNAME%-fruit-service?view=graph</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see something like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-console-app-2.png" alt="DB Deployed" width="900">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can test that everything works properly.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Remember you&#8217;re sending a request to a serverless service, and that kind of services are normally scaled down to zero after a certain time (30 secs by default), so expect some delay for the first request!</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl $(kn route describe atomic-fruit-service-kn  -n %USERNAME%-fruit-service -o jsonpath='{.status.url}')/fruit</code></pre>
 </div>
 </div>
 </div>

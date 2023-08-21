@@ -1,75 +1,67 @@
-apiVersion: 1.0.0
+schemaVersion: 2.2.0
 metadata:
   generateName: quarkus-zero-
+attributes:
+  controller.devfile.io/devworkspace-config:
+    name: devworkspace-config
+    namespace: openshift-operators
+  controller.devfile.io/scc: container-build
+  controller.devfile.io/storage-type: per-user
 components:
-  - id: redhat/quarkus-java11/latest
-    type: chePlugin
-  - mountSources: true
-    endpoints:
-      - attributes:
-          public: 'true'
+  - attributes:
+      controller.devfile.io/merge-contribution: true
+    container:
+      endpoints:
+        - exposure: none
+          name: debug
+          protocol: tcp
+          targetPort: 5005
+        - exposure: public
+          name: hello-greeting-endpoint
+          path: /hello/greeting/devspaces-user
           protocol: http
-          discoverable: 'true'
-        name: web-ui
-        port: 8080
-      - attributes:
-          public: 'false'
-          protocol: jdwp
-          discoverable: 'false'
-        name: debug
-        port: 5005
-    memoryLimit: 8Gi
-    type: dockerimage
-    alias: quarkus-tools
-    #image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-stack:2.5'
-    image: 'quay.io/atarazana/quarkus-stack:2.15-11-001'
-    env:
-      - value: '-Xmx6G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled'
-        name: MAVEN_OPTS
+          targetPort: 8080
+      env:
+        - name: QUARKUS_HTTP_HOST
+          value: 0.0.0.0
+        - name: CHE_DASHBOARD_URL
+          value: https://devspaces.apps.cluster-qqk4g.qqk4g.sandbox1969.opentlc.com
+        - name: CHE_PLUGIN_REGISTRY_URL
+          value: https://devspaces.apps.cluster-qqk4g.qqk4g.sandbox1969.opentlc.com/plugin-registry/v3
+        - name: CHE_PLUGIN_REGISTRY_INTERNAL_URL
+          value: http://plugin-registry.openshift-operators.svc:8080/v3
+        - name: CLUSTER_CONSOLE_URL
+          value: https://console-openshift-console.apps.cluster-qqk4g.qqk4g.sandbox1969.opentlc.com
+        - name: CLUSTER_CONSOLE_TITLE
+          value: OpenShift console
+        - name: OPENVSX_REGISTRY_URL
+          value: ''
+      image: registry.redhat.io/devspaces/udi-rhel8@sha256:b1f112760b2640b5e8612869536a000612837e8e247c74d3d99e9fcfbc56d2f3
+      memoryLimit: 4G
+      mountSources: true
+      sourceMapping: /projects
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+    name: tools
+  - name: m2
+    volume:
+      size: 1G
 commands:
-  - name: Login to OpenShift
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}'
-        type: exec
-        command: 'oc login https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT --insecure-skip-tls-verify=true -u ${CHE_WORKSPACE_NAMESPACE}'
-        component: quarkus-tools
-  - name: Run Tests
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}'
-        type: exec
-        command: 'mvn verify -f ${CHE_PROJECTS_ROOT}/atomic-fruit-service'
-        component: quarkus-tools
-  - name: Start Live Coding
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}'
-        type: exec
-        command: 'mvn clean compile quarkus:dev -f ${CHE_PROJECTS_ROOT}/atomic-fruit-service'
-        component: quarkus-tools
-  - name: Package App for OpenShift
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}'
-        type: exec
-        command: 'mvn package -DuberJar=true -DskipTests -f ${CHE_PROJECTS_ROOT}/atomic-fruit-service'
-        component: quarkus-tools
-  - name: Build Native App
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}'
-        type: exec
-        command: 'mvn package -Pnative -DskipTests -Dquarkus.package.uber-jar=false -f ${CHE_PROJECTS_ROOT}/atomic-fruit-service'
-        component: quarkus-tools
-  - name: Start Debugger on 5005
-    actions:
-      - referenceContent: |
-          {
-            "version": "0.2.0",
-            "configurations": [
-              {
-                "type": "java",
-                "request": "attach",
-                "name": "Attach to App",
-                "hostName": "localhost",
-                "port": 5005
-              }
-            ]
-          }
-        type: vscode-launch
+  - exec:
+      commandLine: mvn package
+      component: tools
+      group:
+        isDefault: true
+        kind: build
+      workingDir: ${PROJECTS_ROOT}/quarkus-quickstarts/getting-started
+    id: 1-package
+  - exec:
+      commandLine: mvn compile quarkus:dev
+      component: tools
+      group:
+        isDefault: true
+        kind: run
+      label: Start Development mode (Hot reload + debug)
+      workingDir: ${PROJECTS_ROOT}/quarkus-quickstarts/getting-started
+    id: 2-startdev

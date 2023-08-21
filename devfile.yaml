@@ -17,7 +17,7 @@ components:
           protocol: tcp
           targetPort: 5005
         - exposure: public
-          name: hello-greeting-endpoint
+          name: greeting
           path: /hello/greeting/devspaces-user
           protocol: http
           targetPort: 8080

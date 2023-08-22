@@ -38,7 +38,7 @@ components:
           value: ''
       # image: registry.redhat.io/devspaces/udi-rhel8@sha256:b1f112760b2640b5e8612869536a000612837e8e247c74d3d99e9fcfbc56d2f3
       # image: quay.io/devfile/universal-developer-image:ubi8-latest
-      image: quay.io/atarazana/quarkus-zero-udi:1.0.1
+      image: quay.io/atarazana/quarkus-zero-udi:1.0.2
       # image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-zero-udi:1.0.0'
       memoryLimit: 4G
       mountSources: true

@@ -1,0 +1,180 @@
+# syntax=docker/dockerfile:1.3-labs
+
+# updateBaseImages.sh can't operate on SHA-based tags as they're not date-based or semver-sequential, and therefore cannot be ordered
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+LABEL maintainer="Red Hat, Inc."
+
+LABEL com.redhat.component="devfile-universal-container"
+LABEL name="devfile/universal-developer-image"
+LABEL version="ubi8"
+
+#label for EULA
+LABEL com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+#labels for container catalog
+LABEL summary="devfile universal developer image"
+LABEL description="Image with developers tools. Languages SDK and runtimes included."
+LABEL io.k8s.display-name="devfile-developer-universal"
+LABEL io.openshift.expose-services=""
+
+USER 10001
+
+# Java
+RUN curl -fsSL "https://get.sdkman.io" | bash \
+    && bash -c ". /home/user/.sdkman/bin/sdkman-init.sh \
+             && sed -i "s/sdkman_auto_answer=false/sdkman_auto_answer=true/g" /home/user/.sdkman/etc/config \
+	     && sed -i "s/sdkman_auto_env=false/sdkman_auto_env=true/g" /home/user/.sdkman/etc/config \
+             && sdk install java 11.0.15-tem \
+             && sdk install java 17.0.3-tem \
+             && sdk install java 23.0.1.2.r20-mandrel \
+             && sdk default java 11.0.15-tem \
+             && sdk install gradle \
+             && sdk install maven \
+             && sdk install jbang \
+             && sdk flush archives \
+             && sdk flush temp"
+
+# sdk home java <version>
+ENV JAVA_HOME_11=/home/user/.sdkman/candidates/java/11.0.15-tem
+ENV JAVA_HOME_17=/home/user/.sdkman/candidates/java/17.0.3-tem
+
+# Java-related environment variables are described and set by /home/user/.bashrc
+# To make Java working for dash and other shells, it needs to initialize them in the Dockerfile.
+ENV SDKMAN_CANDIDATES_API="https://api.sdkman.io/2"
+ENV SDKMAN_CANDIDATES_DIR="/home/user/.sdkman/candidates"
+ENV SDKMAN_DIR="/home/user/.sdkman"
+ENV SDKMAN_PLATFORM="linuxx64"
+ENV SDKMAN_VERSION="5.13.0"
+
+ENV GRADLE_HOME="/home/user/.sdkman/candidates/gradle/current"
+ENV JAVA_HOME="/home/user/.sdkman/candidates/java/current"
+ENV MAVEN_HOME="/home/user/.sdkman/candidates/maven/current"
+
+ENV GRAALVM_HOME=/home/user/.sdkman/candidates/java/23.0.1.2.r20-mandrel
+
+ENV PATH="/home/user/.krew/bin:$PATH"
+ENV PATH="/home/user/.sdkman/candidates/maven/current/bin:$PATH"
+ENV PATH="/home/user/.sdkman/candidates/java/current/bin:$PATH"
+ENV PATH="/home/user/.sdkman/candidates/gradle/current/bin:$PATH"
+ENV PATH="/home/user/.local/share/coursier/bin:$PATH"
+
+# NodeJS
+ENV NVM_DIR="/home/user/.nvm"
+ENV NODEJS_VERSION=16.14.0
+ENV NODEJS_12_VERSION=12.22.10
+ENV NODEJS_14_VERSION=14.19.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+RUN source /home/user/.bashrc && nvm install v${NODEJS_VERSION} && nvm install v${NODEJS_14_VERSION} && nvm install v${NODEJS_12_VERSION} && nvm alias default v$NODEJS_VERSION && nvm use v$NODEJS_VERSION && npm install --global yarn@v1.22.17
+ENV PATH=$NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
+ENV NODEJS_HOME_12=$NVM_DIR/versions/node/v$NODEJS_12_VERSION
+ENV NODEJS_HOME_14=$NVM_DIR/versions/node/v$NODEJS_14_VERSION
+ENV NODEJS_HOME_16=$NVM_DIR/versions/node/v$NODEJS_VERSION
+
+# kube
+ENV KUBECONFIG=/home/user/.kube/config
+
+USER 0
+
+# Required packages for AWT
+RUN dnf install -y libXext libXrender libXtst libXi
+
+# Lombok
+ENV LOMBOK_VERSION=1.18.18
+RUN wget -O /usr/local/lib/lombok.jar https://projectlombok.org/downloads/lombok-${LOMBOK_VERSION}.jar
+    
+# C/CPP
+RUN dnf -y install llvm-toolset gcc gcc-c++ clang clang-libs clang-tools-extra gdb
+
+# Go 1.18+    - installed to /usr/bin/go
+# gopls 0.10+ - installed to /home/user/go/bin/gopls and /home/user/go/pkg/mod/
+RUN dnf install -y go-toolset && \
+    GO111MODULE=on go install -v golang.org/x/tools/gopls@latest
+ENV GOBIN="/home/user/go/bin/"
+ENV PATH="$GOBIN:$PATH"
+
+# Python
+RUN dnf -y module enable python39:3.9 && \
+    dnf -y update && \
+    dnf -y install python39 python39-devel python39-setuptools python39-pip nss_wrapper
+
+RUN cd /usr/bin \
+    && if [ ! -L python ]; then ln -s python3.9 python; fi \
+    && if [ ! -L pydoc ]; then ln -s pydoc3.9 pydoc; fi \
+    && if [ ! -L python-config ]; then ln -s python3.9-config python-config; fi \
+    && if [ ! -L pip ]; then ln -s pip-3.9 pip; fi
+
+RUN pip install pylint yq
+
+# camel-k
+ENV KAMEL_VERSION 1.11.0
+RUN curl -L https://github.com/apache/camel-k/releases/download/v${KAMEL_VERSION}/camel-k-client-${KAMEL_VERSION}-linux-64bit.tar.gz | tar -C /usr/local/bin -xz \
+    && chmod +x /usr/local/bin/kamel
+
+# git completion
+RUN echo "source /usr/share/bash-completion/completions/git" >> /home/user/.bashrc
+
+# Cloud
+
+# oc client and completion
+ENV OC_VERSION=4.12.25
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz | tar -C /usr/local/bin -xz \
+    && chmod +x /usr/local/bin/oc  \
+    && oc completion bash > /usr/share/bash-completion/completions/oc \
+    && echo "source /usr/share/bash-completion/completions/oc" >> /home/user/.bashrc
+
+## podman buildah skopeo
+RUN dnf -y module enable container-tools:rhel8 && \ 
+    dnf -y update && \
+    dnf -y reinstall shadow-utils && \
+    dnf -y install podman buildah skopeo fuse-overlayfs
+
+# Set up environment variables to note that this is
+# not starting with usernamespace and default to
+# isolate the filesystem with chroot.
+ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
+
+# Tweaks to make rootless buildah work
+RUN touch /etc/subgid /etc/subuid  && \
+    chmod g=u /etc/subgid /etc/subuid /etc/passwd  && \
+    echo user:10000:65536 > /etc/subuid  && \
+    echo user:10000:65536 > /etc/subgid
+
+# Adjust storage.conf to enable Fuse storage.
+RUN sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
+RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers; \
+    touch /var/lib/shared/overlay-images/images.lock; \
+    touch /var/lib/shared/overlay-layers/layers.lock
+
+# But use VFS since we were not able to make Fuse work yet...
+RUN mkdir -p "${HOME}"/.config/containers && \
+   (echo '[storage]';echo 'driver = "vfs"') > "${HOME}"/.config/containers/storage.conf
+
+# Configure the podman wrapper
+# COPY --chown=0:0 podman-wrapper.sh /usr/bin/podman.wrapper
+# RUN mv /usr/bin/podman /usr/bin/podman.orig
+
+# Set permissions on /etc/passwd and /home to allow arbitrary users to write
+RUN mkdir -p /home/user && chgrp -R 0 /home && chmod -R g=u /etc/passwd /etc/group /home
+
+# Others
+ENV KN_VERSION=1.8.1
+RUN wget -O /usr/bin/kn-linux-amd64 https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/serverless/${KN_VERSION}/kn-linux-amd64 && \
+  mv /usr/bin/kn-linux-amd64 /usr/bin/kn && chmod a+x /usr/bin/kn
+
+ENV TKN_VERSION=1.11.0
+RUN wget -O /tmp/tkn.tar.gz https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/pipelines/${TKN_VERSION}/tkn-linux-amd64.tar.gz && \
+  cd /usr/bin && tar --no-same-owner -xvzf /tmp/tkn.tar.gz tkn && \
+  rm -f /tmp/tkn.tar.gz
+
+# cleanup dnf cache
+RUN dnf -y clean all --enablerepo='*'
+
+COPY --chown=0:0 entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
+USER 10001
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+WORKDIR /projects
+CMD tail -f /dev/null

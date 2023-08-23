@@ -20,11 +20,10 @@ metadata:
   labels:
     operators.coreos.com/serverless-operator.openshift-serverless: ''
   name: serverless-operator
-  namespace: openshift-serverless
 spec:
   channel: stable
   installPlanApproval: Automatic
   name: serverless-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: serverless-operator.v1.24.0
+  # startingCSV: serverless-operator.v1.24.0

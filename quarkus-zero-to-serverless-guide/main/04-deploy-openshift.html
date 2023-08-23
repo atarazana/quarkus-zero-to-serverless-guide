@@ -198,7 +198,7 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
+Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
 </td>
 </tr>
 </table>
@@ -208,7 +208,7 @@ Before proceeding you must be logged in to the OpenShift cluster. Also, yo have 
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="openshift"</code></pre>
 </div>
 </div>
@@ -246,7 +246,7 @@ quarkus.kubernetes-client.namespace=${PROJECT_NAME:%USERNAME%-fruit-service}
 quarkus.kubernetes.deployment-target=openshift
 
 ## Expose the service when deployed
-quarkus.openshift.expose=true</code></pre>
+quarkus.openshift.route.expose=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -255,9 +255,9 @@ quarkus.openshift.expose=true</code></pre>
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">## Recommended labels and a custom label for kubernetes and openshift
-quarkus.openshift.part-of=fruits-app
 quarkus.openshift.name=atomic-fruit-service
-quarkus.openshift.labels.department=fruity-dept</code></pre>
+quarkus.openshift.labels.department=fruity-dept
+quarkus.openshift.labels."app.kubernetes.io/part-of"=fruits-app</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -298,8 +298,8 @@ quarkus.openshift.annotations."app.quarkus/id"=42</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mkdir -p $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes &amp;&amp; \
-cat &lt;&lt;EOF &gt; $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mkdir -p $PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes &amp;&amp; \
+cat &lt;&lt;EOF &gt; $PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
 ---
 apiVersion: v1
 kind: Secret
@@ -358,7 +358,7 @@ quarkus.hibernate-orm.log.sql = true
 </div>
 </div>
 <div class="paragraph">
-<p>You can check the generated file <code>$CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code>, there you'll find: Service and Deployment&#8230;&#8203;</p>
+<p>You can check the generated file <code>$PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code>, there you'll find: Service and Deployment&#8230;&#8203;</p>
 </div>
 <div class="paragraph">
 <p>Let's deploy the result:</p>
@@ -393,7 +393,7 @@ mvn clean package -Dquarkus.kubernetes.deploy=true -DskipTests</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -n %USERNAME%-fruit-service -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -n %USERNAME%-fruit-service -f $PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml</code></pre>
 </div>
 </div>
 </td>
@@ -480,7 +480,7 @@ quarkus.knative.env.mapping.db-password.with-key=password</code></pre>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn clean package -DskipTests &amp;&amp; \
 oc apply -f target/kubernetes/knative.yml</code></pre>
 </div>

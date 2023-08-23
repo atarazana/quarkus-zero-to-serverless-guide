@@ -203,7 +203,8 @@
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:1.11.7.Final-redhat-00009:create \
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn io.quarkus:quarkus-maven-plugin:3.2.4.Final:create \
+  -DplatformVersion=3.2.4.Final \
   -DprojectGroupId="com.redhat.atomic.fruit" \
   -DprojectArtifactId="atomic-fruit-service" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -243,7 +244,7 @@ At this point you must be compliant with all the prerequisites describes in the 
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd $CHE_PROJECTS_ROOT/atomic-fruit-service</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd $PROJECTS_ROOT/atomic-fruit-service</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -265,7 +266,7 @@ At this point you must be compliant with all the prerequisites describes in the 
 <p>Run the application in JVM mode.</p>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">java -jar ./target/atomic-fruit-service-1.0-SNAPSHOT-runner.jar <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">java -jar  ./target/quarkus-app/quarkus-run.jar <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 </li>
@@ -544,10 +545,10 @@ quarkus.log.category."com.redhat.atomic".level=DEBUG</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger; // logging
 
@@ -621,10 +622,10 @@ hello.message = ${HELLO_MESSAGE:hello}</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.atomic.fruit;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger; // logging <i class="conum" data-value="1"></i><b>(1)</b>
 import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <i class="conum" data-value="2"></i><b>(2)</b>

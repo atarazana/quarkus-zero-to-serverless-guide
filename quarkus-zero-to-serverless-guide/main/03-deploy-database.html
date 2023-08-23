@@ -198,7 +198,7 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
+Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at <code>$PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service</code> directory in all your terminals.
 </td>
 </tr>
 </table>
@@ -253,7 +253,7 @@ oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">mvn quarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -314,12 +314,23 @@ oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite
 
 import java.util.List;
 
-import javax.persistence.Entity;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Fruit extends PanacheEntityBase {
+    @Id
+    @SequenceGenerator(
+            name = "fruitSequence",
+            sequenceName = "fruit_sequence",
+            allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fruitSequence")
+    public Integer id;
 
     public String name;
     public String season;
@@ -362,16 +373,16 @@ public class Fruit extends PanacheEntity {
 import java.net.URI;
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.jboss.logging.Logger; // logging <i class="conum" data-value="1"></i><b>(1)</b>
 import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
@@ -515,15 +526,15 @@ quarkus.hibernate-orm.log.sql = true
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Mango'      , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Strawberry' , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Orange'     , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'GrapeFruit' , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Blueberry'  , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Banana'     , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Plum'       , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Apple'      , 'Fall'   );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Grape '     , 'Fall'   );</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Mango'      , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Strawberry' , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Orange'     , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'GrapeFruit' , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Blueberry'  , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Banana'     , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Plum'       , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Apple'      , 'Fall'   );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Grape '     , 'Fall'   );</code></pre>
 </div>
 </div>
 <div class="listingblock copypaste">
@@ -583,7 +594,7 @@ INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Gra
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"</code></pre>
 </div>
 </div>
@@ -722,7 +733,7 @@ curl: (6) Could not resolve host: POST
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
@@ -756,7 +767,7 @@ mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And append to the end of the URL <code>/swagger-ui</code>, you should see something like:</p>
+<p>And append to the end of the URL <code>/q/swagger-ui</code>, you should see something like:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -820,7 +831,7 @@ Pay attention to <strong>Code</strong>, it should be <strong>201</strong>.
 </div>
 <div class="listingblock copypaste">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="smallrye-health"</code></pre>
 </div>
 </div>

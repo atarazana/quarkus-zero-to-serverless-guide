@@ -27,7 +27,7 @@ components:
           protocol: https
           targetPort: 8080
         - exposure: public
-          name: home
+          name: swagger-ui
           path: /q/swagger-ui
           protocol: https
           targetPort: 8080

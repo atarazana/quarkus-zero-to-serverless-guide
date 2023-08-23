@@ -6,10 +6,10 @@
 # by default it is java 8
 #############################################################################
 if [ "${USE_JAVA11}" == "true" ] ; then
-  alternatives --set java-1.8.0-openjdk.x86_64
+  sdk default java 11.0.15-tem
   echo "Java environment set to JAVA 11"
 elif [ "${USE_JAVA17}" == "true" ] ; then
-  alternatives --set java java-17-openjdk.x86_64
+  sdk default java 17.0.3-tem
   echo "Java environment set to JAVA 17"
 else
   echo "Java environment set to JAVA 11"

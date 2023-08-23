@@ -17,9 +17,19 @@ components:
           protocol: tcp
           targetPort: 5005
         - exposure: public
-          name: greeting
+          name: home
+          path: /
+          protocol: https
+          targetPort: 8080
+        - exposure: public
+          name: fruits
           path: /fruit
-          protocol: http
+          protocol: https
+          targetPort: 8080
+        - exposure: public
+          name: home
+          path: /q/swagger-ui
+          protocol: https
           targetPort: 8080
       env:
         - name: QUARKUS_HTTP_HOST
@@ -38,8 +48,8 @@ components:
           value: ''
       # image: registry.redhat.io/devspaces/udi-rhel8@sha256:b1f112760b2640b5e8612869536a000612837e8e247c74d3d99e9fcfbc56d2f3
       # image: quay.io/devfile/universal-developer-image:ubi8-latest
-      image: quay.io/atarazana/quarkus-zero-udi:1.0.2
-      # image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-zero-udi:1.0.0'
+      # image: quay.io/atarazana/quarkus-zero-udi:1.0.2
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-zero-udi:1.1.0'
       memoryLimit: 4G
       mountSources: true
       sourceMapping: /projects

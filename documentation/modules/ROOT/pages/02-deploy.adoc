@@ -12,6 +12,7 @@ By default, the command will target the latest version of `quarkus-universe-bom`
 [source,sh,subs="attributes+",role="copypaste"]
 ----
 mvn io.quarkus:quarkus-maven-plugin:{quarkus_version}:create \
+  -DplatformVersion={platform_version} \
   -DprojectGroupId="{group_id}" \
   -DprojectArtifactId="{artifact_id_quarkus}" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -35,7 +36,7 @@ NOTE: At this point you must be compliant with all the prerequisites describes i
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd $CHE_PROJECTS_ROOT/atomic-fruit-service
+cd $PROJECTS_ROOT/atomic-fruit-service
 ----
 
 [#jvm-mode]
@@ -56,7 +57,7 @@ mvn -DskipTests clean package
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-java -jar ./target/atomic-fruit-service-1.0-SNAPSHOT-runner.jar <1>
+java -jar  ./target/quarkus-app/quarkus-run.jar <1>
 ----
 
 . Test from another terminal, you should receive a `hello` string.
@@ -225,10 +226,10 @@ Keep it open as you are going to use it frequently during all the lab.
 ----
 package com.redhat.atomic.fruit;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger; // logging
 
@@ -292,10 +293,10 @@ hello.message = ${HELLO_MESSAGE:hello}
 ----
 package com.redhat.atomic.fruit;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger; // logging <1>
 import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <2>

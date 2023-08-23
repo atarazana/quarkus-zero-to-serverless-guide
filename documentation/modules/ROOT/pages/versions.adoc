@@ -1,5 +1,9 @@
 :graalvm_version: 20.1.0.3.Final
 // :quarkus_version: 1.11.6.Final-redhat-00001
-:quarkus_version: 1.11.7.Final-redhat-00009
+// :quarkus_version: 1.11.7.Final-redhat-00009
+// :quarkus_version: 2.13.8.Final << si udi oficial si
+// :quarkus_version: 2.13.8.Final-redhat-00004 << NO
+:quarkus_version: 3.2.4.Final
+:platform_version: {quarkus_version}
 :knative_version: 0.19.1
 :tekton_version: 0.15.0

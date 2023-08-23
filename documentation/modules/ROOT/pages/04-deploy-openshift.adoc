@@ -5,14 +5,14 @@ include::_attributes.adoc[]
 [#deploying-to-openshift]
 == Deploying to OpenShift
 
-WARNING: Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service` directory in all your terminals.
+WARNING: Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at `$PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service` directory in all your terminals.
 
 First of all let\'s add the extension to deploy to OpenShift.
 
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="openshift"
 ----
 
@@ -48,7 +48,7 @@ quarkus.kubernetes-client.namespace=${PROJECT_NAME:{project_name}}
 quarkus.kubernetes.deployment-target=openshift
 
 ## Expose the service when deployed
-quarkus.openshift.expose=true
+quarkus.openshift.route.expose=true
 ----
 
 Let\'s add a some additional labels `part-of` and `name`, and a custom label:
@@ -56,9 +56,9 @@ Let\'s add a some additional labels `part-of` and `name`, and a custom label:
 [source,properties,subs="attributes+",role="copypaste"]
 ----
 ## Recommended labels and a custom label for kubernetes and openshift
-quarkus.openshift.part-of={app_name}
 quarkus.openshift.name={artifact_id_quarkus}
 quarkus.openshift.labels.department=fruity-dept
+quarkus.openshift.labels."app.kubernetes.io/part-of"={app_name}
 ----
 
 Regarding annotations, out of the box, the generated resources will be annotated with version control related information that can be used either by tooling, or by the user for troubleshooting purposes.
@@ -87,8 +87,8 @@ NOTE: `openshift` extension takes the file we\'re generating and merge it with t
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-mkdir -p $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes && \
-cat <<EOF > $CHE_PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
+mkdir -p $PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes && \
+cat <<EOF > $PROJECTS_ROOT/atomic-fruit-service/src/main/kubernetes/openshift.yml
 ---
 apiVersion: v1
 kind: Secret
@@ -145,7 +145,7 @@ Let\'s package our application and have a look to the descriptors generated.
 mvn clean package -DskipTests
 ----
 
-You can check the generated file `$CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
+You can check the generated file `$PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml`, there you\'ll find: Service and Deployment...
 
 Let\'s deploy the result:
 
@@ -165,7 +165,7 @@ The other, and equivalent, approach is to use the `oc` client instead of the mav
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
-oc apply -n {project_name} -f $CHE_PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml
+oc apply -n {project_name} -f $PROJECTS_ROOT/atomic-fruit-service/target/kubernetes/openshift.yml
 ----
 ====
 
@@ -243,7 +243,7 @@ Time to deploy using Knative.
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn clean package -DskipTests && \
 oc apply -f target/kubernetes/knative.yml
 ----

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 [#deploying-postgresql]
 == Deploying PostgreSQL
 
-WARNING: Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at `$CHE_PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service` directory in all your terminals.
+WARNING: Before proceeding you must be logged in to the OpenShift cluster. Also, yo have to be at `$PROJECTS_ROOT/quarkus-zero-to-serverless-guide/atomic-fruit-service` directory in all your terminals.
 
 We\'re going to deploy PostgreSQL using a template, in general an operator is a better choice but for the sake of simplicity in this demo a template is a good choice.
 
@@ -46,7 +46,7 @@ We need some extensions to expose our database to the world: REST JSON, PostgreS
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"
+mvn quarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"
 ----
 
 You should see something like this when you add succesfully extensions to an app.
@@ -87,12 +87,23 @@ package com.redhat.atomic.fruit;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Fruit extends PanacheEntityBase {
+    @Id
+    @SequenceGenerator(
+            name = "fruitSequence",
+            sequenceName = "fruit_sequence",
+            allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fruitSequence")
+    public Integer id;
 
     public String name;
     public String season;
@@ -123,16 +134,16 @@ package com.redhat.atomic.fruit;
 import java.net.URI;
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.jboss.logging.Logger; // logging <1>
 import org.eclipse.microprofile.config.inject.ConfigProperty; // custom property <2>
@@ -247,15 +258,15 @@ This is a suitable content for that file.
 
 [source,sql,role="copypaste"]
 ----
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Mango'      , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Strawberry' , 'Spring' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Orange'     , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'GrapeFruit' , 'Winter' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Blueberry'  , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Banana'     , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Plum'       , 'Summer' );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Apple'      , 'Fall'   );
-INSERT INTO Fruit(id,name,season) VALUES ( nextval ('hibernate_sequence') , 'Grape '     , 'Fall'   );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Mango'      , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Strawberry' , 'Spring' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Orange'     , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'GrapeFruit' , 'Winter' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Blueberry'  , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Banana'     , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Plum'       , 'Summer' );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Apple'      , 'Fall'   );
+INSERT INTO Fruit(id,name,season) VALUES ( nextval ('fruit_sequence') , 'Grape '     , 'Fall'   );
 ----
 
 [.console-input]
@@ -302,7 +313,7 @@ We will use _Quarkus_ extension to add **H2 JDBC Driver**. From another terminal
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="io.quarkus:quarkus-jdbc-h2"
 ----
 
@@ -429,7 +440,7 @@ You can easily generate en OpenAPI compliant description of your API and at addi
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"
 ----
 
@@ -457,7 +468,7 @@ You can use the `web-{username}` shortcut from your CodeReady tool panel (right 
 
 image::crw-open-page-shortcut.png[crw-open-page-shortcut, 400]
 
-And append to the end of the URL `/swagger-ui`, you should see something like:
+And append to the end of the URL `/q/swagger-ui`, you should see something like:
 
 image::swagger-ui.png[Swagger UI]
 
@@ -488,7 +499,7 @@ Health checks is one of those things that if recommendable in general is a must 
 [.console-input]
 [source,sh,role="copypaste"]
 ----
-cd ${CHE_PROJECTS_ROOT}/atomic-fruit-service
+cd ${PROJECTS_ROOT}/atomic-fruit-service
 mvn quarkus:add-extension -Dextension="smallrye-health"
 ----
 

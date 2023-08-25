@@ -2,39 +2,27 @@
 include::_attributes.adoc[]
 
 [#getting-ready]
-== Getting Ready for the labs
+== Getting Ready For The Labs
 
-Throughout the lab you will have to use both *CodeReady Workspaces*, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^], and the *OpenShift Console*. In any case you will be authenticated by OpenShift Oauth Server, please use these credentials:
+Throughout the lab you will have to use both link:https://developers.redhat.com/products/openshift-dev-spaces/overview[*Red Hat OpenShift Dev Spaces*^], an online IDE based on https://www.eclipse.org/che/[Eclipse Che^], and the *OpenShift Console*. In any case you will be authenticated by OpenShift Oauth Server, please use these credentials:
 
 - *Username:* `{username}`
 - *Password:* `{password}`
 
 
-You will be using Red Hat CodeReady Workspaces, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^]. *Changes to files are auto-saved every few seconds*, so you don’t need to explicitly save changes.
+You will be using Red Hat Dev Spaces, an online IDE based on https://www.eclipse.org/che/[Eclipse Che^]. *Changes to files are auto-saved every few seconds*, so you don’t need to explicitly save changes.
 
-Let's get started! Access the *CodeReady Workspaces* instance and log in using the username and password you’ve been assigned. Using the next link in a new tab, this links will take you to the IDE you'll be using and at the same time will create the workspace with all the tools needed.
+Let's get started! Access the *Dev Spaces* instance and log in using the username and password you’ve been assigned. Using the next link in a new tab, this links will take you to the IDE you'll be using and at the same time will create the workspace with all the tools needed.
 
 [.console-input]
-[source,bash, subs="+attributes"]
+[source,text, subs="+attributes"]
 ----
 {workspace_launch_url}
 ----
 
-Before you can use your credentials please choose the identity provided named `htpasswd_provider` as in the next picture.
-
-image::crw-login-1.png[CRW Login]
-
-Now, you can use the provided credentials, then please click on `Log in`.
+Please use the provided credentials, then please click on `Log in`.
 
 image::crw-login-2.png[CRW Login]
-
-Finally, before you can start using CRW you have to provide some additional data, you can use the following example data:
-
-- *Email:* `user@{username}.com`
-- *First Name:* `User`
-- *Last Name:* `{username}`
-
-image::crw-login-3.png[CRW Login]
 
 Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green {username}-namespace that says _Open_ on the top right hand side of the screen.
 
@@ -49,43 +37,39 @@ image::crw-workspace-1.png[Workspace]
 If things get weird or your browser appears, you can simply reload the browser tab to refresh the view.
 ====
 
-Many features of CodeReady Workspaces are accessed via *Commands*. You can see a few of the commands listed with links on the home page (e.g. _New File.._, _Git Clone.._, and others).
+Many features of Dev Spaces are accessed via *Commands*. You can see a few of the commands listed with links on the home page (e.g. _New File.._, _Git Clone.._, and others).
 
 If you ever need to run commands that you don't see in a menu, you can press kbd:[F1] to open the command window, or the more traditional kbd:[Control+SHIFT+P] (or kbd:[Command+SHIFT+P] on Mac OS X).
 
 [#login-to-openshift]
 === Login to OpenShift
 
-Although your Eclipse Che workspace is running on the Kubernetes cluster, it’s running with a default restricted _Service Account_ that prevents you from creating most resource types. If you’ve completed other modules, you’re probably already logged in, but let’s login again: click on *Login to OpenShift*, and enter your given credentials:
+As we have already explained, your Dev Spaces environment is running on the Kubernetes cluster and terminals are already logged in so that you can run `oc` commands with out the need of logging in. Never the less tokens expire and if you leave your environment running longer than the expiration time you would need to log back in. If that is the case use the following command in a terminal window.
 
-* Username: `{username}`
-* Password: `{password}`
+[.console-input]
+[source,sh,subs="attributes+",role="copypaste"]
+----
+oc login -u {username} -p {password} --server=https://api.{api-domain}
+----
 
-image::cmd-login.png[login,700]
-
-You should see something like this (the project names may be different):
+This is the expected result, should you needed to run previous command.
 
 [.console-output]
-[source,sh,subs="attributes+"]
+[source,text,subs="attributes+"]
 ----
 Login successful.
 
 You have access to the following projects and can switch between them with 'oc project <projectname>':
 
-  * {username}-project
+  * {project_name}
 
-Using project "{username}-codeready".
+Using project "{project_name}".
 Welcome! See 'oc help' to get started.
 ----
 
 [NOTE]
 ====
-After you log in using *Login to OpenShift*, the terminal is no longer usable as a regular terminal. You can close the terminal window. You will still be logged in when you open more terminals later!
-====
-
-[NOTE]
-====
-The Terminal window in CodeReady Workspaces. You can open a terminal window for any of the containers running in your Developer workspace. For the rest of these labs, anytime you need to run a command in a terminal, you can use the **>_ New Terminal** command on the right:
+The Terminal window in Dev Spaces. You can open a terminal window for any of the containers running in your Developer workspace. For the rest of these labs, anytime you need to run a command in a terminal, you can use the **>_ New Terminal** command on the right:
 
 image::codeready-workspace-terminal.png[codeready-workspace-terminal, 700]
 ====

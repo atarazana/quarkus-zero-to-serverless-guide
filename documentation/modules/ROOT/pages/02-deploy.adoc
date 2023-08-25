@@ -159,7 +159,7 @@ You should see the default Quarkus welcome page (you may need to click the _relo
 
 image::welcome-quarkus.png[port, 900]
 
-Open a *new* CodeReady Workspaces Terminal:
+Open a *new* Dev Spaces Terminal:
 
 image::cmd-terminal.png[livecoding, 900]
 

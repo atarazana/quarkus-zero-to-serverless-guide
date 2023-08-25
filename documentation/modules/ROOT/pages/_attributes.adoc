@@ -12,6 +12,7 @@ include::versions.adoc[]
 :username: %USERNAME%
 :password: %PASSWORD%
 :base_subdomain: %BASE_SUBDOMAIN%
+:api-domain: {base_subdomain}:6443
 :openshift-console-url:  https://console-openshift-console.apps.{base_subdomain}
 :crw-url: https://devspaces.apps.{base_subdomain}
 :devfile-url: https://raw.githubusercontent.com/atarazana/quarkus-zero-to-serverless-guide/main/devfile.yaml

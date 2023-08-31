@@ -7,6 +7,7 @@ metadata:
   name: web-terminal-tooling
   labels:
     console.openshift.io/terminal: 'true'
+    web-terminal.redhat.com/unmanaged-state: "true"
 spec:
   components:
     - container:

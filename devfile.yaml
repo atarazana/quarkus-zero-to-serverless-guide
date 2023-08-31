@@ -36,7 +36,7 @@ components:
           value: 0.0.0.0
         - name: USE_JAVA17
           value: "true"
-      image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-zero-udi:1.1.0'
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/quarkus-zero-udi:1.2.0'
       memoryLimit: 4G
       mountSources: true
       sourceMapping: /projects

@@ -2,4 +2,6 @@
 
 . ./image-env.sh
 
-podman run -it --rm -p 8080:8080 --name ${PROJECT_ID}-${ARTIFACT_ID} localhost/${PROJECT_ID}-${ARTIFACT_ID}:${ARTIFACT_VERSION} bash
+# USE_JAVAX="-e USE_JAVA17=true"
+
+podman run -it --rm -p 8080:8080 --name ${PROJECT_ID}-${ARTIFACT_ID} ${USE_JAVAX} localhost/${PROJECT_ID}-${ARTIFACT_ID}:${ARTIFACT_VERSION} bash

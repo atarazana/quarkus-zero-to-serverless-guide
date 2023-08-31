@@ -25,6 +25,7 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
     && bash -c ". /home/user/.sdkman/bin/sdkman-init.sh \
              && sed -i "s/sdkman_auto_answer=false/sdkman_auto_answer=true/g" /home/user/.sdkman/etc/config \
 	     && sed -i "s/sdkman_auto_env=false/sdkman_auto_env=true/g" /home/user/.sdkman/etc/config \
+             && sdk install java 8.0.332-tem \
              && sdk install java 11.0.15-tem \
              && sdk install java 17.0.3-tem \
              && sdk install java 23.0.1.2.r20-mandrel \
@@ -36,6 +37,7 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
              && sdk flush temp"
 
 # sdk home java <version>
+ENV JAVA_HOME_8=/home/user/.sdkman/candidates/java/8.0.332-tem
 ENV JAVA_HOME_11=/home/user/.sdkman/candidates/java/11.0.15-tem
 ENV JAVA_HOME_17=/home/user/.sdkman/candidates/java/17.0.3-tem
 
@@ -105,6 +107,19 @@ RUN cd /usr/bin \
     && if [ ! -L pip ]; then ln -s pip-3.9 pip; fi
 
 RUN pip install pylint yq
+
+# .NET
+ENV DOTNET_RPM_VERSION=7.0
+RUN dnf install -y dotnet-hostfxr-${DOTNET_RPM_VERSION} dotnet-runtime-${DOTNET_RPM_VERSION} dotnet-sdk-${DOTNET_RPM_VERSION}
+
+# rust
+ENV CARGO_HOME=/home/user/.cargo \
+    RUSTUP_HOME=/home/user/.rustup \
+    PATH=/home/user/.cargo/bin:${PATH}
+RUN curl --proto '=https' --tlsv1.2 -sSfo rustup https://sh.rustup.rs && \
+    chmod +x rustup && \
+    mv rustup /usr/bin/ && \
+    rustup -y --no-modify-path --profile minimal -c rust-src -c rust-analysis -c rls
 
 # camel-k
 ENV KAMEL_VERSION 1.11.0

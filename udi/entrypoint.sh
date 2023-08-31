@@ -5,7 +5,12 @@
 # use java 11 if USE_JAVA11 is set to 'true', 
 # by default it is java 8
 #############################################################################
-if [ "${USE_JAVA11}" == "true" ] ; then
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+if [ "${USE_JAVA8}" == "true" ] ; then
+  sdk default java 8.0.332-tem
+  echo "Java environment set to JAVA 8"
+elif [ "${USE_JAVA11}" == "true" ] ; then
   sdk default java 11.0.15-tem
   echo "Java environment set to JAVA 11"
 elif [ "${USE_JAVA17}" == "true" ] ; then

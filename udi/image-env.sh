@@ -2,7 +2,7 @@
 
 export BASE_IMAGE=quay.io/devfile/base-developer-image:ubi8-latest
 
-export ARTIFACT_VERSION="1.1.0"
+export ARTIFACT_VERSION="1.2.0"
 export ARTIFACT_ID=udi
 export GIT_HASH=$(git rev-parse HEAD)
 

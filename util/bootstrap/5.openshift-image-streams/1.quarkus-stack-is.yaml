@@ -6,6 +6,14 @@ spec:
   lookupPolicy:
     local: false
   tags:
+    - name: 1.2.0
+      from:
+        kind: DockerImage
+        name: 'quay.io/atarazana/quarkus-zero-udi:1.2.0'
+      generation: 1
+      importPolicy: {}
+      referencePolicy:
+        type: Source
     - name: 1.1.0
       from:
         kind: DockerImage

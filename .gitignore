@@ -44,3 +44,5 @@ node_modules
 
 old
 maven-repository-*
+
+*.old

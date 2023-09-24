@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: openshift-config
 
 resources:
-  - 1.project-request-template.yaml
+  - project-request-template.yaml

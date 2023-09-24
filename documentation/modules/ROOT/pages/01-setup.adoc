@@ -22,61 +22,51 @@ Let's get started! Access the *Dev Spaces* instance and log in using the usernam
 
 Please use the provided credentials, then please click on `Log in`.
 
-image::crw-login-2.png[CRW Login]
+image::ocp-login.png[OCP Login]
 
 Once you log in, you’ll be placed on your personal dashboard. Click on the name of the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number). You can also click on the name of the workspace in the center, and then click on the green {username}-namespace that says _Open_ on the top right hand side of the screen.
 
-After a minute or two, you’ll be placed in your workspace:
+After a minute or two, you’ll land in your workspace, you'll be prompted to trust the authors, please trust us, at the end of the day it's only related to the lab content in a container running the IDE you see. Please check the box as in the picture and click on `Yes I trust the authors`:
 
-NOTE: You can see icons on the left for navigating between project explorer, search, version control (e.g. Git), debugging, and other plugins.  You’ll use these during the course of this workshop. Feel free to click on them and see what they do.
-
-image::crw-workspace-1.png[Workspace]
+image::devspaces-workspace-1.png[Workspace]
 
 [NOTE]
 ====
-If things get weird or your browser appears, you can simply reload the browser tab to refresh the view.
+If the terminal or workspace appears to lag or doesn't respond, you can simply reload the browser tab to refresh the view.
 ====
 
-Many features of Dev Spaces are accessed via *Commands*. You can see a few of the commands listed with links on the home page (e.g. _New File.._, _Git Clone.._, and others).
+If you need to run commands that you don't see in a menu, you can press kbd:[F1] to open the command window, or the more traditional kbd:[Control+SHIFT+P] (or kbd:[Command+SHIFT+P] on Mac OS X).
 
-If you ever need to run commands that you don't see in a menu, you can press kbd:[F1] to open the command window, or the more traditional kbd:[Control+SHIFT+P] (or kbd:[Command+SHIFT+P] on Mac OS X).
-
-[#login-to-openshift]
-=== Login to OpenShift
-
-As we have already explained, your Dev Spaces environment is running on the Kubernetes cluster and terminals are already logged in so that you can run `oc` commands with out the need of logging in. Never the less tokens expire and if you leave your environment running longer than the expiration time you would need to log back in. If that is the case use the following command in a terminal window.
-
-[.console-input]
-[source,sh,subs="attributes+",role="copypaste"]
-----
-oc login -u {username} -p {password} --server=https://api.{api-domain}
-----
-
-This is the expected result, should you needed to run previous command.
-
-[.console-output]
-[source,text,subs="attributes+"]
-----
-Login successful.
-
-You have access to the following projects and can switch between them with 'oc project <projectname>':
-
-  * {project_name}
-
-Using project "{project_name}".
-Welcome! See 'oc help' to get started.
-----
+[#open-terminal]
+=== Open Terminal
 
 [NOTE]
 ====
-The Terminal window in Dev Spaces. You can open a terminal window for any of the containers running in your Developer workspace. For the rest of these labs, anytime you need to run a command in a terminal, you can use the **>_ New Terminal** command on the right:
-
-image::codeready-workspace-terminal.png[codeready-workspace-terminal, 700]
+Terminals in Dev Spaces work as in many IDEs and prominently as in VS Code, in a terminal window. The cool part is that in Dev Spaces the terminal window connects to a container running inside OpenShift!
 ====
 
-Open a new terminal (as described above) and create the project:
+Open a new terminal by clicking on the hamburger menu on the upper left corner, as in the next picture:
+
+image::devspaces-open-terminal.png[Terminal]
+
+Now you have to create a project in OpenShift called `{project_name}`, please copy the next command and paste it in the terminal window:
+
+[CAUTION]
+====
+You may have to allow pasting from clipboard as in the next picture.
+
+image::devspaces-allow-pasting.png[Allow Pasting]
+====
+
 [.console-input]
 [source,sh,subs="attributes+",role="copypaste"]
 ----
 oc new-project {project_name}
 ----
+
+[#open-more-terminals]
+=== Open More Terminals
+
+If you need to open more terminals you can do it the same way or clicking on `+ bash` as in the next picture:
+
+image::devspaces-open-more-terminals.png[Open More Terminals]

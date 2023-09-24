@@ -8,9 +8,6 @@ apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: openshift-serverless-operator-group
-  annotations:
-    olm.providedAPIs: >-
-      CheBackupServerConfiguration.v1.org.eclipse.che,CheCluster.v1.org.eclipse.che,CheClusterBackup.v1.org.eclipse.che,CheClusterRestore.v1.org.eclipse.che
   namespace: openshift-serverless
 spec: {}
 ---
@@ -20,6 +17,7 @@ metadata:
   labels:
     operators.coreos.com/serverless-operator.openshift-serverless: ''
   name: serverless-operator
+  namespace: openshift-serverless
 spec:
   channel: stable
   installPlanApproval: Automatic

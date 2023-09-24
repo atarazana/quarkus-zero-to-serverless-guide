@@ -29,7 +29,7 @@ oc label deployment/my-database app.kubernetes.io/part-of={APP_NAME} --overwrite
 Open the OpenShift Console and have a look to the deployment of PostgreSQL.
 
 [.console-input]
-[source,bash, subs="+attributes"]
+[source,console, subs="+attributes"]
 ----
 {openshift-console-url}
 ----
@@ -42,6 +42,13 @@ image::ocp-console-db-1.png[DB Deployed, 900]
 == Adding DB related extensions
 
 We need some extensions to expose our database to the world: REST JSON, PostgreSQL and Panache Hibernate as our ORM.
+
+[NOTE]
+====
+Are you in dir `atomic-fruit-service`? No? Run this command:
+
+`cd $PROJECTS_ROOT/atomic-fruit-service`
+====
 
 [.console-input]
 [source,sh,role="copypaste"]
@@ -74,10 +81,13 @@ While the code is surprisingly simple, under the hood this is using:
 [#lets-create-the-fruit-entity]
 === Let\'s create the `Fruit` entity
 
-Let’s modify the application and add a companion bean. In CodeReady, navigate to `src → main → java → {group_id}`, right-click on `fruit` folder in the project browser and select _New_ --> _File_. Name the file `Fruit.java`.
+Let’s modify the application and add a companion bean. In Dev Spaces, navigate to `src → main → java → {group_id}`, right-click on `fruit` folder in the project browser and select _New_ -> _File_. 
 
-image::newclass.png[newclass,600]
-image::classname.png[classname,400]
+image::newclass.png[newclass]
+
+Name the file `Fruit.java`.
+
+image::classname.png[classname]
 
 Next, replace the below code into the class:
 
@@ -464,9 +474,9 @@ The output:
 [INFO] ------------------------------------------------------------------------
 ----
 
-You can use the `web-{username}` shortcut from your CodeReady tool panel (right side) to open the app link
+Use the public link provided on the area called **, click on arrow icon as indicated in the next picture.
 
-image::crw-open-page-shortcut.png[crw-open-page-shortcut, 400]
+image::open-swagger-shortcut.png[open-swagger-shortcut]
 
 And append to the end of the URL `/q/swagger-ui`, you should see something like:
 
@@ -523,7 +533,12 @@ The output:
 [INFO] ------------------------------------------------------------------------
 ----
 
-Make sure your application is running in `dev` mode, then test the `/health` endpoint like this:
+Make sure your application is running in `dev` mode, then test the `/q/health` endpoint like this:
+
+[NOTE]
+====
+Wait until your application is listening on port `8080`.
+====
 
 [.console-input]
 [source,sh,role="copypaste"]

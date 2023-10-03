@@ -308,9 +308,9 @@ oc label deployment/my-database app.kubernetes.io/part-of=fruits-app --overwrite
 </ul>
 </div>
 <div class="sect2">
-<h3 id="lets-create-the-fruit-entity"><a class="anchor" href="#lets-create-the-fruit-entity"></a>Let's create the <code>Fruit</code> entity</h3>
+<h3 id="lets-create-the-fruit-entity"><a class="anchor" href="#lets-create-the-fruit-entity"></a>Let&#8217;s create the <code>Fruit</code> entity</h3>
 <div class="paragraph">
-<p>Let’s modify the application and add a companion bean. In Dev Spaces, navigate to <code>src → main → java → com.redhat.atomic.fruit</code>, right-click on <code>fruit</code> folder in the project browser and select <em>New</em> &#8594; <em>File</em>.</p>
+<p>Let&#8217;s modify the application and add a bean based on <code>PanacheEntityBase</code>. In Dev Spaces, navigate to <code>src → main → java → com.redhat.atomic.fruit</code>, right-click on <code>fruit</code> folder in the project browser and select <em>New</em> &#8594; <em>File</em>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -342,7 +342,7 @@ import jakarta.persistence.SequenceGenerator;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-public class Fruit extends PanacheEntityBase {
+public class Fruit extends PanacheEntityBase { <i class="conum" data-value="1"></i><b>(1)</b>
     @Id
     @SequenceGenerator(
             name = "fruitSequence",
@@ -355,11 +355,23 @@ public class Fruit extends PanacheEntityBase {
     public String name;
     public String season;
 
-    public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) {
+    public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) { <i class="conum" data-value="2"></i><b>(2)</b>
         return find("season", season).list();
     }
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inheritance will give an implementation for basic CRUD methods</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Custom method to select Fruits by season</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>As you can see our <code>Fruit</code> class extends <code>PanacheEntity</code> which adds the default <strong>CRUD</strong> methods you can expects from an <strong>ORM framework</strong> such as <strong>Panache</strong>. How ever it doesn't add any custom methods. In this case we want to be able to search by season and that's the reason we have added a methos called <code>getAllFruitsForSeason</code>.</p>
@@ -424,18 +436,18 @@ public class FruitResource {
         return message; // custom property <i class="conum" data-value="2"></i><b>(2)</b>
     }
 
-    @GET
+    @GET <i class="conum" data-value="3"></i><b>(3)</b>
     public List&lt;Fruit&gt; allFruits() {
         return Fruit.listAll();
     }
 
-    @GET
+    @GET <i class="conum" data-value="3"></i><b>(3)</b>
     @Path("{season}")
     public List&lt;Fruit&gt; fruitsBySeason(@PathParam("season") String season) {
         return Fruit.getAllFruitsForSeason(season);
     }
 
-    @POST
+    @POST <i class="conum" data-value="3"></i><b>(3)</b>
     @Transactional
     public Response saveFruit(Fruit fruit) {
         // since the FruitEntity is a panache entity
@@ -458,6 +470,10 @@ public class FruitResource {
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Custom property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>CRUD methods</td>
 </tr>
 </table>
 </div>
@@ -779,7 +795,7 @@ mvn quarkus:add-extension -Dextensions="quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Use the public link provided on the area called **, click on arrow icon as indicated in the next picture.</p>
+<p>Use the public link provided on the area called <strong>swagger-ui</strong>, click on arrow icon as indicated in the next picture.</p>
 </div>
 <div class="imageblock">
 <div class="content">

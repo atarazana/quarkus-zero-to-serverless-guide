@@ -536,19 +536,31 @@ This is outside of the scope of this lab but if you want to know more about this
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Now, without stopping our application, let's add some logging&#8230;&#8203;</p>
-</div>
 <div class="sect2">
 <h3 id="quarkus-listen-on-all-ip-addresses"><a class="anchor" href="#quarkus-listen-on-all-ip-addresses"></a>Making Quarkus to listen on all IP addresses</h3>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Although this may not be necessary depending on the version or Quarkus you&#8217;re using, it&#8217;s still useful to know and if set it won&#8217;t hurt anything.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Configure Quarkus logging by setting the following parameters to <code>atomic-fruit-service/src/main/resources/application.properties</code>:</p>
+<p>Configure Quarkus host to <code>0.0.0.0</code> by setting the following parameters to <code>atomic-fruit-service/src/main/resources/application.properties</code>:</p>
 </div>
 <div class="listingblock copypaste">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Listen on all IP addresses
 quarkus.http.host=0.0.0.0</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Now, without stopping our application, let's add some logging&#8230;&#8203;</p>
 </div>
 </div>
 <div class="sect2">

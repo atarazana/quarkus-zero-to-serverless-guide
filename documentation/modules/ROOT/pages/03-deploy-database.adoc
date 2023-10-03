@@ -126,7 +126,7 @@ public class Fruit extends PanacheEntityBase { <1>
 <1> Inheritance will give an implementation for basic CRUD methods
 <2> Custom method to select Fruits by season
 
-As you can see our `Fruit` class extends `PanacheEntity` which adds the default *CRUD* methods you can expects from an *ORM framework* such as **Panache**. How ever it doesn\'t add any custom methods. In this case we want to be able to search by season and that\'s the reason we have added a methos called `getAllFruitsForSeason`.
+As you can see our `Fruit` class extends `PanacheEntity` which adds the default *CRUD* methods you can expects from an *ORM framework* such as **Panache**. How ever it doesn\'t add any custom methods. In this case we want to be able to search by season and that\'s the reason we have added a method called `getAllFruitsForSeason`.
 
 [#lets-crudify-our-rest-enabled-service]
 === Let\'s CRUDify our REST enabled service

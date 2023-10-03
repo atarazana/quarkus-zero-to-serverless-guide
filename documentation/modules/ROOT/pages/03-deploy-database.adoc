@@ -56,7 +56,7 @@ Are you in dir `atomic-fruit-service`? No? Run this command:
 mvn quarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-postgresql, quarkus-hibernate-orm-panache"
 ----
 
-You should see something like this when you add succesfully extensions to an app.
+You should see something like this when you add successfully extensions to an app.
 
 [.console-output]
 [source,console]

@@ -79,9 +79,9 @@ While the code is surprisingly simple, under the hood this is using:
 * **Maven** Java project structure
 
 [#lets-create-the-fruit-entity]
-=== Let\'s create the `Fruit` entity
+=== Let's create the `Fruit` entity
 
-Let’s modify the application and add a companion bean. In Dev Spaces, navigate to `src → main → java → {group_id}`, right-click on `fruit` folder in the project browser and select _New_ -> _File_. 
+Let's modify the application and add a bean based on `PanacheEntityBase`. In Dev Spaces, navigate to `src → main → java → {group_id}`, right-click on `fruit` folder in the project browser and select _New_ -> _File_. 
 
 image::newclass.png[newclass]
 
@@ -105,7 +105,7 @@ import jakarta.persistence.SequenceGenerator;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-public class Fruit extends PanacheEntityBase {
+public class Fruit extends PanacheEntityBase { <1>
     @Id
     @SequenceGenerator(
             name = "fruitSequence",
@@ -118,11 +118,13 @@ public class Fruit extends PanacheEntityBase {
     public String name;
     public String season;
 
-    public static List<Fruit> getAllFruitsForSeason(String season) {
+    public static List<Fruit> getAllFruitsForSeason(String season) { <2>
         return find("season", season).list();
     }
 }
 ----
+<1> Inheritance will give an implementation for basic CRUD methods
+<2> Custom method to select Fruits by season
 
 As you can see our `Fruit` class extends `PanacheEntity` which adds the default *CRUD* methods you can expects from an *ORM framework* such as **Panache**. How ever it doesn\'t add any custom methods. In this case we want to be able to search by season and that\'s the reason we have added a methos called `getAllFruitsForSeason`.
 
@@ -175,18 +177,18 @@ public class FruitResource {
         return message; // custom property <2> 
     }
 
-    @GET
+    @GET <3>
     public List<Fruit> allFruits() {
         return Fruit.listAll();
     }
 
-    @GET
+    @GET <3>
     @Path("{season}")
     public List<Fruit> fruitsBySeason(@PathParam("season") String season) {
         return Fruit.getAllFruitsForSeason(season);
     }
 
-    @POST
+    @POST <3>
     @Transactional
     public Response saveFruit(Fruit fruit) {
         // since the FruitEntity is a panache entity
@@ -202,6 +204,7 @@ public class FruitResource {
 
 <1> Logging
 <2> Custom property
+<3> CRUD methods
 
 We need to adapt the test class after the changes to `FruitResource`. Update `$PROJECT_HOME/src/test/java/com/redhat/atomic/fruit/FruitResourceTest.java` with the next code.
 
@@ -474,7 +477,7 @@ The output:
 [INFO] ------------------------------------------------------------------------
 ----
 
-Use the public link provided on the area called **, click on arrow icon as indicated in the next picture.
+Use the public link provided on the area called *swagger-ui*, click on arrow icon as indicated in the next picture.
 
 image::open-swagger-shortcut.png[open-swagger-shortcut]
 
